@@ -1,0 +1,42 @@
+name: Build and Deploy to Aliyun
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 2. 安装 Node.js 环境
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. 安装依赖并打包
+      - name: Install and Build
+        run: |
+          npm install
+          npm run build
+
+      # 4. 把打包好的 dist 文件夹传到阿里云
+      - name: Deploy to Server via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          # 你的构建输出目录 (Vite 通常是 dist)
+          source: "dist/*"
+          # 服务器上的目标目录
+          target: "/var/www/my-react-app"
+          # 去掉源路径中的 dist 前缀
+          strip_components: 1

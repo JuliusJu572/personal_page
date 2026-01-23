@@ -1,0 +1,145 @@
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.heroLeft {
+  padding: 8px 0;
+}
+
+.title {
+  margin: 12px 0 10px;
+  font-size: 44px;
+  letter-spacing: -0.8px;
+  line-height: 1.06;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 60ch;
+}
+
+.heroActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.heroRight {
+  overflow: hidden;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--bg-elev) 85%, transparent);
+}
+
+.panelDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, white 18%, transparent);
+}
+
+.panelTitle {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.panelBody {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.panelRow {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+
+.k {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.v {
+  color: var(--fg);
+  font-size: 13px;
+  word-break: break-word;
+  text-decoration: none;
+}
+
+.v:hover {
+  text-decoration: underline;
+}
+
+.grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.gridCard {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 210px;
+}
+
+.gridCardTop {
+  display: grid;
+  gap: 10px;
+}
+
+.gridTitle {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.2px;
+}
+
+.gridDesc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.gridLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: color-mix(in oklab, var(--accent) 75%, white);
+  text-decoration: none;
+  font-weight: 650;
+}
+
+.gridLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 38px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
