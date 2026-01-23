@@ -14,11 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Checkout Mystic_AI_Tarot
+        uses: actions/checkout@v3
+        with:
+          repository: JuliusJu572/Mystic_AI_Tarot
+          path: Mystic_AI_Tarot
+
       # 2. 安装 Node.js 环境
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22.x'
 
       # 3. 安装依赖并打包
       - name: Install and Build
@@ -37,6 +43,6 @@ jobs:
           # 你的构建输出目录 (Vite 通常是 dist)
           source: "dist/*"
           # 服务器上的目标目录
-          target: "/var/www/my-react-app"
+          target: "/var/www/PersonalPage"
           # 去掉源路径中的 dist 前缀
           strip_components: 1

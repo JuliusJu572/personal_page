@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:tarot": "npm --prefix ../Mystic_AI_Tarot install && npm --prefix ../Mystic_AI_Tarot run build",
+    "build:tarot": "npm --prefix ./Mystic_AI_Tarot install && npm --prefix ./Mystic_AI_Tarot run build",
     "copy:tarot": "node scripts/copy-tarot.mjs",
     "build": "npm run build:tarot && tsc -b && vite build && npm run copy:tarot",
     "lint": "eslint .",
