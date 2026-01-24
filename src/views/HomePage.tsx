@@ -43,14 +43,6 @@ export function HomePage() {
               <span className={styles.k}>Modules</span>
               <span className={styles.v}>Cheating Buddy · Mystic AI Tarot</span>
             </div>
-            <div className={styles.panelRow}>
-              <span className={styles.k}>Design</span>
-              <span className={styles.v}>统一色彩 / 间距 / 交互反馈</span>
-            </div>
-            <div className={styles.panelRow}>
-              <span className={styles.k}>Mobile</span>
-              <span className={styles.v}>支持手机与桌面端</span>
-            </div>
           </div>
         </Card>
       </section>
@@ -58,7 +50,7 @@ export function HomePage() {
       <section className={styles.grid}>
         <Card className={styles.gridCard}>
           <div className={styles.gridCardTop}>
-            <Badge tone="success">核心模块</Badge>
+            <Badge tone="success">应用</Badge>
             <h2 className={styles.gridTitle}>Cheating Buddy（作弊老铁）</h2>
             <p className={styles.gridDesc}>
               将 README 核心信息结构化展示，并自动抓取最新 Release，提供 Windows / macOS 直链下载。
@@ -71,7 +63,7 @@ export function HomePage() {
 
         <Card className={styles.gridCard}>
           <div className={styles.gridCardTop}>
-            <Badge tone="accent">独立风格</Badge>
+            <Badge tone="accent">子应用</Badge>
             <h2 className={styles.gridTitle}>Mystic AI Tarot</h2>
             <p className={styles.gridDesc}>
               作为子应用挂载在主站路径下，保留其原有神秘视觉风格与动效。
@@ -85,4 +77,3 @@ export function HomePage() {
     </Container>
   )
 }
-

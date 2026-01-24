@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { projects } from '../config/projects'
 import type { GitHubRelease } from '../lib/github'
 import { fetchLatestRelease, pickReleaseAsset } from '../lib/github'
@@ -53,10 +53,34 @@ function useLatestRelease() {
   return state
 }
 
-function FocusSwitchTest() {
+type FocusSwitchTestHandle = {
+  start: () => void
+  stop: () => void
+  clear: () => void
+}
+
+const FocusSwitchTest = forwardRef<FocusSwitchTestHandle>(function FocusSwitchTest(_props, ref) {
   const [isRunning, setIsRunning] = useState(false)
   const [events, setEvents] = useState<Array<{ t: number; type: string; detail?: string }>>([])
   const [startedAt, setStartedAt] = useState<number | null>(null)
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      start: () => {
+        const now = Date.now()
+        setStartedAt(now)
+        setEvents([{ t: now, type: 'start' }])
+        setIsRunning(true)
+      },
+      stop: () => {
+        setIsRunning(false)
+        setStartedAt(null)
+      },
+      clear: () => setEvents([]),
+    }),
+    [],
+  )
 
   useEffect(() => {
     if (!isRunning) return
@@ -123,14 +147,16 @@ function FocusSwitchTest() {
           ))
         )}
       </div>
-      <div className={styles.toolHint}>
-        参考灵感：<a href={projects.gankInterview.toolsUrl} target="_blank" rel="noreferrer">tools.gankinterview.cn</a>
-      </div>
     </div>
   )
+})
+
+type ScreenShareVisibilityTestHandle = {
+  start: () => Promise<void>
+  stop: () => void
 }
 
-function ScreenShareVisibilityTest() {
+const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(function ScreenShareVisibilityTest(_props, ref) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const [status, setStatus] = useState<'idle' | 'running' | 'error'>('idle')
@@ -147,6 +173,26 @@ function ScreenShareVisibilityTest() {
     setStatus('idle')
   }
 
+  const start = async () => {
+    if (status === 'running') return
+    setErrorMsg('')
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { frameRate: 30 },
+        audio: false,
+      })
+      streamRef.current = stream
+      if (videoRef.current) videoRef.current.srcObject = stream
+      setStatus('running')
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '无法获取屏幕共享权限'
+      setErrorMsg(msg)
+      setStatus('error')
+    }
+  }
+
+  useImperativeHandle(ref, () => ({ start, stop }), [status])
+
   useEffect(() => () => stopTracks(), [])
 
   return (
@@ -161,20 +207,7 @@ function ScreenShareVisibilityTest() {
                 stop()
                 return
               }
-              setErrorMsg('')
-              try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                  video: { frameRate: 30 },
-                  audio: false,
-                })
-                streamRef.current = stream
-                if (videoRef.current) videoRef.current.srcObject = stream
-                setStatus('running')
-              } catch (err: unknown) {
-                const msg = err instanceof Error ? err.message : '无法获取屏幕共享权限'
-                setErrorMsg(msg)
-                setStatus('error')
-              }
+              await start()
             }}
           >
             {status === 'running' ? '停止预览' : '开始预览'}
@@ -189,9 +222,86 @@ function ScreenShareVisibilityTest() {
         <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
         {status !== 'running' ? <div className={styles.videoMask}>点击“开始预览”并选择共享目标</div> : null}
       </div>
-      <div className={styles.toolHint}>
-        参考灵感：<a href={projects.gankInterview.toolsUrl} target="_blank" rel="noreferrer">tools.gankinterview.cn</a>
+    </div>
+  )
+})
+
+function InstallGuide(props: { os: 'windows' | 'mac' }) {
+  if (props.os === 'windows') {
+    return (
+      <div className={styles.stepGroup}>
+        <h4>步骤 1：安装应用程序</h4>
+        <ul className={styles.list}>
+          <li>双击下载的 <code>.exe</code> 文件</li>
+          <li>
+            如果出现“Windows 保护了你的电脑”提示：点击 <strong>更多信息</strong> → <strong>仍要运行</strong>
+          </li>
+          <li>按照安装向导完成安装</li>
+        </ul>
+        <h4>步骤 2：安装 ffmpeg</h4>
+        <ul className={styles.list}>
+          <li>
+            <strong>推荐 (Scoop):</strong> <code>scoop install ffmpeg</code>
+          </li>
+          <li>
+            <strong>或 (Chocolatey):</strong> <code>choco install ffmpeg</code>
+          </li>
+          <li>
+            <strong>手动:</strong> 下载 <code>ffmpeg-release-essentials.zip</code>，解压到 <code>C:\ffmpeg</code> 并添加{' '}
+            <code>bin</code> 到系统环境变量 PATH
+          </li>
+        </ul>
+        <h4>步骤 3：配置权限与启动</h4>
+        <ul className={styles.list}>
+          <li>
+            允许麦克风/屏幕录制权限（Win10/11 可能需在 <strong>设置 → 隐私</strong> 中手动授权）
+          </li>
+          <li>
+            首次使用输入 License Key，在设置中选择使用档案和语言，点击 <strong>开始会话</strong>
+          </li>
+        </ul>
       </div>
+    )
+  }
+
+  return (
+    <div className={styles.stepGroup}>
+      <div className={styles.callout} role="note">
+        macOS 版本仅支持 Apple Silicon（M 系列）芯片
+      </div>
+      <h4>步骤 1：安装应用程序</h4>
+      <ul className={styles.list}>
+        <li>
+          双击 <code>.dmg</code>，将应用图标拖拽到 <strong>应用程序</strong> 文件夹
+        </li>
+      </ul>
+      <h4>步骤 2：移除隔离属性（必须操作）</h4>
+      <ul className={styles.list}>
+        <li>
+          <code>sudo xattr -cr /Applications/Cheating\ Buddy.app</code>
+        </li>
+        <li>
+          验证：<code>xattr -l /Applications/Cheating\ Buddy.app</code>（应无输出）
+        </li>
+      </ul>
+      <h4>步骤 3：安装 ffmpeg 与配置权限</h4>
+      <ul className={styles.list}>
+        <li>
+          <strong>推荐 (Homebrew):</strong> <code>brew install ffmpeg</code>
+        </li>
+        <li>
+          在 <strong>系统设置 → 隐私与安全性</strong> 中授予 <strong>屏幕录制</strong> 与 <strong>麦克风</strong> 权限
+        </li>
+        <li>
+          <strong>重要：</strong> 设置权限后需 <strong>完全退出</strong> 应用重新打开
+        </li>
+      </ul>
+      <h4>步骤 4：启动</h4>
+      <ul className={styles.list}>
+        <li>
+          若提示无法打开：右键点击图标 → 按住 <strong>Option</strong> 键 → 选择 <strong>打开</strong>
+        </li>
+      </ul>
     </div>
   )
 }
@@ -202,41 +312,44 @@ export function CheatingBuddyPage() {
   const release = releaseState.status === 'loaded' ? releaseState.release : null
   const windowsAsset = useMemo(() => (release ? pickReleaseAsset(release, 'windows') : undefined), [release])
   const macAsset = useMemo(() => (release ? pickReleaseAsset(release, 'mac') : undefined), [release])
+  const [selectedOs, setSelectedOs] = useState<'windows' | 'mac'>('windows')
+  const [activeTab, setActiveTab] = useState<'overview' | 'shortcuts' | 'tests'>('overview')
+  const focusTestRef = useRef<FocusSwitchTestHandle | null>(null)
+  const shareTestRef = useRef<ScreenShareVisibilityTestHandle | null>(null)
+  const focusTestBoxRef = useRef<HTMLDivElement | null>(null)
+  const shareTestBoxRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase()
+    if (ua.includes('mac os') || ua.includes('macintosh')) setSelectedOs('mac')
+  }, [])
 
   const releaseTitle = release?.tag_name ?? projects.cheatingBuddy.fallbackReleaseTag
-  const releaseHref = release?.html_url ?? `${projects.cheatingBuddy.releasesUrl}/tag/${projects.cheatingBuddy.fallbackReleaseTag}`
 
   return (
     <Container>
-      <header className={styles.header}>
-        <div className={styles.headerLeft}>
-          <div className={styles.badges}>
-            <Badge tone="success">AI 面试助手</Badge>
-            <Badge tone="neutral">macOS / Windows</Badge>
-          </div>
-          <h1 className={styles.title}>Cheating Buddy（作弊老铁）</h1>
-          <p className={styles.subtitle}>
-            一个实时 AI 助手，通过屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助。
-          </p>
-          <div className={styles.links}>
-            <a href={projects.cheatingBuddy.repoUrl} target="_blank" rel="noreferrer" className={styles.link}>
-              项目仓库
-            </a>
-            <a href={projects.cheatingBuddy.releasesUrl} target="_blank" rel="noreferrer" className={styles.link}>
-              Releases
-            </a>
-          </div>
-        </div>
-
-        <Card className={styles.releaseCard}>
-          <div className={styles.releaseTop}>
-            <div className={styles.releaseTitle}>最新版本</div>
-            <a href={releaseHref} target="_blank" rel="noreferrer" className={styles.releaseTag}>
-              {releaseTitle}
-            </a>
+      <header className={styles.hero}>
+        <div className={styles.heroGrid}>
+          <div className={styles.heroCopy}>
+            <div className={styles.badges}>
+              <Badge tone="success">AI 面试助手</Badge>
+              <Badge tone="neutral">macOS / Windows</Badge>
+            </div>
+            <h1 className={styles.title}>Cheating Buddy（作弊老铁）</h1>
+            <p className={styles.subtitle}>
+              一个实时 AI 助手，通过屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助。
+            </p>
           </div>
 
-          {releaseState.status === 'loading' ? <div className={styles.releaseMeta}>正在获取 Release 信息…</div> : null}
+          <Card className={styles.downloadCard}>
+            <div className={styles.releaseTop}>
+              <div className={styles.releaseTitle}>最新版本</div>
+              <span className={styles.releaseTag} aria-label="最新版本号">
+                {releaseTitle}
+              </span>
+            </div>
+
+            {releaseState.status === 'loading' ? <div className={styles.releaseMeta}>正在获取版本信息…</div> : null}
           {releaseState.status === 'error' ? (
             <div className={styles.releaseError}>
               无法自动获取最新 Release：{releaseState.message}
@@ -251,7 +364,17 @@ export function CheatingBuddyPage() {
           ) : null}
 
           <div className={styles.downloadGrid}>
-            <div className={styles.downloadItem}>
+            <div
+              className={[styles.downloadItem, selectedOs === 'windows' ? styles.downloadItemActive : '']
+                .filter(Boolean)
+                .join(' ')}
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelectedOs('windows')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setSelectedOs('windows')
+              }}
+            >
               <div className={styles.downloadK}>Windows</div>
               <div className={styles.downloadV}>
                 {windowsAsset ? (
@@ -265,16 +388,22 @@ export function CheatingBuddyPage() {
                   <span className={styles.downloadMissing}>未找到可识别的 Windows 安装包</span>
                 )}
               </div>
-              <a
-                href={windowsAsset?.browser_download_url ?? projects.cheatingBuddy.releasesUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Button disabled={!windowsAsset}>下载 Windows</Button>
-              </a>
+              {windowsAsset ? (
+                <a href={windowsAsset.browser_download_url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+                  <Button>下载 Windows</Button>
+                </a>
+              ) : null}
             </div>
 
-            <div className={styles.downloadItem}>
+            <div
+              className={[styles.downloadItem, selectedOs === 'mac' ? styles.downloadItemActive : ''].filter(Boolean).join(' ')}
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelectedOs('mac')}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') setSelectedOs('mac')
+              }}
+            >
               <div className={styles.downloadK}>macOS</div>
               <div className={styles.downloadV}>
                 {macAsset ? (
@@ -288,62 +417,112 @@ export function CheatingBuddyPage() {
                   <span className={styles.downloadMissing}>未找到可识别的 macOS 安装包</span>
                 )}
               </div>
-              <a href={macAsset?.browser_download_url ?? projects.cheatingBuddy.releasesUrl} target="_blank" rel="noreferrer">
-                <Button disabled={!macAsset}>下载 macOS</Button>
-              </a>
+              {macAsset ? (
+                <a href={macAsset.browser_download_url} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
+                  <Button>下载 macOS</Button>
+                </a>
+              ) : null}
             </div>
           </div>
 
-          {release && release.assets.length > 0 ? (
-            <div className={styles.assets}>
-              <div className={styles.assetsTitle}>全部附件（直链）</div>
-              <div className={styles.assetsList}>
-                {release.assets.map((a) => (
-                  <a key={a.browser_download_url} href={a.browser_download_url} className={styles.assetItem}>
-                    <span className={styles.assetName}>{a.name}</span>
-                    <span className={styles.assetSize}>{formatBytes(a.size)}</span>
-                  </a>
-                ))}
+          <div className={styles.guide}>
+            <div className={styles.guideTop}>
+              <div className={styles.guideTitle}>安装与使用指引</div>
+              <div className={styles.osToggle} role="tablist" aria-label="选择操作系统">
+                <button
+                  type="button"
+                  className={[styles.osBtn, selectedOs === 'windows' ? styles.osBtnActive : ''].filter(Boolean).join(' ')}
+                  aria-pressed={selectedOs === 'windows'}
+                  onClick={() => setSelectedOs('windows')}
+                >
+                  Windows
+                </button>
+                <button
+                  type="button"
+                  className={[styles.osBtn, selectedOs === 'mac' ? styles.osBtnActive : ''].filter(Boolean).join(' ')}
+                  aria-pressed={selectedOs === 'mac'}
+                  onClick={() => setSelectedOs('mac')}
+                >
+                  macOS
+                </button>
               </div>
             </div>
-          ) : null}
-        </Card>
-      </header>
-
-      <section className={styles.section}>
-        <h2 className={styles.h2}>核心功能</h2>
-        <div className={styles.twoCol}>
-          <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>多模态 + 多场景</h3>
-            <ul className={styles.list}>
-              <li>屏幕与音频捕获：结合屏幕内容与系统/麦克风音频进行多模态分析</li>
-              <li>透明悬浮窗：始终置顶，可自由移动定位；支持点击穿透模式</li>
-              <li>多档案配置：面试/销售/会议/演示/谈判等场景模板</li>
-              <li>内容保护：防止屏幕录制软件捕获窗口内容（依赖系统与平台差异）</li>
-            </ul>
-          </Card>
-          <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>使用方式（最短路径）</h3>
-            <ol className={styles.list}>
-              <li>下载并安装（Windows：.exe；macOS：.dmg）</li>
-              <li>安装 ffmpeg（Windows：scoop/choco 或手动；macOS：brew install ffmpeg）</li>
-              <li>首次启动输入 License Key，授予屏幕录制/麦克风权限</li>
-              <li>选择使用档案，开始会话；建议模拟“面试官提问”场景</li>
-            </ol>
+            <InstallGuide os={selectedOs} />
+          </div>
           </Card>
         </div>
+      </header>
 
-        <div className={styles.twoCol}>
+      <nav className={styles.tabs} role="tablist" aria-label="页面导航">
+        <button
+          type="button"
+          className={[styles.tabBtn, activeTab === 'overview' ? styles.tabBtnActive : ''].filter(Boolean).join(' ')}
+          aria-pressed={activeTab === 'overview'}
+          onClick={() => setActiveTab('overview')}
+        >
+          功能概览
+        </button>
+        <button
+          type="button"
+          className={[styles.tabBtn, activeTab === 'shortcuts' ? styles.tabBtnActive : ''].filter(Boolean).join(' ')}
+          aria-pressed={activeTab === 'shortcuts'}
+          onClick={() => setActiveTab('shortcuts')}
+        >
+          快捷键
+        </button>
+        <button
+          type="button"
+          className={[styles.tabBtn, activeTab === 'tests' ? styles.tabBtnActive : ''].filter(Boolean).join(' ')}
+          aria-pressed={activeTab === 'tests'}
+          onClick={() => setActiveTab('tests')}
+        >
+          使用前测试
+        </button>
+      </nav>
+
+      {activeTab === 'overview' ? (
+        <section className={styles.section}>
+          <h2 className={styles.h2}>功能概览</h2>
+          <div className={styles.twoCol}>
+            <Card className={styles.cardPad}>
+              <h3 className={styles.h3}>多模态 + 多场景</h3>
+              <ul className={styles.list}>
+                <li>屏幕与音频捕获：结合屏幕内容与系统/麦克风音频进行多模态分析</li>
+                <li>透明悬浮窗：始终置顶，可自由移动定位；支持点击穿透模式</li>
+                <li>多档案配置：面试/销售/会议/演示/谈判等场景模板</li>
+                <li>内容保护：防止屏幕录制软件捕获窗口内容（依赖系统与平台差异）</li>
+              </ul>
+            </Card>
+            <Card className={styles.cardPad}>
+              <h3 className={styles.h3}>使用方式（最短路径）</h3>
+              <ol className={styles.list}>
+                <li>下载并安装（Windows：.exe；macOS：.dmg）</li>
+                <li>安装 ffmpeg（Windows：scoop/choco 或手动；macOS：brew install ffmpeg）</li>
+                <li>首次启动输入 License Key，授予屏幕录制/麦克风权限</li>
+                <li>选择使用档案，开始会话；建议模拟“面试官提问”场景</li>
+              </ol>
+            </Card>
+          </div>
+
+          <div className={styles.oneCol}>
+            <Card className={styles.cardPad}>
+              <details className={styles.details}>
+                <summary className={styles.summary}>模型栈（项目说明）</summary>
+                <ul className={styles.list}>
+                  <li>Qwen (qwen3-max)：强大的文本对话能力</li>
+                  <li>Qwen Vision (qwen3-vl-plus)：截图识别与图像理解</li>
+                  <li>Qwen ASR (qwen3-asr-flash)：高精度语音识别</li>
+                </ul>
+              </details>
+            </Card>
+          </div>
+        </section>
+      ) : null}
+
+      {activeTab === 'shortcuts' ? (
+        <section className={styles.section}>
+          <h2 className={styles.h2}>快捷键</h2>
           <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>模型栈（项目说明）</h3>
-            <ul className={styles.list}>
-              <li>Qwen (qwen3-max)：强大的文本对话能力</li>
-              <li>Qwen Vision (qwen3-vl-plus)：截图识别与图像理解</li>
-              <li>Qwen ASR (qwen3-asr-flash)：高精度语音识别</li>
-            </ul>
-          </Card>
-          <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>快捷键说明</h3>
             <div className={styles.kbdGrid}>
               <div className={styles.kbdRow}>
                 <span className={styles.kbdName}>📸 截屏提问</span>
@@ -379,78 +558,48 @@ export function CheatingBuddyPage() {
               </div>
             </div>
           </Card>
-        </div>
+        </section>
+      ) : null}
 
-        <div className={styles.twoCol}>
-          <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>Windows 详细安装教程</h3>
-            <div className={styles.stepGroup}>
-              <h4>步骤 1：安装应用程序</h4>
-              <ul className={styles.list}>
-                <li>双击下载的 <code>.exe</code> 文件</li>
-                <li>如果出现"Windows 保护了你的电脑"提示：点击 <strong>"更多信息"</strong> → <strong>"仍要运行"</strong></li>
-                <li>按照安装向导完成安装</li>
-              </ul>
-              <h4>步骤 2：安装 ffmpeg</h4>
-              <ul className={styles.list}>
-                <li><strong>推荐 (Scoop):</strong> <code>scoop install ffmpeg</code></li>
-                <li><strong>或 (Chocolatey):</strong> <code>choco install ffmpeg</code></li>
-                <li><strong>手动:</strong> 下载 <code>ffmpeg-release-essentials.zip</code> 解压到 <code>C:\ffmpeg</code> 并添加 <code>bin</code> 到系统环境变量 PATH</li>
-              </ul>
-              <h4>步骤 3：配置权限与启动</h4>
-              <ul className={styles.list}>
-                <li>允许麦克风/屏幕录制权限（Win10/11 可能需在 <strong>设置 → 隐私</strong> 中手动授权）</li>
-                <li>首次使用输入 License Key，在设置中选择使用档案和语言，点击 <strong>"开始会话"</strong></li>
-              </ul>
+      {activeTab === 'tests' ? (
+        <section className={styles.section}>
+          <h2 className={styles.h2}>使用前测试</h2>
+          <p className={styles.sectionLead}>
+            建议完成以下两项测试，提前暴露环境差异（系统版本、权限、屏幕共享可见性），减少“现场翻车”概率并优化体验。
+          </p>
+          <div className={styles.testActions}>
+            <Button
+              onClick={() => {
+                focusTestBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                focusTestRef.current?.start()
+              }}
+            >
+              开始切屏检测
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={async () => {
+                shareTestBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                await shareTestRef.current?.start()
+              }}
+            >
+              开始屏幕共享预览
+            </Button>
+          </div>
+          <div className={styles.toolsGrid}>
+            <div ref={focusTestBoxRef}>
+              <Card className={styles.cardPad}>
+                <FocusSwitchTest ref={focusTestRef} />
+              </Card>
             </div>
-          </Card>
-          <Card className={styles.cardPad}>
-            <h3 className={styles.h3}>macOS 详细安装教程</h3>
-            <div className={styles.stepGroup}>
-              <h4>步骤 1：安装应用程序</h4>
-              <ul className={styles.list}>
-                <li>双击 <code>.dmg</code>，将应用图标拖拽到 <strong>"应用程序"</strong> 文件夹</li>
-              </ul>
-              <h4>步骤 2：移除隔离属性（必须操作！）</h4>
-              <ul className={styles.list}>
-                <li><code>sudo xattr -cr /Applications/Cheating\ Buddy.app</code></li>
-                <li>验证：<code>xattr -l /Applications/Cheating\ Buddy.app</code> (应无输出)</li>
-              </ul>
-              <h4>步骤 3：安装 ffmpeg 与配置权限</h4>
-              <ul className={styles.list}>
-                <li><strong>推荐 (Homebrew):</strong> <code>brew install ffmpeg</code></li>
-                <li>在 <strong>系统设置 → 隐私与安全性</strong> 中授予 <strong>屏幕录制</strong> 与 <strong>麦克风</strong> 权限</li>
-                <li><strong>⚠️ 重要：</strong> 设置权限后需 <strong>完全退出</strong> 应用重新打开</li>
-              </ul>
-              <h4>步骤 4：启动</h4>
-              <ul className={styles.list}>
-                <li>若提示"无法打开"：右键点击图标 → 按住 <strong>Option</strong> 键 → 选择 <strong>"打开"</strong></li>
-              </ul>
+            <div ref={shareTestBoxRef}>
+              <Card className={styles.cardPad}>
+                <ScreenShareVisibilityTest ref={shareTestRef} />
+              </Card>
             </div>
-          </Card>
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h2 className={styles.h2}>使用前建议先做三项测试</h2>
-        <p className={styles.sectionLead}>
-          目的：在正式使用前尽量提前暴露环境差异（系统版本、权限、屏幕共享可见性、快捷键可观测性），减少“现场翻车”概率并优化体验。
-        </p>
-        <div className={styles.toolsGrid}>
-          <Card className={styles.cardPad}>
-            <FocusSwitchTest />
-          </Card>
-          <Card className={styles.cardPad}>
-            <ScreenShareVisibilityTest />
-          </Card>
-        </div>
-        <div className={styles.moreTools}>
-          也可以直接访问原站工具集：{' '}
-          <a href={projects.gankInterview.toolsUrl} target="_blank" rel="noreferrer">
-            {projects.gankInterview.toolsUrl}
-          </a>
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
     </Container>
   )
 }
