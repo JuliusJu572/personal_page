@@ -2,8 +2,9 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../ui/AppLayout'
 import { CheatingBuddyPage } from '../views/CheatingBuddyPage'
 import { HomePage } from '../views/HomePage'
+import { KnowledgeCardEditorPage } from '../views/KnowledgeCardEditorPage'
+import { KnowledgeCardsPage } from '../views/KnowledgeCardsPage'
 import { NotFoundPage } from '../views/NotFoundPage'
-import { TarotPage } from '../views/TarotPage'
 
 export function AppRoutes() {
   return (
@@ -11,11 +12,11 @@ export function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route index element={<HomePage />} />
         <Route path="cheating-buddy" element={<CheatingBuddyPage />} />
-        <Route path="tarot" element={<TarotPage />} />
+        <Route path="knowledge-cards" element={<KnowledgeCardsPage />} />
+        <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />
         <Route path="home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   )
 }
-

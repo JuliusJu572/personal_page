@@ -1,8 +1,7 @@
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { projects } from '../config/projects'
 import type { GitHubRelease } from '../lib/github'
 import { fetchLatestRelease, pickReleaseAsset } from '../lib/github'
-import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
@@ -134,7 +133,7 @@ const FocusSwitchTest = forwardRef<FocusSwitchTestHandle>(function FocusSwitchTe
       </p>
       <div className={styles.toolLog} role="log" aria-label="检测日志">
         {events.length === 0 ? (
-          <div className={styles.toolEmpty}>点击“开始检测”后尝试切换窗口/标签页。</div>
+          <div className={styles.toolEmpty}>点击"开始检测"后尝试切换窗口/标签页。</div>
         ) : (
           events.map((e, idx) => (
             <div key={`${e.t}-${idx}`} className={styles.toolRow}>
@@ -162,22 +161,30 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
   const [status, setStatus] = useState<'idle' | 'running' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState<string>('')
 
-  const stopTracks = () => {
+  const stopTracks = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
     streamRef.current = null
     if (videoRef.current) videoRef.current.srcObject = null
-  }
+  }, [])
 
-  const stop = () => {
+  const stop = useCallback(() => {
     stopTracks()
     setStatus('idle')
-  }
+  }, [stopTracks])
 
-  const start = async () => {
+  const start = useCallback(async () => {
     if (status === 'running') return
     setErrorMsg('')
     try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
+      const mediaDevices = navigator.mediaDevices
+      const getDisplayMedia = mediaDevices?.getDisplayMedia
+      if (typeof getDisplayMedia !== 'function') {
+        setStatus('error')
+        setErrorMsg('当前浏览器/环境不支持屏幕共享预览。请使用最新版 Chrome/Edge，并确保在 https 或 localhost 下打开。')
+        return
+      }
+
+      const stream = await getDisplayMedia.call(mediaDevices, {
         video: { frameRate: 30 },
         audio: false,
       })
@@ -189,11 +196,11 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
       setErrorMsg(msg)
       setStatus('error')
     }
-  }
+  }, [status])
 
-  useImperativeHandle(ref, () => ({ start, stop }), [status])
+  useImperativeHandle(ref, () => ({ start, stop }), [start, stop])
 
-  useEffect(() => () => stopTracks(), [])
+  useEffect(() => () => stopTracks(), [stopTracks])
 
   return (
     <div className={styles.tool}>
@@ -215,12 +222,12 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
         </div>
       </div>
       <p className={styles.toolDesc}>
-        选择“整个屏幕”共享后，你会看到采集到的画面。可在同时打开 Cheating Buddy 主程序时观察：屏幕采集里是否会出现悬浮窗/提示等内容。
+        选择"整个屏幕"共享后，你会看到采集到的画面。可在同时打开 Cheating Buddy 主程序时观察：屏幕采集里是否会出现悬浮窗/提示等内容。
       </p>
       {status === 'error' ? <div className={styles.toolError}>{errorMsg}</div> : null}
       <div className={styles.videoBox}>
         <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
-        {status !== 'running' ? <div className={styles.videoMask}>点击“开始预览”并选择共享目标</div> : null}
+        {status !== 'running' ? <div className={styles.videoMask}>点击"开始预览"并选择共享目标</div> : null}
       </div>
     </div>
   )
@@ -234,7 +241,7 @@ function InstallGuide(props: { os: 'windows' | 'mac' }) {
         <ul className={styles.list}>
           <li>双击下载的 <code>.exe</code> 文件</li>
           <li>
-            如果出现“Windows 保护了你的电脑”提示：点击 <strong>更多信息</strong> → <strong>仍要运行</strong>
+            如果出现"Windows 保护了你的电脑"提示：点击 <strong>更多信息</strong> → <strong>仍要运行</strong>
           </li>
           <li>按照安装向导完成安装</li>
         </ul>
@@ -312,33 +319,38 @@ export function CheatingBuddyPage() {
   const release = releaseState.status === 'loaded' ? releaseState.release : null
   const windowsAsset = useMemo(() => (release ? pickReleaseAsset(release, 'windows') : undefined), [release])
   const macAsset = useMemo(() => (release ? pickReleaseAsset(release, 'mac') : undefined), [release])
-  const [selectedOs, setSelectedOs] = useState<'windows' | 'mac'>('windows')
+  const [selectedOs, setSelectedOs] = useState<'windows' | 'mac'>(() => {
+    if (typeof navigator === 'undefined') return 'windows'
+    const ua = navigator.userAgent.toLowerCase()
+    return ua.includes('mac os') || ua.includes('macintosh') ? 'mac' : 'windows'
+  })
   const [activeTab, setActiveTab] = useState<'overview' | 'shortcuts' | 'tests'>('overview')
   const focusTestRef = useRef<FocusSwitchTestHandle | null>(null)
   const shareTestRef = useRef<ScreenShareVisibilityTestHandle | null>(null)
   const focusTestBoxRef = useRef<HTMLDivElement | null>(null)
   const shareTestBoxRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    const ua = navigator.userAgent.toLowerCase()
-    if (ua.includes('mac os') || ua.includes('macintosh')) setSelectedOs('mac')
-  }, [])
-
   const releaseTitle = release?.tag_name ?? projects.cheatingBuddy.fallbackReleaseTag
+  const repoUrl = `https://github.com/${projects.cheatingBuddy.owner}/${projects.cheatingBuddy.repo}`
+  const releaseUrl = release?.html_url ?? `${repoUrl}/releases`
 
   return (
-    <Container>
+    <Container className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroGrid}>
           <div className={styles.heroCopy}>
-            <div className={styles.badges}>
-              <Badge tone="success">AI 面试助手</Badge>
-              <Badge tone="neutral">macOS / Windows</Badge>
-            </div>
             <h1 className={styles.title}>Cheating Buddy（作弊老铁）</h1>
             <p className={styles.subtitle}>
-              一个实时 AI 助手，通过屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助。
+              一个实时 AI 助手：基于屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助与回答草稿。
             </p>
+            <div className={styles.heroLinks}>
+              <a href={repoUrl} target="_blank" rel="noreferrer">
+                <Button variant="secondary">查看仓库</Button>
+              </a>
+              <a href={releaseUrl} target="_blank" rel="noreferrer">
+                <Button variant="ghost">Release</Button>
+              </a>
+            </div>
           </div>
 
           <Card className={styles.downloadCard}>
@@ -499,7 +511,7 @@ export function CheatingBuddyPage() {
                 <li>下载并安装（Windows：.exe；macOS：.dmg）</li>
                 <li>安装 ffmpeg（Windows：scoop/choco 或手动；macOS：brew install ffmpeg）</li>
                 <li>首次启动输入 License Key，授予屏幕录制/麦克风权限</li>
-                <li>选择使用档案，开始会话；建议模拟“面试官提问”场景</li>
+                <li>选择使用档案，开始会话；建议模拟"面试官提问"场景</li>
               </ol>
             </Card>
           </div>
@@ -565,7 +577,7 @@ export function CheatingBuddyPage() {
         <section className={styles.section}>
           <h2 className={styles.h2}>使用前测试</h2>
           <p className={styles.sectionLead}>
-            建议完成以下两项测试，提前暴露环境差异（系统版本、权限、屏幕共享可见性），减少“现场翻车”概率并优化体验。
+            建议完成以下两项测试，提前暴露环境差异（系统版本、权限、屏幕共享可见性），减少"现场翻车"概率并优化体验。
           </p>
           <div className={styles.testActions}>
             <Button

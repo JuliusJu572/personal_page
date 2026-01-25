@@ -1,35 +1,38 @@
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-xs);
   padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  font-size: 12px;
-  line-height: 18px;
-  color: var(--muted);
-  background: color-mix(in oklab, var(--bg-elev) 88%, transparent);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-subtle);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  transition: all var(--transition-fast);
 }
 
 .neutral {
-  color: var(--muted);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-subtle);
 }
 
 .accent {
-  border-color: color-mix(in oklab, var(--accent) 25%, var(--border));
-  color: color-mix(in oklab, var(--accent) 70%, white);
-  background: color-mix(in oklab, var(--accent) 14%, transparent);
+  border-color: var(--color-accent-primary);
+  color: var(--color-accent-primary);
+  background: rgba(0, 113, 227, 0.08);
 }
 
 .success {
-  border-color: color-mix(in oklab, var(--accent-2) 22%, var(--border));
-  color: color-mix(in oklab, var(--accent-2) 70%, white);
-  background: color-mix(in oklab, var(--accent-2) 12%, transparent);
+  border-color: var(--color-accent-success);
+  color: var(--color-accent-success);
+  background: rgba(52, 199, 89, 0.08);
 }
 
 .warn {
-  border-color: color-mix(in oklab, #f59e0b 30%, var(--border));
-  color: color-mix(in oklab, #f59e0b 75%, white);
-  background: color-mix(in oklab, #f59e0b 12%, transparent);
+  border-color: var(--color-accent-warning);
+  color: var(--color-accent-warning);
+  background: rgba(255, 149, 0, 0.08);
 }
-

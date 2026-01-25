@@ -1,6 +1,5 @@
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 28px 16px 56px;
+  padding: var(--spacing-5xl) var(--spacing-lg) var(--spacing-5xl);
 }
-

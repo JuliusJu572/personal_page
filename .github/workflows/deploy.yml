@@ -14,12 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Checkout Mystic_AI_Tarot
-        uses: actions/checkout@v3
-        with:
-          repository: JuliusJu572/Mystic_AI_Tarot
-          path: Mystic_AI_Tarot
-
       # 2. 安装 Node.js 环境
       - name: Setup Node
         uses: actions/setup-node@v3

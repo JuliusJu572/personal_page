@@ -4,7 +4,7 @@ import styles from './appLayout.module.css'
 const navItems: Array<{ to: string; label: string }> = [
   { to: '/', label: '主页' },
   { to: '/cheating-buddy', label: 'Cheating Buddy' },
-  { to: '/tarot', label: 'Mystic AI Tarot' },
+  { to: '/knowledge-cards', label: '知识卡片' },
 ]
 
 export function AppLayout() {
@@ -59,4 +59,3 @@ export function AppLayout() {
     </div>
   )
 }
-

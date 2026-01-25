@@ -1,78 +1,108 @@
 import { Link } from 'react-router-dom'
-import { Badge } from '../ui/Badge'
+import { projects } from '../config/projects'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import styles from './homePage.module.css'
 
 export function HomePage() {
+  const cheatingRepoUrl = `https://github.com/${projects.cheatingBuddy.owner}/${projects.cheatingBuddy.repo}`
+
   return (
-    <Container>
+    <Container className={styles.page}>
       <section className={styles.hero}>
-        <div className={styles.heroLeft}>
-          <Badge tone="accent">React · 响应式 · 统一设计</Badge>
-          <h1 className={styles.title}>个人主页 / Projects Hub</h1>
+        <div className={styles.heroCopy}>
+          <h1 className={styles.title}>JuliusJu</h1>
           <p className={styles.subtitle}>
-            集成两个核心模块：Cheating Buddy（作弊老铁）与 Mystic AI Tarot（塔罗牌预测）。
+            极简项目入口。当前主推：Cheating Buddy（作弊老铁）—— 下载中心、安装指引、使用前测试，一站式整理。
           </p>
-          <div className={styles.heroActions}>
+          <div className={styles.actions}>
             <Link to="/cheating-buddy">
-              <Button>进入 Cheating Buddy</Button>
+              <Button>打开 Cheating Buddy</Button>
             </Link>
-            <Link to="/tarot">
-              <Button variant="secondary">进入 Mystic AI Tarot</Button>
-            </Link>
+            <a href={cheatingRepoUrl} target="_blank" rel="noreferrer">
+              <Button variant="secondary">GitHub</Button>
+            </a>
           </div>
         </div>
 
-        <Card className={styles.heroRight}>
-          <div className={styles.panelHeader}>
-            <div className={styles.panelDot} />
-            <div className={styles.panelDot} />
-            <div className={styles.panelDot} />
-            <div className={styles.panelTitle}>/</div>
+        <Card className={styles.heroCard}>
+          <div className={styles.heroCardTop}>
+            <div className={styles.featureIcon} aria-hidden="true" />
+            <div className={styles.featureText}>
+              <div className={styles.featureName}>Cheating Buddy</div>
+              <div className={styles.featureDesc}>macOS / Windows · 最新 Release 自动拉取</div>
+            </div>
           </div>
-          <div className={styles.panelBody}>
-            <div className={styles.panelRow}>
-              <span className={styles.k}>GitHub</span>
-              <a href="https://github.com/JuliusJu572" target="_blank" rel="noreferrer" className={styles.v}>
-                github.com/JuliusJu572
-              </a>
+          <div className={styles.metaGrid}>
+            <div className={styles.metaItem}>
+              <div className={styles.metaK}>Repo</div>
+              <div className={styles.metaV}>
+                <a href={cheatingRepoUrl} target="_blank" rel="noreferrer">
+                  {projects.cheatingBuddy.owner}/{projects.cheatingBuddy.repo}
+                </a>
+              </div>
             </div>
-            <div className={styles.panelRow}>
-              <span className={styles.k}>Modules</span>
-              <span className={styles.v}>Cheating Buddy · Mystic AI Tarot</span>
+            <div className={styles.metaItem}>
+              <div className={styles.metaK}>包含</div>
+              <div className={styles.metaV}>下载 · 安装 · 快捷键 · 风险测试</div>
             </div>
+          </div>
+          <div className={styles.heroCardActions}>
+            <Link to="/cheating-buddy">
+              <Button variant="secondary">进入介绍页</Button>
+            </Link>
           </div>
         </Card>
       </section>
 
-      <section className={styles.grid}>
-        <Card className={styles.gridCard}>
-          <div className={styles.gridCardTop}>
-            <Badge tone="success">应用</Badge>
-            <h2 className={styles.gridTitle}>Cheating Buddy（作弊老铁）</h2>
-            <p className={styles.gridDesc}>
-              将 README 核心信息结构化展示，并自动抓取最新 Release，提供 Windows / macOS 直链下载。
-            </p>
-          </div>
-          <Link to="/cheating-buddy" className={styles.gridLink}>
-            进入介绍页 →
-          </Link>
-        </Card>
+      <section className={styles.section}>
+        <h2 className={styles.h2}>你可以在这里做什么</h2>
+        <div className={styles.cards}>
+          <Card className={styles.infoCard}>
+            <div className={styles.infoTop}>
+              <div className={styles.infoIcon} aria-hidden="true" />
+              <div className={styles.infoTitle}>直达下载</div>
+            </div>
+            <p className={styles.infoDesc}>自动获取最新 Release，并给出 Windows / macOS 安装包直链。</p>
+            <Link to="/cheating-buddy" className={styles.cardLink}>
+              去下载 →
+            </Link>
+          </Card>
 
-        <Card className={styles.gridCard}>
-          <div className={styles.gridCardTop}>
-            <Badge tone="accent">子应用</Badge>
-            <h2 className={styles.gridTitle}>Mystic AI Tarot</h2>
-            <p className={styles.gridDesc}>
-              作为子应用挂载在主站路径下，保留其原有神秘视觉风格与动效。
-            </p>
-          </div>
-          <Link to="/tarot" className={styles.gridLink}>
-            打开 Tarot →
-          </Link>
-        </Card>
+          <Card className={styles.infoCard}>
+            <div className={styles.infoTop}>
+              <div className={styles.infoIcon2} aria-hidden="true" />
+              <div className={styles.infoTitle}>快速上手</div>
+            </div>
+            <p className={styles.infoDesc}>按系统拆分的安装步骤与 ffmpeg 配置要点，少踩坑。</p>
+            <Link to="/cheating-buddy" className={styles.cardLink}>
+              看指引 →
+            </Link>
+          </Card>
+
+          <Card className={styles.infoCard}>
+            <div className={styles.infoTop}>
+              <div className={styles.infoIcon3} aria-hidden="true" />
+              <div className={styles.infoTitle}>使用前测试</div>
+            </div>
+            <p className={styles.infoDesc}>切屏/可见性与屏幕共享预览，提前暴露环境差异。</p>
+            <Link to="/cheating-buddy" className={styles.cardLink}>
+              去测试 →
+            </Link>
+          </Card>
+
+          <Card className={styles.infoCard}>
+            <div className={styles.infoTop}>
+              <div className={styles.infoIcon} aria-hidden="true" />
+              <div className={styles.infoTitle}>知识卡片编辑</div>
+            </div>
+            <p className={styles.infoDesc}>上传或编辑 Markdown，一键拆分成可浏览的知识卡片。</p>
+            <Link to="/knowledge-cards/editor" className={styles.cardLink}>
+              去编辑 →
+            </Link>
+          </Card>
+        </div>
       </section>
     </Container>
   )
