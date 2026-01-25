@@ -1,15 +1,93 @@
 .card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  position: relative;
+  background: var(--glass-bg-regular);
+  border: 1px solid var(--glass-border-regular);
   border-radius: var(--radius-xl);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  box-shadow: var(--depth-md);
+  backdrop-filter: var(--glass-blur-regular) saturate(180%);
+  -webkit-backdrop-filter: var(--glass-blur-regular) saturate(180%);
+  transition: transform var(--transition-spring), box-shadow var(--transition-spring),
+    border-color var(--transition-base), background var(--transition-base);
+  overflow: hidden;
+}
+
+/* Inner glow effect */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Subtle shine on hover */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transition: left var(--transition-slow);
+  pointer-events: none;
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--color-border-default);
+  transform: translateY(-4px) scale(var(--scale-hover));
+  box-shadow: var(--depth-xl);
+  border-color: var(--glass-border-strong);
+  background: var(--glass-bg-thick);
+}
+
+.card:hover::after {
+  left: 100%;
+}
+
+.card:active {
+  transform: translateY(-1px) scale(var(--scale-active));
+  box-shadow: var(--depth-md);
+}
+
+/* Variant: Thin glass for less prominent cards */
+.card.thin {
+  background: var(--glass-bg-thin);
+  backdrop-filter: var(--glass-blur-subtle) saturate(150%);
+  -webkit-backdrop-filter: var(--glass-blur-subtle) saturate(150%);
+  border-color: var(--glass-border-thin);
+  box-shadow: var(--depth-sm);
+}
+
+.card.thin:hover {
+  transform: translateY(-2px) scale(var(--scale-hover));
+  box-shadow: var(--depth-lg);
+}
+
+/* Variant: Thick glass for prominent cards */
+.card.thick {
+  background: var(--glass-bg-heavy);
+  backdrop-filter: var(--glass-blur-strong) saturate(200%);
+  -webkit-backdrop-filter: var(--glass-blur-strong) saturate(200%);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--depth-lg);
+}
+
+.card.thick:hover {
+  transform: translateY(-6px) scale(var(--scale-hover));
+  box-shadow: var(--depth-2xl);
 }

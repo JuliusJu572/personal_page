@@ -1,38 +1,70 @@
 .badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-full);
-  border: 1px solid var(--color-border-subtle);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   line-height: 1.5;
-  color: var(--color-text-secondary);
-  background: var(--color-bg-secondary);
-  transition: all var(--transition-fast);
+  backdrop-filter: var(--glass-blur-subtle) saturate(150%);
+  -webkit-backdrop-filter: var(--glass-blur-subtle) saturate(150%);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .neutral {
-  color: var(--color-text-secondary);
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+  background: var(--glass-bg-thin);
+  border: 1px solid var(--glass-border-regular);
 }
 
 .accent {
-  border-color: var(--color-accent-primary);
   color: var(--color-accent-primary);
-  background: rgba(0, 113, 227, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 113, 227, 0.15) 0%,
+    rgba(0, 113, 227, 0.05) 100%
+  );
+  border: 1px solid rgba(0, 113, 227, 0.3);
+  box-shadow: 0 0 12px rgba(0, 113, 227, 0.15);
 }
 
 .success {
-  border-color: var(--color-accent-success);
   color: var(--color-accent-success);
-  background: rgba(52, 199, 89, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(52, 199, 89, 0.15) 0%,
+    rgba(52, 199, 89, 0.05) 100%
+  );
+  border: 1px solid rgba(52, 199, 89, 0.3);
+  box-shadow: 0 0 12px rgba(52, 199, 89, 0.15);
 }
 
 .warn {
-  border-color: var(--color-accent-warning);
   color: var(--color-accent-warning);
-  background: rgba(255, 149, 0, 0.08);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 149, 0, 0.15) 0%,
+    rgba(255, 149, 0, 0.05) 100%
+  );
+  border: 1px solid rgba(255, 149, 0, 0.3);
+  box-shadow: 0 0 12px rgba(255, 149, 0, 0.15);
 }

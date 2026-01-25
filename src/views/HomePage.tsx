@@ -2,16 +2,17 @@ import { Link } from 'react-router-dom'
 import { projects } from '../config/projects'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
-import { Container } from '../ui/Container'
 import styles from './homePage.module.css'
 
 export function HomePage() {
   const cheatingRepoUrl = `https://github.com/${projects.cheatingBuddy.owner}/${projects.cheatingBuddy.repo}`
 
   return (
-    <Container className={styles.page}>
+    <div className={styles.page}>
+      {/* Hero Section - Bento Grid */}
       <section className={styles.hero}>
-        <div className={styles.heroCopy}>
+        {/* Title Section - spans 8 columns, 2 rows */}
+        <div className={styles.titleSection}>
           <h1 className={styles.title}>JuliusJu</h1>
           <p className={styles.subtitle}>
             极简项目入口。当前主推：Cheating Buddy（作弊老铁）—— 下载中心、安装指引、使用前测试，一站式整理。
@@ -26,7 +27,8 @@ export function HomePage() {
           </div>
         </div>
 
-        <Card className={styles.heroCard}>
+        {/* Hero Card - spans 4 columns, 2 rows */}
+        <Card className={styles.heroCard} variant="thick">
           <div className={styles.heroCardTop}>
             <div className={styles.featureIcon} aria-hidden="true" />
             <div className={styles.featureText}>
@@ -56,10 +58,11 @@ export function HomePage() {
         </Card>
       </section>
 
+      {/* Features Section - Bento Grid */}
       <section className={styles.section}>
         <h2 className={styles.h2}>你可以在这里做什么</h2>
-        <div className={styles.cards}>
-          <Card className={styles.infoCard}>
+        <div className={styles.bentoGrid}>
+          <Card className={[styles.infoCard, styles.bentoMedium].join(' ')} variant="default">
             <div className={styles.infoTop}>
               <div className={styles.infoIcon} aria-hidden="true" />
               <div className={styles.infoTitle}>直达下载</div>
@@ -70,7 +73,7 @@ export function HomePage() {
             </Link>
           </Card>
 
-          <Card className={styles.infoCard}>
+          <Card className={[styles.infoCard, styles.bentoMedium].join(' ')} variant="default">
             <div className={styles.infoTop}>
               <div className={styles.infoIcon2} aria-hidden="true" />
               <div className={styles.infoTitle}>快速上手</div>
@@ -81,7 +84,7 @@ export function HomePage() {
             </Link>
           </Card>
 
-          <Card className={styles.infoCard}>
+          <Card className={[styles.infoCard, styles.bentoMedium].join(' ')} variant="default">
             <div className={styles.infoTop}>
               <div className={styles.infoIcon3} aria-hidden="true" />
               <div className={styles.infoTitle}>使用前测试</div>
@@ -92,7 +95,7 @@ export function HomePage() {
             </Link>
           </Card>
 
-          <Card className={styles.infoCard}>
+          <Card className={[styles.infoCard, styles.bentoMedium].join(' ')} variant="default">
             <div className={styles.infoTop}>
               <div className={styles.infoIcon} aria-hidden="true" />
               <div className={styles.infoTitle}>知识卡片编辑</div>
@@ -104,6 +107,6 @@ export function HomePage() {
           </Card>
         </div>
       </section>
-    </Container>
+    </div>
   )
 }

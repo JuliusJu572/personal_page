@@ -1,18 +1,21 @@
 .button {
+  position: relative;
   appearance: none;
   border: none;
   border-radius: var(--radius-full);
-  padding: 10px 20px;
+  padding: 12px 24px;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-spring), box-shadow var(--transition-spring),
+    background var(--transition-base), border-color var(--transition-base);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .button:disabled {
@@ -22,43 +25,117 @@
 }
 
 .button:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: scale(var(--scale-active));
 }
 
+/* Primary Button - Gradient with glow */
 .primary {
-  background: var(--color-accent-primary);
+  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
   color: white;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--depth-sm), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--color-accent-secondary);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--depth-lg), 0 0 20px rgba(var(--color-accent-primary), 0.3);
 }
 
+.primary:hover:not(:disabled)::before {
+  opacity: 1;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Secondary Button - Liquid Glass */
 .secondary {
-  background: var(--glass-bg);
+  background: var(--glass-bg-regular);
   color: var(--color-text-primary);
-  border: 1px solid var(--color-border-default);
-  box-shadow: var(--shadow-xs);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border-regular);
+  box-shadow: var(--depth-sm);
+  backdrop-filter: var(--glass-blur-regular) saturate(180%);
+  -webkit-backdrop-filter: var(--glass-blur-regular) saturate(180%);
+}
+
+.secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px) scale(1.02);
+  background: var(--glass-bg-thick);
+  border-color: var(--glass-border-strong);
+  box-shadow: var(--depth-md);
 }
 
+/* Ghost Button - Minimal */
 .ghost {
   background: transparent;
   color: var(--color-text-secondary);
-  border: none;
+  border: 1px solid transparent;
+}
+
+.ghost::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--glass-bg-thin);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  border-radius: inherit;
 }
 
 .ghost:hover:not(:disabled) {
-  background: var(--color-bg-secondary);
   color: var(--color-text-primary);
+  transform: translateY(-1px) scale(1.01);
+}
+
+.ghost:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+/* Size variants */
+.button.small {
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
+}
+
+.button.large {
+  padding: 16px 32px;
+  font-size: var(--font-size-lg);
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
