@@ -62,6 +62,10 @@ const FocusSwitchTest = forwardRef<FocusSwitchTestHandle>(function FocusSwitchTe
   const [isRunning, setIsRunning] = useState(false)
   const [events, setEvents] = useState<Array<{ t: number; type: string; detail?: string }>>([])
   const [startedAt, setStartedAt] = useState<number | null>(null)
+  const [snapshot, setSnapshot] = useState(() => ({
+    hasFocus: typeof document === 'undefined' ? true : document.hasFocus(),
+    visibilityState: typeof document === 'undefined' ? 'visible' : document.visibilityState,
+  }))
 
   useImperativeHandle(
     ref,
@@ -102,10 +106,34 @@ const FocusSwitchTest = forwardRef<FocusSwitchTestHandle>(function FocusSwitchTe
     }
   }, [isRunning])
 
+  useEffect(() => {
+    const update = () => {
+      setSnapshot({
+        hasFocus: document.hasFocus(),
+        visibilityState: document.visibilityState,
+      })
+    }
+    update()
+    document.addEventListener('visibilitychange', update)
+    window.addEventListener('blur', update)
+    window.addEventListener('focus', update)
+    return () => {
+      document.removeEventListener('visibilitychange', update)
+      window.removeEventListener('blur', update)
+      window.removeEventListener('focus', update)
+    }
+  }, [])
+
   return (
     <div className={styles.tool}>
       <div className={styles.toolTop}>
-        <div className={styles.toolTitle}>切屏检测（焦点/可见性）</div>
+        <div className={styles.toolTitle}>
+          切屏检测（焦点/可见性）
+          <span className={styles.toolStatus}>
+            <span className={styles.toolStatusItem}>焦点：{snapshot.hasFocus ? '在本页' : '不在本页'}</span>
+            <span className={styles.toolStatusItem}>可见：{snapshot.visibilityState}</span>
+          </span>
+        </div>
         <div className={styles.toolActions}>
           <Button
             variant={isRunning ? 'secondary' : 'primary'}
@@ -160,6 +188,30 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
   const streamRef = useRef<MediaStream | null>(null)
   const [status, setStatus] = useState<'idle' | 'running' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState<string>('')
+  const [snapshot, setSnapshot] = useState(() => ({
+    hasFocus: typeof document === 'undefined' ? true : document.hasFocus(),
+    visibilityState: typeof document === 'undefined' ? 'visible' : document.visibilityState,
+  }))
+
+  const support = useMemo(() => {
+    const secure = typeof window === 'undefined' ? true : window.isSecureContext
+    const mediaDevices = typeof navigator === 'undefined' ? undefined : navigator.mediaDevices
+    const getDisplayMedia = mediaDevices?.getDisplayMedia
+
+    if (!secure) {
+      return {
+        ok: false,
+        message: '当前页面不是安全上下文，浏览器会禁止屏幕共享。请使用 https 或 localhost 打开。',
+      }
+    }
+    if (typeof getDisplayMedia !== 'function') {
+      return {
+        ok: false,
+        message: '当前浏览器/环境不支持屏幕共享预览。请使用最新版 Chrome/Edge，并确保在 https 或 localhost 下打开。',
+      }
+    }
+    return { ok: true, message: '' }
+  }, [])
 
   const stopTracks = useCallback(() => {
     streamRef.current?.getTracks().forEach((t) => t.stop())
@@ -176,36 +228,68 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
     if (status === 'running') return
     setErrorMsg('')
     try {
-      const mediaDevices = navigator.mediaDevices
-      const getDisplayMedia = mediaDevices?.getDisplayMedia
-      if (typeof getDisplayMedia !== 'function') {
+      if (!support.ok) {
         setStatus('error')
-        setErrorMsg('当前浏览器/环境不支持屏幕共享预览。请使用最新版 Chrome/Edge，并确保在 https 或 localhost 下打开。')
+        setErrorMsg(support.message)
         return
       }
 
-      const stream = await getDisplayMedia.call(mediaDevices, {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
         video: { frameRate: 30 },
         audio: false,
       })
       streamRef.current = stream
       if (videoRef.current) videoRef.current.srcObject = stream
+      const [track] = stream.getVideoTracks()
+      if (track) {
+        track.addEventListener(
+          'ended',
+          () => {
+            stop()
+          },
+          { once: true },
+        )
+      }
       setStatus('running')
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '无法获取屏幕共享权限'
       setErrorMsg(msg)
       setStatus('error')
     }
-  }, [status])
+  }, [status, stop, support.ok, support.message])
 
   useImperativeHandle(ref, () => ({ start, stop }), [start, stop])
 
   useEffect(() => () => stopTracks(), [stopTracks])
 
+  useEffect(() => {
+    const update = () => {
+      setSnapshot({
+        hasFocus: document.hasFocus(),
+        visibilityState: document.visibilityState,
+      })
+    }
+    update()
+    document.addEventListener('visibilitychange', update)
+    window.addEventListener('blur', update)
+    window.addEventListener('focus', update)
+    return () => {
+      document.removeEventListener('visibilitychange', update)
+      window.removeEventListener('blur', update)
+      window.removeEventListener('focus', update)
+    }
+  }, [])
+
   return (
     <div className={styles.tool}>
       <div className={styles.toolTop}>
-        <div className={styles.toolTitle}>视频共享可见检测（屏幕采集预览）</div>
+        <div className={styles.toolTitle}>
+          视频共享可见检测（屏幕采集预览）
+          <span className={styles.toolStatus}>
+            <span className={styles.toolStatusItem}>焦点：{snapshot.hasFocus ? '在本页' : '不在本页'}</span>
+            <span className={styles.toolStatusItem}>可见：{snapshot.visibilityState}</span>
+          </span>
+        </div>
         <div className={styles.toolActions}>
           <Button
             variant={status === 'running' ? 'secondary' : 'primary'}
@@ -226,8 +310,40 @@ const ScreenShareVisibilityTest = forwardRef<ScreenShareVisibilityTestHandle>(fu
       </p>
       {status === 'error' ? <div className={styles.toolError}>{errorMsg}</div> : null}
       <div className={styles.videoBox}>
-        <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
-        {status !== 'running' ? <div className={styles.videoMask}>点击"开始预览"并选择共享目标</div> : null}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className={[styles.video, status === 'running' ? '' : styles.videoHidden].filter(Boolean).join(' ')}
+        />
+        {status !== 'running' ? (
+          <>
+            <div className={styles.mockPreview} aria-hidden="true">
+              <div className={styles.mockTopBar}>
+                <span className={styles.mockDot} />
+                <span className={styles.mockDot} />
+                <span className={styles.mockDot} />
+                <span className={styles.mockTopTitle}>共享桌面预览（示意）</span>
+              </div>
+              <div className={styles.mockBody}>
+                <div className={styles.mockLeft}>
+                  <div className={styles.mockWindow} />
+                  <div className={styles.mockWindow} />
+                </div>
+                <div className={styles.mockRight}>
+                  <div className={styles.mockChart} />
+                  <div className={styles.mockChart} />
+                </div>
+              </div>
+            </div>
+            <div className={styles.videoMask}>
+              {status === 'error'
+                ? '当前无法开始真实预览（原因见上方）。此处展示共享成功后的示意画面。'
+                : '点击"开始预览"并选择共享目标（建议选"整个屏幕"）'}
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   )
@@ -331,8 +447,8 @@ export function CheatingBuddyPage() {
   const shareTestBoxRef = useRef<HTMLDivElement | null>(null)
 
   const releaseTitle = release?.tag_name ?? projects.cheatingBuddy.fallbackReleaseTag
-  const repoUrl = `https://github.com/${projects.cheatingBuddy.owner}/${projects.cheatingBuddy.repo}`
-  const releaseUrl = release?.html_url ?? `${repoUrl}/releases`
+  const releaseUrl =
+    release?.html_url ?? `https://github.com/${projects.cheatingBuddy.owner}/${projects.cheatingBuddy.repo}/releases`
 
   return (
     <Container className={styles.page}>
@@ -343,38 +459,28 @@ export function CheatingBuddyPage() {
             <p className={styles.subtitle}>
               一个实时 AI 助手：基于屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助与回答草稿。
             </p>
-            <div className={styles.heroLinks}>
-              <a href={repoUrl} target="_blank" rel="noreferrer">
-                <Button variant="secondary">查看仓库</Button>
+            <div className={styles.latestInline}>
+              <span className={styles.latestLabel}>最新版本</span>
+              <a href={releaseUrl} className={styles.latestTagLink} target="_blank" rel="noreferrer">
+                <span className={styles.releaseTag} aria-label="最新版本号">
+                  {releaseTitle}
+                </span>
               </a>
-              <a href={releaseUrl} target="_blank" rel="noreferrer">
-                <Button variant="ghost">Release</Button>
-              </a>
+              {releaseState.status === 'loading' ? <span className={styles.latestMeta}>正在获取版本信息…</span> : null}
+              {releaseState.status === 'error' ? (
+                <span className={styles.latestMeta}>
+                  无法自动获取：{releaseState.message}（已显示 fallback：{projects.cheatingBuddy.fallbackReleaseTag}）
+                </span>
+              ) : null}
+              {release ? (
+                <span className={styles.latestMeta}>
+                  发布于 {formatDate(release.published_at)} · {release.assets.length} 个附件
+                </span>
+              ) : null}
             </div>
           </div>
 
           <Card className={styles.downloadCard}>
-            <div className={styles.releaseTop}>
-              <div className={styles.releaseTitle}>最新版本</div>
-              <span className={styles.releaseTag} aria-label="最新版本号">
-                {releaseTitle}
-              </span>
-            </div>
-
-            {releaseState.status === 'loading' ? <div className={styles.releaseMeta}>正在获取版本信息…</div> : null}
-          {releaseState.status === 'error' ? (
-            <div className={styles.releaseError}>
-              无法自动获取最新 Release：{releaseState.message}
-              <div className={styles.releaseMeta}>可先使用 fallback 版本入口：{projects.cheatingBuddy.fallbackReleaseTag}</div>
-            </div>
-          ) : null}
-
-          {release ? (
-            <div className={styles.releaseMeta}>
-              发布于 {formatDate(release.published_at)} · {release.assets.length} 个附件
-            </div>
-          ) : null}
-
           <div className={styles.downloadGrid}>
             <div
               className={[styles.downloadItem, selectedOs === 'windows' ? styles.downloadItemActive : '']

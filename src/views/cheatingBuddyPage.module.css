@@ -37,8 +37,8 @@
 
 .heroGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-4xl);
+  grid-template-columns: 1fr;
+  gap: var(--spacing-3xl);
   align-items: start;
 }
 
@@ -71,10 +71,25 @@
   max-width: 540px;
 }
 
-.heroLinks {
+.latestInline {
   display: flex;
-  gap: var(--spacing-md);
+  align-items: center;
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
+}
+
+.latestLabel {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.latestTagLink {
+  text-decoration: none;
+}
+
+.latestMeta {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .downloadCard {
@@ -458,6 +473,24 @@ details[open] > .summary::after {
   color: var(--color-text-primary);
 }
 
+.toolStatus {
+  display: inline-flex;
+  gap: var(--spacing-sm);
+  margin-left: var(--spacing-md);
+  vertical-align: middle;
+  flex-wrap: wrap;
+}
+
+.toolStatusItem {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+}
+
 .toolActions {
   display: flex;
   gap: var(--spacing-sm);
@@ -543,6 +576,10 @@ details[open] > .summary::after {
   display: block;
 }
 
+.videoHidden {
+  display: none;
+}
+
 .videoMask {
   position: absolute;
   inset: 0;
@@ -555,11 +592,74 @@ details[open] > .summary::after {
   background: rgba(0, 0, 0, 0.6);
 }
 
-@media (max-width: 1024px) {
-  .heroGrid {
-    grid-template-columns: 1fr;
-  }
+.mockPreview {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 44px 1fr;
+  background: linear-gradient(135deg, rgba(0, 113, 227, 0.22), rgba(0, 0, 0, 0.92));
+}
 
+.mockTopBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.mockDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.mockTopTitle {
+  margin-left: 8px;
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.01em;
+}
+
+.mockBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-2xl);
+}
+
+.mockLeft,
+.mockRight {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.mockWindow {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.mockChart {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  position: relative;
+  overflow: hidden;
+}
+
+.mockChart::after {
+  content: '';
+  position: absolute;
+  inset: 22% 10% 18% 10%;
+  border-radius: var(--radius-md);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 1024px) {
   .downloadGrid {
     grid-template-columns: 1fr;
   }
@@ -584,6 +684,10 @@ details[open] > .summary::after {
 
   .video {
     height: 280px;
+  }
+
+  .mockBody {
+    grid-template-columns: 1fr;
   }
 
   .kbdRow {
