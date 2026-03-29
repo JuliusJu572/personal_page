@@ -52,6 +52,11 @@ export interface LoginResponse {
     quotaTokens: number
     usedTokens: number
     created_at: string
+    license_key: string
+    license_type: string
+    pay_mode: number
+    pay_mode_label: string
+    expires_at: string | null
   }
 }
 
@@ -75,6 +80,10 @@ export interface MeResponse {
     id: number
     username: string
     licenseKey: string
+    licenseType: string
+    payMode: number
+    payModeLabel: string
+    expiresAt: string | null
     createdAt: string
     role: string
     frozen: boolean
