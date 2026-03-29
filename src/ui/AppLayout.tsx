@@ -4,8 +4,8 @@ import styles from './appLayout.module.css'
 const navItems: Array<{ to: string; label: string }> = [
   { to: '/cheating-buddy', label: 'Cheating Buddy' },
   { to: '/guide', label: '使用说明' },
-  { to: '/register', label: '注册' },
   { to: '/knowledge-cards', label: '知识卡片' },
+  { to: '/login', label: '登录' },
 ]
 
 export function AppLayout() {
