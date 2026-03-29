@@ -4,6 +4,7 @@ import styles from './appLayout.module.css'
 const navItems: Array<{ to: string; label: string }> = [
   { to: '/cheating-buddy', label: 'Cheating Buddy' },
   { to: '/guide', label: '使用说明' },
+  { to: '/register', label: '注册' },
   { to: '/knowledge-cards', label: '知识卡片' },
 ]
 
@@ -46,14 +47,6 @@ export function AppLayout() {
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
           <span>© {new Date().getFullYear()} JuliusJu</span>
-          <a
-            href="https://github.com/JuliusJu572"
-            target="_blank"
-            rel="noreferrer"
-            className={styles.footerLink}
-          >
-            GitHub
-          </a>
         </div>
       </footer>
     </div>

@@ -3,6 +3,7 @@
   padding: var(--spacing-5xl) var(--spacing-lg);
   max-width: 960px;
   margin: 0 auto;
+  padding-right: 220px;
 }
 
 .header {
@@ -26,12 +27,10 @@
 }
 
 .toc {
-  position: sticky;
+  position: fixed;
   top: 80px;
-  float: right;
+  right: 24px;
   width: 180px;
-  margin-left: var(--spacing-3xl);
-  margin-bottom: var(--spacing-3xl);
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   background: var(--glass-bg-regular);
@@ -39,6 +38,9 @@
   -webkit-backdrop-filter: var(--glass-blur-regular);
   border: 1px solid var(--glass-border-regular);
   box-shadow: var(--depth-sm);
+  z-index: 50;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 .tocTitle {
@@ -239,12 +241,15 @@
 }
 
 @media (max-width: 768px) {
+  .page {
+    padding-right: var(--spacing-lg);
+  }
+
   .toc {
     position: static;
-    float: none;
     width: 100%;
-    margin-left: 0;
-    margin-bottom: var(--spacing-2xl);
+    max-height: none;
+    overflow-y: visible;
   }
 
   .imgRow,
