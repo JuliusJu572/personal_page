@@ -19,6 +19,7 @@ import {
   updateSavedCard,
 } from '../knowledgeCards/storage'
 import type { KnowledgeBrowseItem, KnowledgeCard } from '../knowledgeCards/types'
+import type { SavedKnowledgeCardMeta } from '../knowledgeCards/storage'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
@@ -128,7 +129,7 @@ export function KnowledgeCardsPage() {
   const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [saveName, setSaveName] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [savedCards, setSavedCards] = useState(() => listSavedCardMetas())
+  const [savedCards, setSavedCards] = useState<SavedKnowledgeCardMeta[]>([])
 
   useEffect(() => {
     if (user) {
@@ -144,9 +145,14 @@ export function KnowledgeCardsPage() {
     }
   }, [authLoading, user, navigate])
 
-  const refreshSavedCards = useCallback(() => {
-    setSavedCards(listSavedCardMetas())
+  const refreshSavedCards = useCallback(async () => {
+    const metas = await listSavedCardMetas()
+    setSavedCards(metas)
   }, [])
+
+  useEffect(() => {
+    if (user) refreshSavedCards()
+  }, [user, refreshSavedCards])
 
   const loadExample = useCallback(async () => {
     setLoadingExample(true)
@@ -165,8 +171,8 @@ export function KnowledgeCardsPage() {
     }
   }, [])
 
-  const loadSavedCard = useCallback((id: string) => {
-    const card = loadSavedCardFromStorage(id)
+  const loadSavedCard = useCallback(async (id: string) => {
+    const card = await loadSavedCardFromStorage(id)
     if (card) {
       setMarkdown(card.markdown)
       setSourceLabel(`已保存：${card.name}`)
@@ -175,12 +181,12 @@ export function KnowledgeCardsPage() {
     }
   }, [])
 
-  const handleSave = useCallback(() => {
+  const handleSave = useCallback(async () => {
     if (!markdown.trim()) return
     if (sourceSavedCardId) {
-      updateSavedCard(sourceSavedCardId, markdown, saveName || undefined)
+      await updateSavedCard(sourceSavedCardId, markdown, saveName || undefined)
     } else {
-      saveKnowledgeCard(markdown, saveName || '未命名知识卡片')
+      await saveKnowledgeCard(markdown, saveName || '未命名知识卡片')
     }
     setShowSaveDialog(false)
     setSaveName('')
@@ -188,8 +194,8 @@ export function KnowledgeCardsPage() {
   }, [markdown, saveName, sourceSavedCardId, refreshSavedCards])
 
   const handleDeleteSaved = useCallback(
-    (id: string) => {
-      deleteSavedCard(id)
+    async (id: string) => {
+      await deleteSavedCard(id)
       refreshSavedCards()
       if (sourceSavedCardId === id) {
         setMarkdown('')
@@ -234,46 +240,54 @@ export function KnowledgeCardsPage() {
       }
     }
 
-    const latestSaved = listSavedCardMetas()[0]
-    if (latestSaved) {
-      const card = loadSavedCardFromStorage(latestSaved.id)
-      if (card) {
-        setMarkdown(card.markdown)
-        setSourceLabel(`已保存：${card.name}`)
-        setSourceDraftId(null)
-        setSourceSavedCardId(card.id)
-        return
+    let cancelled = false
+    ;(async () => {
+      const metas = await listSavedCardMetas()
+      if (cancelled) return
+      const latestSaved = metas[0]
+      if (latestSaved) {
+        const card = await loadSavedCardFromStorage(latestSaved.id)
+        if (cancelled) return
+        if (card) {
+          setMarkdown(card.markdown)
+          setSourceLabel(`已保存：${card.name}`)
+          setSourceDraftId(null)
+          setSourceSavedCardId(card.id)
+          return
+        }
       }
-    }
 
-    const latestPublishedMeta = listPublishedMetas()[0]
-    if (latestPublishedMeta) {
-      const published = loadPublished(latestPublishedMeta.id)
-      if (published) {
-        setMarkdown(published.markdown)
-        setSourceLabel(`已发布：${published.name}`)
-        setSourceDraftId(null)
-        setSourceSavedCardId(null)
-        return
+      const latestPublishedMeta = listPublishedMetas()[0]
+      if (latestPublishedMeta) {
+        const published = loadPublished(latestPublishedMeta.id)
+        if (published) {
+          setMarkdown(published.markdown)
+          setSourceLabel(`已发布：${published.name}`)
+          setSourceDraftId(null)
+          setSourceSavedCardId(null)
+          return
+        }
       }
-    }
 
-    const latestDraftMeta = listDraftMetas()[0]
-    if (latestDraftMeta) {
-      const draft = loadDraft(latestDraftMeta.id)
-      if (draft) {
-        setMarkdown(draft.markdown)
-        setSourceLabel(`草稿：${draft.name}`)
-        setSourceDraftId(draft.id)
-        setSourceSavedCardId(null)
-        return
+      const latestDraftMeta = listDraftMetas()[0]
+      if (latestDraftMeta) {
+        const draft = loadDraft(latestDraftMeta.id)
+        if (draft) {
+          setMarkdown(draft.markdown)
+          setSourceLabel(`草稿：${draft.name}`)
+          setSourceDraftId(draft.id)
+          setSourceSavedCardId(null)
+          return
+        }
       }
-    }
 
-    setMarkdown('')
-    setSourceLabel('')
-    setSourceDraftId(null)
-    setSourceSavedCardId(null)
+      setMarkdown('')
+      setSourceLabel('')
+      setSourceDraftId(null)
+      setSourceSavedCardId(null)
+    })()
+
+    return () => { cancelled = true }
   }, [draftId, location.state, publishedId, user])
 
   const cards = useMemo(() => parseMarkdownToCards(markdown), [markdown])

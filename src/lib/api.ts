@@ -100,6 +100,32 @@ export interface BalanceResponse {
   frozen: boolean
 }
 
+export interface KnowledgeCardMeta {
+  id: string
+  name: string
+  createdAt: number
+  updatedAt: number
+}
+
+export interface KnowledgeCardData extends KnowledgeCardMeta {
+  markdown: string
+}
+
+export interface KnowledgeCardsListResponse {
+  success: boolean
+  cards: KnowledgeCardMeta[]
+}
+
+export interface KnowledgeCardGetResponse {
+  success: boolean
+  card: KnowledgeCardData
+}
+
+export interface KnowledgeCardSaveResponse {
+  success: boolean
+  card: KnowledgeCardData
+}
+
 export const api = {
   login(username: string, password: string) {
     return request<LoginResponse>('/auth/login', {
@@ -121,6 +147,34 @@ export const api = {
 
   getBalance() {
     return request<BalanceResponse>('/api/user/balance')
+  },
+
+  listKnowledgeCards() {
+    return request<KnowledgeCardsListResponse>('/api/knowledge-cards/list')
+  },
+
+  getKnowledgeCard(cardId: string) {
+    return request<KnowledgeCardGetResponse>(`/api/knowledge-cards/${cardId}`)
+  },
+
+  saveKnowledgeCard(markdown: string, name: string) {
+    return request<KnowledgeCardSaveResponse>('/api/knowledge-cards/save', {
+      method: 'POST',
+      body: JSON.stringify({ markdown, name }),
+    })
+  },
+
+  updateKnowledgeCard(cardId: string, markdown: string, name?: string) {
+    return request<KnowledgeCardSaveResponse>(`/api/knowledge-cards/${cardId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ markdown, name }),
+    })
+  },
+
+  deleteKnowledgeCard(cardId: string) {
+    return request<{ success: boolean }>(`/api/knowledge-cards/${cardId}`, {
+      method: 'DELETE',
+    })
   },
 
   getToken() {

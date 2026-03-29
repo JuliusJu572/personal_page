@@ -16,6 +16,9 @@ export function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    alert('暂停创建，请联系管理员。')
+    return
+
     setError('')
 
     if (!username.trim() || !password) {
@@ -36,9 +39,9 @@ export function RegisterPage() {
       const data = await api.register(username.trim().toLowerCase(), password)
       api.setToken(data.token)
       navigate('/login')
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof ApiError) {
-        setError(err.message)
+        setError((err as ApiError).message)
       } else {
         setError('注册失败，请稍后重试')
       }

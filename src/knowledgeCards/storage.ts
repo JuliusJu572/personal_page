@@ -156,54 +156,50 @@ export function publishFromDraft(draft: KnowledgeDraft, updates?: { name?: strin
   return { ...meta, markdown: draft.markdown }
 }
 
-export function listSavedCardMetas(): SavedKnowledgeCardMeta[] {
-  if (typeof window === 'undefined') return []
-  const metas = safeJsonParse<SavedKnowledgeCardMeta[]>(window.localStorage.getItem(KEY.savedCards())) ?? []
-  return sortByUpdatedDesc(metas)
-}
-
-export function loadSavedCard(id: string): SavedKnowledgeCard | null {
-  if (typeof window === 'undefined') return null
-  const meta = listSavedCardMetas().find((d) => d.id === id)
-  if (!meta) return null
-  const markdown = window.localStorage.getItem(KEY.savedCard(id)) ?? ''
-  return { ...meta, markdown }
-}
-
-export function saveKnowledgeCard(markdown: string, name: string): SavedKnowledgeCard {
-  if (typeof window === 'undefined') {
-    return { id: uuid(), name, createdAt: Date.now(), updatedAt: Date.now(), markdown }
+export async function listSavedCardMetas(): Promise<SavedKnowledgeCardMeta[]> {
+  try {
+    const { api } = await import('../lib/api')
+    const res = await api.listKnowledgeCards()
+    return res.cards
+  } catch {
+    return []
   }
-
-  const id = uuid()
-  const now = Date.now()
-  const meta: SavedKnowledgeCardMeta = { id, name: name.trim() || '未命名', createdAt: now, updatedAt: now }
-
-  const metas = listSavedCardMetas()
-  window.localStorage.setItem(KEY.savedCards(), JSON.stringify(sortByUpdatedDesc([meta, ...metas])))
-  window.localStorage.setItem(KEY.savedCard(id), markdown)
-  return { ...meta, markdown }
 }
 
-export function updateSavedCard(id: string, markdown: string, name?: string) {
-  if (typeof window === 'undefined') return
-  const metas = listSavedCardMetas()
-  const existing = metas.find((d) => d.id === id)
-  if (!existing) return
-
-  const now = Date.now()
-  const updated: SavedKnowledgeCardMeta = {
-    ...existing,
-    name: name ? name.trim() || existing.name : existing.name,
-    updatedAt: now,
+export async function loadSavedCard(id: string): Promise<SavedKnowledgeCard | null> {
+  try {
+    const { api } = await import('../lib/api')
+    const res = await api.getKnowledgeCard(id)
+    return res.card
+  } catch {
+    return null
   }
-  window.localStorage.setItem(KEY.savedCards(), JSON.stringify(sortByUpdatedDesc([updated, ...metas.filter((d) => d.id !== id)])))
-  window.localStorage.setItem(KEY.savedCard(id), markdown)
 }
 
-export function deleteSavedCard(id: string) {
-  if (typeof window === 'undefined') return
-  const metas = listSavedCardMetas().filter((d) => d.id !== id)
-  window.localStorage.setItem(KEY.savedCards(), JSON.stringify(metas))
-  window.localStorage.removeItem(KEY.savedCard(id))
+export async function saveKnowledgeCard(markdown: string, name: string): Promise<SavedKnowledgeCard | null> {
+  try {
+    const { api } = await import('../lib/api')
+    const res = await api.saveKnowledgeCard(markdown, name)
+    return res.card
+  } catch {
+    return null
+  }
+}
+
+export async function updateSavedCard(id: string, markdown: string, name?: string): Promise<void> {
+  try {
+    const { api } = await import('../lib/api')
+    await api.updateKnowledgeCard(id, markdown, name)
+  } catch {
+    // silent
+  }
+}
+
+export async function deleteSavedCard(id: string): Promise<void> {
+  try {
+    const { api } = await import('../lib/api')
+    await api.deleteKnowledgeCard(id)
+  } catch {
+    // silent
+  }
 }

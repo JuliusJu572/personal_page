@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import { Button } from '../ui/Button'
@@ -499,9 +499,13 @@ export function LoginPage() {
 
           <div className={styles.footer}>
             还没有账号？
-            <Link to="/register" className={styles.link}>
+            <span
+              className={styles.link}
+              style={{ cursor: 'pointer' }}
+              onClick={() => alert('暂停创建，请联系管理员。')}
+            >
               立即注册
-            </Link>
+            </span>
           </div>
         </Card>
       </div>
