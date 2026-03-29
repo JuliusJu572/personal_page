@@ -165,7 +165,7 @@ export function GuidePage() {
         </Step>
 
         <Step title="步骤 2：输入账户密码">
-          <p className={styles.text}>输入发给你的邮箱，密码为邮箱的名字（@前的内容）</p>
+          <p className={styles.text}>输入分配给你的用户名和密码进行登录</p>
           <Img src="/guide-images/image_0.png" alt="输入账户密码" />
         </Step>
 
