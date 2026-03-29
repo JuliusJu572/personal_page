@@ -24,6 +24,90 @@ function getDaysRemaining(iso: string | null): number {
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
 }
 
+function UnpaidView({ user }: { user: { username: string; role: string } }) {
+  return (
+    <div className={styles.loggedInSection}>
+      <Card variant="thick" className={styles.infoCard}>
+        <div className={styles.welcomeRow}>
+          <div>
+            <h2 className={styles.welcomeTitle}>
+              欢迎回来，{user.username}
+            </h2>
+            <p className={styles.welcomeRole}>
+              未付费用户 · {user.role === 'admin' ? '管理员' : '普通用户'}
+            </p>
+          </div>
+          <Button variant="ghost" onClick={() => {}} className={styles.logoutBtn}>
+            退出登录
+          </Button>
+        </div>
+
+        <div className={styles.statsGrid}>
+          <div className={styles.statCard}>
+            <div className={styles.statLabel}>当前状态</div>
+            <div className={styles.statValueDanger}>未开通</div>
+            <div className={styles.statUnit}>尚未开通付费套餐</div>
+          </div>
+        </div>
+
+        <div className={styles.frozenNotice}>
+          您尚未开通付费套餐，无法使用 AI 功能。请联系管理员开通。
+        </div>
+      </Card>
+
+      <Card variant="default" className={styles.pricingCard}>
+        <h3 className={styles.pricingTitle}>开通套餐</h3>
+        <p className={styles.pricingDesc}>
+          选择适合你的套餐，开通后即可使用 AI 面试辅助功能。
+        </p>
+        <div className={styles.pricingGrid}>
+          <div className={styles.pricingItem}>
+            <div className={styles.pricingName}>普通用户</div>
+            <div className={styles.pricingTokens}>Qwen 系列模型</div>
+            <div className={styles.pricingPrice}>¥99/月</div>
+          </div>
+          <div className={`${styles.pricingItem} ${styles.pricingItemFeatured}`}>
+            <div className={styles.pricingBadge}>推荐</div>
+            <div className={styles.pricingName}>高级会员</div>
+            <div className={styles.pricingTokens}>GLM5、MiniMax2.7 等旗舰模型</div>
+            <div className={styles.pricingPrice}>¥299/月</div>
+          </div>
+          <div className={styles.pricingItem}>
+            <div className={styles.pricingName}>按量付费</div>
+            <div className={styles.pricingTokens}>自行定义额度，1元=1万Token</div>
+            <div className={styles.pricingPrice}>¥1/万Token</div>
+          </div>
+        </div>
+
+        <div className={styles.modelNotice}>
+          <div className={styles.modelNoticeTitle}>模型权限说明</div>
+          <div className={styles.modelNoticeItem}>
+            <span className={styles.modelNoticeTag}>普通用户 / 按量付费</span>
+            <span>仅可使用 Qwen 系列模型</span>
+          </div>
+          <div className={styles.modelNoticeItem}>
+            <span className={`${styles.modelNoticeTag} ${styles.modelNoticeTagFeatured}`}>高级会员</span>
+            <span>可使用 GLM5、MiniMax2.7 等国内旗舰模型</span>
+          </div>
+        </div>
+
+        <div className={styles.noteBox}>
+          <p>注：由于 OpenAI、Anthropic 公司的模型需要梯子，如果梯子过脏，容易封号，因此暂不开放。</p>
+        </div>
+
+        <div className={styles.warningBox}>
+          <p>软件自行监测 MAC 地址，请勿借用账号，本软件保留权利对违规账号进行处理。</p>
+        </div>
+
+        <div className={styles.contactInfo}>
+          <p>🟢 微信：jrb_572_</p>
+          <p>开通后请联系管理员手动设置套餐</p>
+        </div>
+      </Card>
+    </div>
+  )
+}
+
 function SubscriptionView({ user }: { user: { username: string; role: string; payMode: number; payModeLabel: string; expiresAt: string | null; frozen: boolean } }) {
   const daysRemaining = getDaysRemaining(user.expiresAt)
   const isExpired = user.expiresAt && daysRemaining === 0
@@ -296,6 +380,10 @@ function LoggedInView({ onLogout }: { onLogout: () => void }) {
   }
 
   if (!user) return null
+
+  if (user.payMode === 0) {
+    return <UnpaidView user={user} />
+  }
 
   if (user.payMode === 3) {
     return <PayGoView user={user} />

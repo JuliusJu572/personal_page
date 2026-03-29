@@ -90,6 +90,7 @@ export interface MeResponse {
     quotaTokens: number
     usedTokens: number
   }
+  serverTime: string
 }
 
 export interface BalanceResponse {
