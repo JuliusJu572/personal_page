@@ -2,8 +2,8 @@ import { NavLink, Outlet } from 'react-router-dom'
 import styles from './appLayout.module.css'
 
 const navItems: Array<{ to: string; label: string }> = [
-  { to: '/', label: '主页' },
   { to: '/cheating-buddy', label: 'Cheating Buddy' },
+  { to: '/guide', label: '使用说明' },
   { to: '/knowledge-cards', label: '知识卡片' },
 ]
 
@@ -16,7 +16,7 @@ export function AppLayout() {
             <div className={styles.brandMark} aria-hidden="true" />
             <div className={styles.brandText}>
               <div className={styles.brandTitle}>JuliusJu</div>
-              <div className={styles.brandSubtitle}>个人主页 · Projects</div>
+              <div className={styles.brandSubtitle}>Cheating Buddy · Projects</div>
             </div>
           </div>
 
