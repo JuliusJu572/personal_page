@@ -13,7 +13,7 @@ import {
   listSavedCardMetas,
   loadDraft,
   loadPublished,
-  loadSavedCard,
+  loadSavedCard as loadSavedCardFromStorage,
   saveKnowledgeCard,
   setStorageUserId,
   updateSavedCard,
@@ -166,7 +166,7 @@ export function KnowledgeCardsPage() {
   }, [])
 
   const loadSavedCard = useCallback((id: string) => {
-    const card = loadSavedCard(id)
+    const card = loadSavedCardFromStorage(id)
     if (card) {
       setMarkdown(card.markdown)
       setSourceLabel(`已保存：${card.name}`)
@@ -236,7 +236,7 @@ export function KnowledgeCardsPage() {
 
     const latestSaved = listSavedCardMetas()[0]
     if (latestSaved) {
-      const card = loadSavedCard(latestSaved.id)
+      const card = loadSavedCardFromStorage(latestSaved.id)
       if (card) {
         setMarkdown(card.markdown)
         setSourceLabel(`已保存：${card.name}`)
