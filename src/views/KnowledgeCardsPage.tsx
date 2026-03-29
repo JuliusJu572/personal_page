@@ -60,6 +60,7 @@ export function KnowledgeCardsPage() {
   const [markdown, setMarkdown] = useState<string>('')
   const [sourceLabel, setSourceLabel] = useState<string>('')
   const [sourceDraftId, setSourceDraftId] = useState<string | null>(null)
+  const [showGuide, setShowGuide] = useState(true)
 
   useEffect(() => {
     const fromState = (location.state as { markdown?: string } | null)?.markdown
@@ -331,6 +332,51 @@ export function KnowledgeCardsPage() {
       </div>
 
       {sourceLabel ? <div className={styles.sourceLabel}>{sourceLabel}</div> : null}
+
+      <div className={styles.guideCard}>
+        <button type="button" className={styles.guideToggle} onClick={() => setShowGuide((v) => !v)}>
+          <span className={styles.guideToggleIcon}>{showGuide ? '▾' : '▸'}</span>
+          <span>使用说明</span>
+        </button>
+        {showGuide && (
+          <div className={styles.guideContent}>
+            <div className={styles.guideSection}>
+              <div className={styles.guideSectionTitle}>面试中的优势</div>
+              <ul className={styles.guideList}>
+                <li>将知识点按层级组织为卡片，模拟面试官提问场景，快速定位答案</li>
+                <li>键盘 1-9 快速切换不同类型的卡片，无需鼠标操作，面试时更自然</li>
+                <li>按 0 或 Esc 返回上级目录，像翻目录一样浏览知识体系</li>
+                <li>支持 Markdown + 数学公式 + 代码高亮，覆盖技术面试常见内容</li>
+              </ul>
+            </div>
+            <div className={styles.guideSection}>
+              <div className={styles.guideSectionTitle}>快捷键</div>
+              <div className={styles.guideKeys}>
+                <div className={styles.guideKeyRow}>
+                  <span className={styles.guideKey}>1 - 9</span>
+                  <span className={styles.guideKeyDesc}>选择对应位置的卡片或文件夹</span>
+                </div>
+                <div className={styles.guideKeyRow}>
+                  <span className={styles.guideKey}>0 / Esc / ←</span>
+                  <span className={styles.guideKeyDesc}>返回上级</span>
+                </div>
+                <div className={styles.guideKeyRow}>
+                  <span className={styles.guideKey}>→ / D</span>
+                  <span className={styles.guideKeyDesc}>下一页</span>
+                </div>
+                <div className={styles.guideKeyRow}>
+                  <span className={styles.guideKey}>← / A</span>
+                  <span className={styles.guideKeyDesc}>上一页</span>
+                </div>
+                <div className={styles.guideKeyRow}>
+                  <span className={styles.guideKey}>↑ / ↓</span>
+                  <span className={styles.guideKeyDesc}>卡片详情中上下滚动</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className={styles.breadcrumbBar}>
         <button type="button" className={styles.breadcrumbHome} onClick={() => resetFilter('all')}>

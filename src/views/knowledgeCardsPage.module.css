@@ -48,6 +48,112 @@
   font-family: var(--font-family-mono);
 }
 
+.guideCard {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-subtle);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  overflow: hidden;
+}
+
+.guideToggle {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  transition: background var(--transition-fast);
+}
+
+.guideToggle:hover {
+  background: var(--color-bg-secondary);
+}
+
+.guideToggleIcon {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  width: 14px;
+  text-align: center;
+}
+
+.guideContent {
+  padding: 0 var(--spacing-2xl) var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.guideSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.guideSectionTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.guideList {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.guideKeys {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.guideKeyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.guideKey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  height: 28px;
+  padding: 0 var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-default);
+  background: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+@media (prefers-color-scheme: dark) {
+  .guideKey {
+    background: rgba(28, 28, 30, 0.4);
+  }
+}
+
+.guideKeyDesc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
 .placeholder {
   padding: var(--spacing-4xl);
   display: flex;
