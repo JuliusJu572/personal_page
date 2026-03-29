@@ -35,7 +35,7 @@ export function RegisterPage() {
     try {
       const data = await api.register(username.trim().toLowerCase(), password)
       api.setToken(data.token)
-      navigate('/cheating-buddy')
+      navigate('/login')
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import { Button } from '../ui/Button'
@@ -141,6 +141,7 @@ function LoggedInView({ onLogout }: { onLogout: () => void }) {
 }
 
 export function LoginPage() {
+  const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!api.getToken())
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -166,6 +167,7 @@ export function LoginPage() {
       const data = await api.login(username.trim().toLowerCase(), password)
       api.setToken(data.token)
       setIsLoggedIn(true)
+      navigate('/login', { replace: true })
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message)
