@@ -2,10 +2,22 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { useAuth } from '../lib/authContext'
 import { getBrowseItems, type KnowledgeBrowseFilter } from '../knowledgeCards/browseModel'
 import { parseMarkdownToCards } from '../knowledgeCards/parseMarkdownToCards'
 import { renderMarkdownWithMath } from '../knowledgeCards/renderMarkdownWithMath'
-import { listDraftMetas, listPublishedMetas, loadDraft, loadPublished } from '../knowledgeCards/storage'
+import {
+  deleteSavedCard,
+  listDraftMetas,
+  listPublishedMetas,
+  listSavedCardMetas,
+  loadDraft,
+  loadPublished,
+  loadSavedCard,
+  saveKnowledgeCard,
+  setStorageUserId,
+  updateSavedCard,
+} from '../knowledgeCards/storage'
 import type { KnowledgeBrowseItem, KnowledgeCard } from '../knowledgeCards/types'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
@@ -50,7 +62,58 @@ async function ensureMathJax() {
   await loadScript('https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js')
 }
 
+function GuideSection() {
+  const [showGuide, setShowGuide] = useState(true)
+  return (
+    <div className={styles.guideCard}>
+      <button type="button" className={styles.guideToggle} onClick={() => setShowGuide((v) => !v)}>
+        <span className={styles.guideToggleIcon}>{showGuide ? '▾' : '▸'}</span>
+        <span>使用说明</span>
+      </button>
+      {showGuide && (
+        <div className={styles.guideContent}>
+          <div className={styles.guideSection}>
+            <div className={styles.guideSectionTitle}>面试中的优势</div>
+            <ul className={styles.guideList}>
+              <li>将知识点按层级组织为卡片，模拟面试官提问场景，快速定位答案</li>
+              <li>键盘 1-9 快速切换不同类型的卡片，无需鼠标操作，面试时更自然</li>
+              <li>按 0 或 Esc 返回上级目录，像翻目录一样浏览知识体系</li>
+              <li>支持 Markdown + 数学公式 + 代码高亮，覆盖技术面试常见内容</li>
+            </ul>
+          </div>
+          <div className={styles.guideSection}>
+            <div className={styles.guideSectionTitle}>快捷键</div>
+            <div className={styles.guideKeys}>
+              <div className={styles.guideKeyRow}>
+                <span className={styles.guideKey}>1 - 9</span>
+                <span className={styles.guideKeyDesc}>选择对应位置的卡片或文件夹</span>
+              </div>
+              <div className={styles.guideKeyRow}>
+                <span className={styles.guideKey}>0 / Esc / ←</span>
+                <span className={styles.guideKeyDesc}>返回上级</span>
+              </div>
+              <div className={styles.guideKeyRow}>
+                <span className={styles.guideKey}>→ / D</span>
+                <span className={styles.guideKeyDesc}>下一页</span>
+              </div>
+              <div className={styles.guideKeyRow}>
+                <span className={styles.guideKey}>← / A</span>
+                <span className={styles.guideKeyDesc}>上一页</span>
+              </div>
+              <div className={styles.guideKeyRow}>
+                <span className={styles.guideKey}>↑ / ↓</span>
+                <span className={styles.guideKeyDesc}>卡片详情中上下滚动</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function KnowledgeCardsPage() {
+  const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [searchParams] = useSearchParams()
@@ -60,14 +123,92 @@ export function KnowledgeCardsPage() {
   const [markdown, setMarkdown] = useState<string>('')
   const [sourceLabel, setSourceLabel] = useState<string>('')
   const [sourceDraftId, setSourceDraftId] = useState<string | null>(null)
-  const [showGuide, setShowGuide] = useState(true)
+  const [sourceSavedCardId, setSourceSavedCardId] = useState<string | null>(null)
+  const [loadingExample, setLoadingExample] = useState(false)
+  const [showSaveDialog, setShowSaveDialog] = useState(false)
+  const [saveName, setSaveName] = useState('')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [savedCards, setSavedCards] = useState(() => listSavedCardMetas())
 
   useEffect(() => {
+    if (user) {
+      setStorageUserId(user.id)
+    } else {
+      setStorageUserId(null)
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/login', { replace: true })
+    }
+  }, [authLoading, user, navigate])
+
+  const refreshSavedCards = useCallback(() => {
+    setSavedCards(listSavedCardMetas())
+  }, [])
+
+  const loadExample = useCallback(async () => {
+    setLoadingExample(true)
+    try {
+      const res = await fetch('/example-knowledge-cards.md', { cache: 'no-store' })
+      if (!res.ok) throw new Error(String(res.status))
+      const text = await res.text()
+      setMarkdown(text)
+      setSourceLabel('示例：前端面试知识卡片')
+      setSourceDraftId(null)
+      setSourceSavedCardId(null)
+    } catch {
+      setSourceLabel('')
+    } finally {
+      setLoadingExample(false)
+    }
+  }, [])
+
+  const loadSavedCard = useCallback((id: string) => {
+    const card = loadSavedCard(id)
+    if (card) {
+      setMarkdown(card.markdown)
+      setSourceLabel(`已保存：${card.name}`)
+      setSourceDraftId(null)
+      setSourceSavedCardId(id)
+    }
+  }, [])
+
+  const handleSave = useCallback(() => {
+    if (!markdown.trim()) return
+    if (sourceSavedCardId) {
+      updateSavedCard(sourceSavedCardId, markdown, saveName || undefined)
+    } else {
+      saveKnowledgeCard(markdown, saveName || '未命名知识卡片')
+    }
+    setShowSaveDialog(false)
+    setSaveName('')
+    refreshSavedCards()
+  }, [markdown, saveName, sourceSavedCardId, refreshSavedCards])
+
+  const handleDeleteSaved = useCallback(
+    (id: string) => {
+      deleteSavedCard(id)
+      refreshSavedCards()
+      if (sourceSavedCardId === id) {
+        setMarkdown('')
+        setSourceLabel('')
+        setSourceSavedCardId(null)
+      }
+    },
+    [sourceSavedCardId, refreshSavedCards],
+  )
+
+  useEffect(() => {
+    if (!user) return
+
     const fromState = (location.state as { markdown?: string } | null)?.markdown
     if (fromState) {
       setMarkdown(fromState)
       setSourceLabel('临时预览')
       setSourceDraftId(null)
+      setSourceSavedCardId(null)
       return
     }
 
@@ -77,6 +218,7 @@ export function KnowledgeCardsPage() {
         setMarkdown(published.markdown)
         setSourceLabel(`已发布：${published.name}`)
         setSourceDraftId(null)
+        setSourceSavedCardId(null)
         return
       }
     }
@@ -87,6 +229,19 @@ export function KnowledgeCardsPage() {
         setMarkdown(draft.markdown)
         setSourceLabel(`草稿：${draft.name}`)
         setSourceDraftId(draft.id)
+        setSourceSavedCardId(null)
+        return
+      }
+    }
+
+    const latestSaved = listSavedCardMetas()[0]
+    if (latestSaved) {
+      const card = loadSavedCard(latestSaved.id)
+      if (card) {
+        setMarkdown(card.markdown)
+        setSourceLabel(`已保存：${card.name}`)
+        setSourceDraftId(null)
+        setSourceSavedCardId(card.id)
         return
       }
     }
@@ -98,6 +253,7 @@ export function KnowledgeCardsPage() {
         setMarkdown(published.markdown)
         setSourceLabel(`已发布：${published.name}`)
         setSourceDraftId(null)
+        setSourceSavedCardId(null)
         return
       }
     }
@@ -109,6 +265,7 @@ export function KnowledgeCardsPage() {
         setMarkdown(draft.markdown)
         setSourceLabel(`草稿：${draft.name}`)
         setSourceDraftId(draft.id)
+        setSourceSavedCardId(null)
         return
       }
     }
@@ -116,7 +273,9 @@ export function KnowledgeCardsPage() {
     setMarkdown('')
     setSourceLabel('')
     setSourceDraftId(null)
-  }, [draftId, location.state, publishedId])
+    setSourceSavedCardId(null)
+  }, [draftId, location.state, publishedId, user])
+
   const cards = useMemo(() => parseMarkdownToCards(markdown), [markdown])
 
   const [filter, setFilter] = useState<KnowledgeBrowseFilter>({ h1: null, h2: null, h3: null })
@@ -176,22 +335,22 @@ export function KnowledgeCardsPage() {
 
   const handleSelect = useCallback(
     (visualIndex: number) => {
-    const realIndex = page * itemsPerPage + visualIndex
-    const item = allItems[realIndex]
-    if (!item) return
+      const realIndex = page * itemsPerPage + visualIndex
+      const item = allItems[realIndex]
+      if (!item) return
 
-    if (item.type === 'folder') {
-      setPage(0)
-      setFilter((prev) => {
-        if (item.level === 'h1') return { h1: item.title, h2: null, h3: null }
-        if (item.level === 'h2') return { ...prev, h2: item.title, h3: null }
-        return { ...prev, h3: item.title }
-      })
-      return
-    }
+      if (item.type === 'folder') {
+        setPage(0)
+        setFilter((prev) => {
+          if (item.level === 'h1') return { h1: item.title, h2: null, h3: null }
+          if (item.level === 'h2') return { ...prev, h2: item.title, h3: null }
+          return { ...prev, h3: item.title }
+        })
+        return
+      }
 
-    setModalCard(item.data)
-    setIsModalOpen(true)
+      setModalCard(item.data)
+      setIsModalOpen(true)
     },
     [allItems, page],
   )
@@ -207,6 +366,8 @@ export function KnowledgeCardsPage() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      if (showSaveDialog) return
+
       if (isModalOpen) {
         if (e.key === '0' || e.key === 'Escape') {
           e.preventDefault()
@@ -247,7 +408,7 @@ export function KnowledgeCardsPage() {
 
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [goBack, handleSelect, isModalOpen, nextPage, prevPage])
+  }, [goBack, handleSelect, isModalOpen, nextPage, prevPage, showSaveDialog])
 
   const modalHtml = useMemo(() => (modalCard ? renderMarkdownWithMath(modalCard.content) : ''), [modalCard])
 
@@ -268,46 +429,57 @@ export function KnowledgeCardsPage() {
       .catch(() => {})
   }, [isModalOpen, modalHtml])
 
-  if (!markdown || cards.length === 0) {
+  if (authLoading || !user) {
     return (
       <Container className={styles.page}>
-        <div className={styles.header}>
-          <div className={styles.headerCopy}>
-            <h1 className={styles.title}>知识卡片</h1>
-            <p className={styles.subtitle}>
-              将 Markdown 按标题层级拆分为卡片，并以更适合复习的方式浏览。
-            </p>
-          </div>
-
-          <div className={styles.headerActions}>
-            <Link to="/knowledge-cards/editor">
-              <Button>编辑 / 上传</Button>
-            </Link>
-            <Button variant="secondary" onClick={() => navigate(-1)} disabled={location.key === 'default'}>
-              返回
-            </Button>
-          </div>
+        <div className={styles.placeholder}>
+          <div className={styles.placeholderTitle}>加载中...</div>
         </div>
-
-        <Card className={styles.placeholder}>
-          <div className={styles.placeholderTitle}>未加载任何内容</div>
-          <div className={styles.placeholderDesc}>
-            请前往“编辑 / 上传”页面加载 Markdown 文件，或发布一个版本后再来浏览。
-          </div>
-          <div className={styles.placeholderActions}>
-            <Link to="/knowledge-cards/editor">
-              <Button variant="secondary">去编辑</Button>
-            </Link>
-          </div>
-        </Card>
       </Container>
     )
   }
 
   const visualToItem = (visualIndex: number): KnowledgeBrowseItem | undefined => pageItems[visualIndex]
 
-  return (
-    <Container className={styles.page}>
+  const mainContent = !markdown || cards.length === 0 ? (
+    <div className={styles.mainArea}>
+      <div className={styles.header}>
+        <div className={styles.headerCopy}>
+          <h1 className={styles.title}>知识卡片</h1>
+          <p className={styles.subtitle}>
+            将 Markdown 按标题层级拆分为卡片，并以更适合复习的方式浏览。
+          </p>
+        </div>
+
+        <div className={styles.headerActions}>
+          <Link to="/knowledge-cards/editor">
+            <Button>编辑 / 上传</Button>
+          </Link>
+          <Button variant="secondary" onClick={loadExample} disabled={loadingExample}>
+            {loadingExample ? '加载中...' : '加载示例'}
+          </Button>
+        </div>
+      </div>
+
+      <GuideSection />
+
+      <Card className={styles.placeholder}>
+        <div className={styles.placeholderTitle}>未加载任何内容</div>
+        <div className={styles.placeholderDesc}>
+          请前往"编辑 / 上传"页面加载 Markdown 文件，或点击"加载示例"快速体验。
+        </div>
+        <div className={styles.placeholderActions}>
+          <Link to="/knowledge-cards/editor">
+            <Button variant="secondary">去编辑</Button>
+          </Link>
+          <Button variant="secondary" onClick={loadExample} disabled={loadingExample}>
+            {loadingExample ? '加载中...' : '加载示例'}
+          </Button>
+        </div>
+      </Card>
+    </div>
+  ) : (
+    <div className={styles.mainArea}>
       <div className={styles.header}>
         <div className={styles.headerCopy}>
           <h1 className={styles.title}>知识卡片</h1>
@@ -325,6 +497,9 @@ export function KnowledgeCardsPage() {
               <Button variant="secondary">编辑该草稿</Button>
             </Link>
           ) : null}
+          <Button variant="secondary" onClick={() => { setShowSaveDialog(true); setSaveName('') }}>
+            保存
+          </Button>
           <Button variant="secondary" onClick={goBack} disabled={!filter.h1 && !filter.h2 && !filter.h3}>
             返回上级
           </Button>
@@ -333,50 +508,7 @@ export function KnowledgeCardsPage() {
 
       {sourceLabel ? <div className={styles.sourceLabel}>{sourceLabel}</div> : null}
 
-      <div className={styles.guideCard}>
-        <button type="button" className={styles.guideToggle} onClick={() => setShowGuide((v) => !v)}>
-          <span className={styles.guideToggleIcon}>{showGuide ? '▾' : '▸'}</span>
-          <span>使用说明</span>
-        </button>
-        {showGuide && (
-          <div className={styles.guideContent}>
-            <div className={styles.guideSection}>
-              <div className={styles.guideSectionTitle}>面试中的优势</div>
-              <ul className={styles.guideList}>
-                <li>将知识点按层级组织为卡片，模拟面试官提问场景，快速定位答案</li>
-                <li>键盘 1-9 快速切换不同类型的卡片，无需鼠标操作，面试时更自然</li>
-                <li>按 0 或 Esc 返回上级目录，像翻目录一样浏览知识体系</li>
-                <li>支持 Markdown + 数学公式 + 代码高亮，覆盖技术面试常见内容</li>
-              </ul>
-            </div>
-            <div className={styles.guideSection}>
-              <div className={styles.guideSectionTitle}>快捷键</div>
-              <div className={styles.guideKeys}>
-                <div className={styles.guideKeyRow}>
-                  <span className={styles.guideKey}>1 - 9</span>
-                  <span className={styles.guideKeyDesc}>选择对应位置的卡片或文件夹</span>
-                </div>
-                <div className={styles.guideKeyRow}>
-                  <span className={styles.guideKey}>0 / Esc / ←</span>
-                  <span className={styles.guideKeyDesc}>返回上级</span>
-                </div>
-                <div className={styles.guideKeyRow}>
-                  <span className={styles.guideKey}>→ / D</span>
-                  <span className={styles.guideKeyDesc}>下一页</span>
-                </div>
-                <div className={styles.guideKeyRow}>
-                  <span className={styles.guideKey}>← / A</span>
-                  <span className={styles.guideKeyDesc}>上一页</span>
-                </div>
-                <div className={styles.guideKeyRow}>
-                  <span className={styles.guideKey}>↑ / ↓</span>
-                  <span className={styles.guideKeyDesc}>卡片详情中上下滚动</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      <GuideSection />
 
       <div className={styles.breadcrumbBar}>
         <button type="button" className={styles.breadcrumbHome} onClick={() => resetFilter('all')}>
@@ -465,6 +597,100 @@ export function KnowledgeCardsPage() {
           </div>
         ) : null}
       </div>
+    </div>
+  )
+
+  return (
+    <Container className={styles.page}>
+      <div className={styles.layout}>
+        <aside className={[styles.sidebar, sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed].join(' ')}>
+          <div className={styles.sidebarHeader}>
+            <span className={styles.sidebarTitle}>我的知识卡片</span>
+            <button
+              type="button"
+              className={styles.sidebarToggle}
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-label={sidebarOpen ? '收起侧栏' : '展开侧栏'}
+            >
+              {sidebarOpen ? '◀' : '▶'}
+            </button>
+          </div>
+
+          {sidebarOpen && (
+            <>
+              <div className={styles.sidebarList}>
+                {savedCards.length === 0 ? (
+                  <div className={styles.sidebarEmpty}>暂无保存的知识卡片</div>
+                ) : (
+                  savedCards.map((card) => (
+                    <div
+                      key={card.id}
+                      className={[styles.sidebarItem, sourceSavedCardId === card.id ? styles.sidebarItemActive : undefined]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
+                      <button
+                        type="button"
+                        className={styles.sidebarItemBtn}
+                        onClick={() => loadSavedCard(card.id)}
+                      >
+                        <div className={styles.sidebarItemName}>{card.name}</div>
+                        <div className={styles.sidebarItemTime}>
+                          {new Date(card.updatedAt).toLocaleDateString('zh-CN')}
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.sidebarItemDelete}
+                        onClick={() => handleDeleteSaved(card.id)}
+                        aria-label={`删除 ${card.name}`}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className={styles.sidebarFooter}>
+                <Button variant="secondary" size="sm" onClick={loadExample} disabled={loadingExample}>
+                  {loadingExample ? '加载中...' : '加载示例'}
+                </Button>
+              </div>
+            </>
+          )}
+        </aside>
+
+        <div className={styles.mainContent}>{mainContent}</div>
+      </div>
+
+      {showSaveDialog ? (
+        <div className={styles.saveDialogOverlay} onMouseDown={(e) => e.target === e.currentTarget && setShowSaveDialog(false)}>
+          <div className={styles.saveDialog}>
+            <div className={styles.saveDialogTitle}>保存知识卡片</div>
+            <input
+              type="text"
+              className={styles.saveDialogInput}
+              placeholder="输入知识卡片名称..."
+              value={saveName}
+              onChange={(e) => setSaveName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSave()
+                if (e.key === 'Escape') setShowSaveDialog(false)
+              }}
+              autoFocus
+            />
+            <div className={styles.saveDialogActions}>
+              <Button variant="secondary" onClick={() => setShowSaveDialog(false)}>
+                取消
+              </Button>
+              <Button onClick={handleSave} disabled={!saveName.trim()}>
+                {sourceSavedCardId ? '更新' : '保存'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {modalCard ? (
         <div

@@ -1,4 +1,5 @@
 import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './lib/authContext'
 import { AppRoutes } from './routes/AppRoutes'
 import { Background } from './ui/Background'
 
@@ -7,7 +8,9 @@ function App() {
     <>
       <Background />
       <BrowserRouter>
-        <AppRoutes />
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
       </BrowserRouter>
     </>
   )

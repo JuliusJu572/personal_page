@@ -192,6 +192,41 @@
   opacity: 1;
 }
 
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.userName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--glass-bg-regular);
+  border: 1px solid var(--glass-border-regular);
+  box-shadow: var(--depth-sm);
+}
+
+.logoutBtn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.logoutBtn:hover {
+  color: var(--color-text-primary);
+  background: var(--glass-bg-thin);
+}
+
 @media (max-width: 640px) {
   .brand {
     min-width: unset;
