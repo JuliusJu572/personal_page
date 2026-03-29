@@ -1,4 +1,4 @@
-const API_BASE = 'http://182.92.63.149:8787'
+const API_BASE = ''
 
 class ApiError extends Error {
   code: string
