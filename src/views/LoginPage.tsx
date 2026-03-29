@@ -24,7 +24,7 @@ function getDaysRemaining(iso: string | null): number {
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)))
 }
 
-function UnpaidView({ user }: { user: { username: string; role: string } }) {
+function UnpaidView({ user, onLogout }: { user: { username: string; role: string }; onLogout: () => void }) {
   return (
     <div className={styles.loggedInSection}>
       <Card variant="thick" className={styles.infoCard}>
@@ -37,7 +37,7 @@ function UnpaidView({ user }: { user: { username: string; role: string } }) {
               未付费用户 · {user.role === 'admin' ? '管理员' : '普通用户'}
             </p>
           </div>
-          <Button variant="ghost" onClick={() => {}} className={styles.logoutBtn}>
+          <Button variant="ghost" onClick={onLogout} className={styles.logoutBtn}>
             退出登录
           </Button>
         </div>
@@ -108,7 +108,7 @@ function UnpaidView({ user }: { user: { username: string; role: string } }) {
   )
 }
 
-function SubscriptionView({ user }: { user: { username: string; role: string; payMode: number; payModeLabel: string; expiresAt: string | null; frozen: boolean } }) {
+function SubscriptionView({ user, onLogout }: { user: { username: string; role: string; payMode: number; payModeLabel: string; expiresAt: string | null; frozen: boolean }; onLogout: () => void }) {
   const daysRemaining = getDaysRemaining(user.expiresAt)
   const isExpired = user.expiresAt && daysRemaining === 0
   const isExpiringSoon = daysRemaining > 0 && daysRemaining <= 7
@@ -125,7 +125,7 @@ function SubscriptionView({ user }: { user: { username: string; role: string; pa
               {user.payModeLabel} · {user.role === 'admin' ? '管理员' : '普通用户'}
             </p>
           </div>
-          <Button variant="ghost" onClick={() => {}} className={styles.logoutBtn}>
+          <Button variant="ghost" onClick={onLogout} className={styles.logoutBtn}>
             退出登录
           </Button>
         </div>
@@ -223,7 +223,7 @@ function SubscriptionView({ user }: { user: { username: string; role: string; pa
   )
 }
 
-function PayGoView({ user }: { user: { username: string; role: string; payMode: number; payModeLabel: string; quotaTokens: number; usedTokens: number; frozen: boolean } }) {
+function PayGoView({ user, onLogout }: { user: { username: string; role: string; payMode: number; payModeLabel: string; quotaTokens: number; usedTokens: number; frozen: boolean }; onLogout: () => void }) {
   const remaining = Math.max(user.quotaTokens - user.usedTokens, 0)
   const usagePercent = user.quotaTokens > 0
     ? Math.min((user.usedTokens / user.quotaTokens) * 100, 100)
@@ -241,7 +241,7 @@ function PayGoView({ user }: { user: { username: string; role: string; payMode: 
               {user.payModeLabel} · {user.role === 'admin' ? '管理员' : '普通用户'}
             </p>
           </div>
-          <Button variant="ghost" onClick={() => {}} className={styles.logoutBtn}>
+          <Button variant="ghost" onClick={onLogout} className={styles.logoutBtn}>
             退出登录
           </Button>
         </div>
@@ -382,14 +382,14 @@ function LoggedInView({ onLogout }: { onLogout: () => void }) {
   if (!user) return null
 
   if (user.payMode === 0) {
-    return <UnpaidView user={user} />
+    return <UnpaidView user={user} onLogout={onLogout} />
   }
 
   if (user.payMode === 3) {
-    return <PayGoView user={user} />
+    return <PayGoView user={user} onLogout={onLogout} />
   }
 
-  return <SubscriptionView user={user} />
+  return <SubscriptionView user={user} onLogout={onLogout} />
 }
 
 export function LoginPage() {
