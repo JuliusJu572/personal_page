@@ -1,7 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import styles from './cheatingBuddyPage.module.css'
+
+const RELEASES_BASE = 'https://juliusju.xyz/cheating-buddy/releases'
+
+interface ReleaseInfo {
+  version: string
+  changelog: string[]
+}
 
 const shortcuts = [
   { icon: '📸', name: '截屏提问', win: 'Ctrl + Enter', mac: 'Cmd + Enter' },
@@ -29,17 +36,37 @@ export function CheatingBuddyPage() {
     return ua.includes('mac os') || ua.includes('macintosh') ? 'mac' : 'windows'
   })
 
+  const [release, setRelease] = useState<ReleaseInfo | null>(null)
+
+  useEffect(() => {
+    fetch(`${RELEASES_BASE}/latest.txt`)
+      .then((r) => r.json())
+      .then((data) => {
+        const info: ReleaseInfo = {
+          version: data.version || '',
+          changelog: Array.isArray(data.changelog) ? data.changelog : [],
+        }
+        setRelease(info)
+      })
+      .catch(() => {})
+  }, [])
+
+  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.Setup.exe` : '#'
+  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.dmg` : '#'
+
   return (
     <Container className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroContent}>
-          <img
-            className={styles.heroImage}
-            src="/lucencia_hero.png"
-            alt="Lucencia"
-            width={2662}
-            height={2252}
-          />
+          <div className={styles.heroImageWrapper}>
+            <img
+              className={styles.heroImage}
+              src="/lucencia_hero.png"
+              alt="Lucencia"
+              width={2662}
+              height={2252}
+            />
+          </div>
           <h1 className={styles.title}>
             <span className={styles.titleEn}>Lucencia</span>
             <span className={styles.titleSep}> · </span>
@@ -59,11 +86,11 @@ export function CheatingBuddyPage() {
             <div className={styles.downloadInfo}>
               <h3 className={styles.downloadOs}>Windows</h3>
               <p className={styles.downloadNote}>适用于 Windows 10 / 11</p>
+              {release && <p className={styles.downloadVersion}>v{release.version}</p>}
             </div>
             <a
-              href="#"
+              href={winUrl}
               className={styles.downloadBtn}
-              onClick={(e) => e.preventDefault()}
               aria-label="下载 Windows 版本"
             >
               下载
@@ -75,11 +102,11 @@ export function CheatingBuddyPage() {
             <div className={styles.downloadInfo}>
               <h3 className={styles.downloadOs}>macOS</h3>
               <p className={styles.downloadNote}>Apple Silicon (M 系列)</p>
+              {release && <p className={styles.downloadVersion}>v{release.version}</p>}
             </div>
             <a
-              href="#"
+              href={macUrl}
               className={styles.downloadBtn}
-              onClick={(e) => e.preventDefault()}
               aria-label="下载 macOS 版本"
             >
               下载
@@ -87,6 +114,22 @@ export function CheatingBuddyPage() {
           </Card>
         </div>
       </section>
+
+      {release && release.changelog.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>更新日志 <span className={styles.changelogVersion}>v{release.version}</span></h2>
+          <Card className={styles.changelogCard}>
+            <ul className={styles.changelogList}>
+              {release.changelog.map((item, i) => (
+                <li key={i} className={styles.changelogItem}>
+                  <span className={styles.changelogDot} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </section>
+      )}
 
       <section className={styles.section}>
         <div className={styles.shortcutsHeader}>
