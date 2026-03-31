@@ -3,8 +3,8 @@ import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import styles from './cheatingBuddyPage.module.css'
 
-const RELEASES_BASE = 'https://www.juliusju.xyz/releases'
-const LATEST_URL = 'https://www.juliusju.xyz/cheating-buddy/releases/latest.txt'
+const RELEASES_BASE = '/releases'
+const LATEST_URL = '/releases/latest.txt'
 
 interface ReleaseInfo {
   version: string
