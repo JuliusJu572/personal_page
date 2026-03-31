@@ -3,7 +3,8 @@ import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
 import styles from './cheatingBuddyPage.module.css'
 
-const RELEASES_BASE = 'https://juliusju.xyz/cheating-buddy/releases'
+const RELEASES_BASE = 'https://www.juliusju.xyz/releases'
+const LATEST_URL = 'https://www.juliusju.xyz/cheating-buddy/releases/latest.txt'
 
 interface ReleaseInfo {
   version: string
@@ -39,7 +40,7 @@ export function CheatingBuddyPage() {
   const [release, setRelease] = useState<ReleaseInfo | null>(null)
 
   useEffect(() => {
-    fetch(`${RELEASES_BASE}/latest.txt`)
+    fetch(LATEST_URL)
       .then((r) => r.json())
       .then((data) => {
         const info: ReleaseInfo = {
@@ -51,8 +52,8 @@ export function CheatingBuddyPage() {
       .catch(() => {})
   }, [])
 
-  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.Setup.exe` : '#'
-  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.dmg` : '#'
+  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Cheating.Buddy.exe` : '#'
+  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Cheating%20Buddy.dmg` : '#'
 
   return (
     <Container className={styles.page}>
