@@ -46,25 +46,12 @@
   min-width: 200px;
 }
 
-.brandMark {
+.brandIcon {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
-  box-shadow: var(--depth-sm), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-  position: relative;
-  overflow: hidden;
-}
-
-.brandMark::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.3) 0%,
-    transparent 50%
-  );
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .brandText {
@@ -78,12 +65,6 @@
   font-size: var(--font-size-base);
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
-}
-
-.brandSubtitle {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-medium);
 }
 
 .nav {
@@ -230,10 +211,6 @@
 @media (max-width: 640px) {
   .brand {
     min-width: unset;
-  }
-
-  .brandSubtitle {
-    display: none;
   }
 
   .headerInner {

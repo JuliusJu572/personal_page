@@ -22,10 +22,9 @@ export function AppLayout() {
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.brand}>
-            <div className={styles.brandMark} aria-hidden="true" />
+            <img className={styles.brandIcon} src="/lucencia_icon.png" alt="" width={36} height={36} />
             <div className={styles.brandText}>
-              <div className={styles.brandTitle}>JuliusJu</div>
-              <div className={styles.brandSubtitle}>Lucencia · Projects</div>
+              <div className={styles.brandTitle}>Lucencia · 露森西娅</div>
             </div>
           </div>
 
