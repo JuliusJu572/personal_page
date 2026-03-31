@@ -33,8 +33,8 @@ export function CheatingBuddyPage() {
     <Container className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1 className={styles.title}>Cheating Buddy</h1>
-          <p className={styles.subtitle}>作弊老铁</p>
+          <h1 className={styles.title}>Lucencia</h1>
+          <p className={styles.subtitle}>露森西娅</p>
           <p className={styles.desc}>
             实时 AI 助手 — 基于屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助与回答草稿。
           </p>

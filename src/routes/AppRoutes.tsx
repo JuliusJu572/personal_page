@@ -12,8 +12,8 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<Navigate to="/cheating-buddy" replace />} />
-        <Route path="cheating-buddy" element={<CheatingBuddyPage />} />
+        <Route index element={<Navigate to="/lucencia" replace />} />
+        <Route path="lucencia" element={<CheatingBuddyPage />} />
         <Route path="guide" element={<GuidePage />} />
         <Route path="knowledge-cards" element={<KnowledgeCardsPage />} />
         <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />

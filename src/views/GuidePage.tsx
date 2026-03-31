@@ -53,7 +53,7 @@ export function GuidePage() {
   return (
     <Container className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>作弊老铁使用说明</h1>
+        <h1 className={styles.title}>Lucencia 使用说明</h1>
         <p className={styles.subtitle}>从安装到使用，一站式完整指南</p>
       </header>
 
@@ -126,7 +126,7 @@ export function GuidePage() {
           <Step title="步骤 2：移除隔离属性">
             <p className={styles.text}>由于应用未经 Apple 公证，需要手动移除隔离属性：</p>
             <Note>
-              如下的 <code>/Applications/Cheating\ Buddy.app</code> 需要指向 Cheating Buddy 实际的目录
+              如下的 <code>/Applications/Lucencia.app</code> 需要指向 Lucencia 实际的目录
             </Note>
             <p className={styles.text}>打开终端 <Kbd>Command (⌘)</Kbd> + <Kbd>空格键</Kbd></p>
           </Step>
@@ -141,17 +141,17 @@ export function GuidePage() {
                 <strong>屏幕录制权限</strong>
                 <p className={styles.text}>打开"系统设置" → "隐私与安全性" → "屏幕录制"</p>
                 <p className={styles.text}>点击左下角的锁图标解锁</p>
-                <p className={styles.text}>找到"Cheating Buddy"并勾选</p>
+                <p className={styles.text}>找到"Lucencia"并勾选</p>
               </div>
               <div className={styles.permItem}>
                 <strong>麦克风权限</strong>
                 <p className={styles.text}>在"系统设置" → "隐私与安全性" → "麦克风"</p>
-                <p className={styles.text}>找到"Cheating Buddy"并勾选。</p>
+                <p className={styles.text}>找到"Lucencia"并勾选。</p>
               </div>
               <div className={styles.permItem}>
                 <strong>辅助功能权限</strong>
                 <p className={styles.text}>在"系统设置" → "隐私与安全性" → "辅助功能"</p>
-                <p className={styles.text}>找到"Cheating Buddy"并勾选。</p>
+                <p className={styles.text}>找到"Lucencia"并勾选。</p>
               </div>
             </div>
             <Warn>⚠️ 重要提示：设置权限后需要<strong>完全退出</strong>应用，然后重新打开才能生效</Warn>
@@ -183,7 +183,7 @@ export function GuidePage() {
           <div className={styles.newFeature}>
             <strong>新增功能：</strong>
             <ul className={styles.list}>
-              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制电脑上的内容，Cheating Buddy 会随时读取剪切板然后获取答案。</li>
+              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制电脑上的内容，Lucencia 会随时读取剪切板然后获取答案。</li>
               <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 使用 OCR 模型提取电脑屏幕上的文字，之后获取答案。</li>
             </ul>
           </div>
