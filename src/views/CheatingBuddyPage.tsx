@@ -42,17 +42,23 @@ export function CheatingBuddyPage() {
     fetch(LATEST_URL)
       .then((r) => r.json())
       .then((data) => {
+        let changelog: string[] = []
+        if (Array.isArray(data.changelog)) {
+          changelog = data.changelog
+        } else if (typeof data.changelog === 'string' && data.changelog.trim()) {
+          changelog = data.changelog.split('\n').filter((s: string) => s.trim())
+        }
         const info: ReleaseInfo = {
           version: data.version || '',
-          changelog: Array.isArray(data.changelog) ? data.changelog : [],
+          changelog,
         }
         setRelease(info)
       })
       .catch(() => {})
   }, [])
 
-  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Cheating.Buddy.exe` : '#'
-  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Cheating%20Buddy.dmg` : '#'
+  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.Setup.exe` : '#'
+  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.dmg` : '#'
 
   return (
     <Container className={styles.page}>
