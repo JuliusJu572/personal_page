@@ -1,9 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../ui/AppLayout'
 import { CheatingBuddyPage } from '../views/CheatingBuddyPage'
+import { BrandStoryPage } from '../views/BrandStoryPage'
+import { FeaturesPage } from '../views/FeaturesPage'
 import { GuidePage } from '../views/GuidePage'
 import { KnowledgeCardEditorPage } from '../views/KnowledgeCardEditorPage'
 import { KnowledgeCardsPage } from '../views/KnowledgeCardsPage'
+import { PrivacyPage } from '../views/PrivacyPage'
+import { TermsPage } from '../views/TermsPage'
 import { NotFoundPage } from '../views/NotFoundPage'
 import { RegisterPage } from '../views/RegisterPage'
 import { LoginPage } from '../views/LoginPage'
@@ -14,9 +18,13 @@ export function AppRoutes() {
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
         <Route path="lucencia" element={<CheatingBuddyPage />} />
+        <Route path="brand-story" element={<BrandStoryPage />} />
+        <Route path="features" element={<FeaturesPage />} />
         <Route path="guide" element={<GuidePage />} />
         <Route path="knowledge-cards" element={<KnowledgeCardsPage />} />
         <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />
+        <Route path="privacy" element={<PrivacyPage />} />
+        <Route path="terms" element={<TermsPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />

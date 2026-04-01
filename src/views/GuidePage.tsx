@@ -59,7 +59,7 @@ export function GuidePage() {
 
       <nav className={styles.toc}>
         <div className={styles.tocTitle}>目录</div>
-        <a className={styles.tocLink} href="#features">功能特性</a>
+        <a className={styles.tocLink} href="#features">核心功能</a>
         <a className={styles.tocLink} href="#download">下载说明</a>
         <a className={styles.tocLink} href="#install">安装说明</a>
         <a className={styles.tocLink} href="#login">登录界面</a>
@@ -68,7 +68,7 @@ export function GuidePage() {
         <a className={styles.tocLink} href="#ending">结语</a>
       </nav>
 
-      <Section id="features" title="✨ 功能特性">
+      <Section id="features" title="✨ 核心功能">
         <SubSection title="🧠 强大的 AI 内核">
           <ul className={styles.list}>
             <li><strong>多模型支持：</strong>
@@ -87,12 +87,12 @@ export function GuidePage() {
           </ul>
         </SubSection>
 
-        <SubSection title="🛡️ 隐蔽与安全">
+        <SubSection title="🌐 多语种同声传译">
           <ul className={styles.list}>
-            <li>🔲 <strong>透明悬浮窗：</strong>窗口始终置顶，背景透明度可调，完美融入桌面</li>
-            <li>🖱️ <strong>点击穿透：</strong>一键让鼠标穿透窗口，不影响底层操作</li>
-            <li>📹 <strong>防录屏保护：</strong>开启内容保护后，会议软件（如 OBS、腾讯会议、飞书）无法捕获悬浮窗内容</li>
-            <li>👻 <strong>隐身模式：</strong>窗口在截图/录屏中完全不可见</li>
+            <li>🎤 <strong>实时语音捕获：</strong>毫秒级语音识别与转写，支持 50+ 语种</li>
+            <li>📝 <strong>高精度翻译：</strong>专业术语库定制，确保翻译准确性</li>
+            <li>📊 <strong>会议纪要生成：</strong>自动记录会议要点，生成结构化摘要</li>
+            <li>👥 <strong>无障碍沟通：</strong>为听障人士提供实时字幕支持</li>
           </ul>
         </SubSection>
 
@@ -178,13 +178,13 @@ export function GuidePage() {
       <Section id="usage" title="使用界面">
         <Img src="/guide-images/image_19.png" alt="使用界面总览" />
 
-        <SubSection title="文本">
-          <p className={styles.text}>在下方文本框中输入后，敲击回车 <Kbd>Enter</Kbd> 键发送。</p>
+        <SubSection title="文本输入">
+          <p className={styles.text}>在文本框中输入问题或指令，按 <Kbd>Enter</Kbd> 键发送。Lucencia 会结合会议上下文为您提供精准回答。</p>
           <div className={styles.newFeature}>
-            <strong>新增功能：</strong>
+            <strong>智能功能：</strong>
             <ul className={styles.list}>
-              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制电脑上的内容，Lucencia 会随时读取剪切板然后获取答案。</li>
-              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 使用 OCR 模型提取电脑屏幕上的文字，之后获取答案。</li>
+              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制屏幕内容，Lucencia 会自动识别并翻译。</li>
+              <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 启用屏幕 OCR，自动提取并翻译屏幕上的文字。</li>
             </ul>
           </div>
           <div className={styles.imgRow}>
@@ -193,10 +193,10 @@ export function GuidePage() {
           </div>
         </SubSection>
 
-        <SubSection title="截屏">
-          <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd></p>
-          <Img src="/guide-images/image_11.png" alt="截屏功能" />
-          <Note>注意：测评时，为了让 VLM 更好的理解内容，请尽可能的放大页面中的字体。</Note>
+        <SubSection title="屏幕翻译">
+          <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd> 截取屏幕内容并自动翻译。</p>
+          <Img src="/guide-images/image_11.png" alt="屏幕翻译功能" />
+          <Note>提示：为获得最佳识别效果，建议将屏幕上的文字适当放大。</Note>
         </SubSection>
 
         <SubSection title="系统音频">
@@ -210,12 +210,11 @@ export function GuidePage() {
           <Img src="/guide-images/image_21.png" alt="麦克风录制" />
         </SubSection>
 
-        <SubSection title="简历/JD 解析">
+        <SubSection title="智能屏幕解析">
+          <p className={styles.text}>一键捕获屏幕内容，自动识别并翻译外语 PPT、图表和文档。</p>
           <div className={styles.imgGrid}>
-            <Img src="/guide-images/image_20.png" alt="简历解析1" />
-            <Img src="/guide-images/image_22.png" alt="简历解析2" />
-            <Img src="/guide-images/image_13.png" alt="简历解析3" />
-            <Img src="/guide-images/image_17.png" alt="简历解析4" />
+            <Img src="/guide-images/image_11.png" alt="屏幕解析1" />
+            <Img src="/guide-images/image_12.png" alt="屏幕解析2" />
           </div>
         </SubSection>
 
@@ -226,7 +225,7 @@ export function GuidePage() {
 
       <Section id="settings" title="重要设置">
         <SubSection title="账号与计费">
-          <p className={styles.text}>设置中，第一栏可以查看用户余额，一次对话大约消耗 1,000 tokens，因此在面试前需要提前查看，预留出大约 30,000 tokens。</p>
+          <p className={styles.text}>设置中，第一栏可以查看用户余额。一次对话大约消耗 1,000 tokens，建议在重要会议前预留足够额度。</p>
           <Img src="/guide-images/image_14.png" alt="账号与计费" />
         </SubSection>
 
@@ -239,26 +238,26 @@ export function GuidePage() {
           <Img src="/guide-images/image_24.png" alt="界面设置" />
         </SubSection>
 
-        <SubSection title="隐身配置">
-          <Warn>一定一定一定！！！要确保这里的选项是"平衡"。</Warn>
-          <Img src="/guide-images/image_16.png" alt="隐身配置" />
+        <SubSection title="界面优化配置">
+          <p className={styles.text}>根据您的使用习惯，调整界面显示效果和性能设置。</p>
+          <Img src="/guide-images/image_16.png" alt="界面配置" />
         </SubSection>
 
         <SubSection title="模型设置">
           <ul className={styles.list}>
-            <li>文本模型建议使用 <strong>Qwen3-Max</strong>，暂时不推荐使用 Qwen3.5plus（速度过慢，服务不稳定）。如果不想使用，可以更换为 Deepseek、Minimax 或 Kimi。</li>
-            <li>视觉模型不建议更换，使用默认的 <strong>Qwen3-VL-Plus</strong>。</li>
+            <li>文本模型建议使用 <strong>Qwen3-Max</strong>，也可选择 Deepseek、Minimax 或 Kimi。</li>
+            <li>视觉模型建议使用默认的 <strong>Qwen3-VL-Plus</strong>，精准识别屏幕内容。</li>
             <li>最大回复 Tokens 越大回复越长，响应速度越慢。</li>
-            <li>多轮对话默认开启，不建议关闭。</li>
-            <li>追问增强可以预判面试官的追问，按需开启，会加大 tokens 的消耗。</li>
+            <li>多轮对话默认开启，保持上下文连贯性。</li>
+            <li>智能追问可预判会议中的后续问题，按需开启。</li>
           </ul>
           <Img src="/guide-images/image_7.png" alt="模型设置" />
 
           <div className={styles.subSubSection}>
-            <h4 className={styles.h4}>追问增强实例</h4>
+            <h4 className={styles.h4}>智能追问示例</h4>
             <div className={styles.imgRow}>
-              <Img src="/guide-images/image_6.png" alt="追问增强实例1" />
-              <Img src="/guide-images/image_15.png" alt="追问增强实例2" />
+              <Img src="/guide-images/image_6.png" alt="智能追问示例1" />
+              <Img src="/guide-images/image_15.png" alt="智能追问示例2" />
             </div>
           </div>
         </SubSection>
@@ -274,11 +273,11 @@ export function GuidePage() {
 
       <Section id="ending" title="📌 结语">
         <div className={styles.ending}>
-          <p>🎉 祝大家都能在 经济下行期 + AI 时代 找到满意的工作！</p>
-          <p>💪 求职路上，愿这款工具能成为你的得力助手，助你在激烈的竞争中脱颖而出</p>
-          <p>📮 联系我</p>
-          <p>🟢 微信：jrb_572_</p>
-          <p>✨ 祝求职顺利！</p>
+          <p>🚀 让每一场跨国会议都高效、无障碍、充满价值！</p>
+          <p>� Lucencia 致力于打破语言壁垒，提升团队协作效率</p>
+          <p>� 商务合作与技术支持</p>
+          <p>� 邮箱：contact@lucencia.com</p>
+          <p>✨ 祝您的团队协作更加顺畅！</p>
         </div>
       </Section>
     </Container>

@@ -144,6 +144,11 @@
   font-size: var(--font-size-sm);
 }
 
+.footerLinks {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
 .footerLink {
   position: relative;
   color: var(--color-text-secondary);

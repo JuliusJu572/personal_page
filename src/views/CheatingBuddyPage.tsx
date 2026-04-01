@@ -12,20 +12,19 @@ interface ReleaseInfo {
 }
 
 const shortcuts = [
-  { icon: '📸', name: '截屏提问', win: 'Ctrl + Enter', mac: 'Cmd + Enter' },
+  { icon: '📸', name: '截屏翻译', win: 'Ctrl + Enter', mac: 'Cmd + Enter' },
   { icon: '🖱️', name: '点击穿透', win: 'Ctrl + M', mac: 'Cmd + M' },
   { icon: '🪟', name: '窗口移动', win: 'Ctrl + 方向键', mac: 'Cmd + 方向键' },
   { icon: '🔇', name: '显示/隐藏', win: 'Ctrl + \\', mac: 'Cmd + \\' },
   { icon: '🔊', name: '系统录音', win: 'Ctrl + L', mac: 'Cmd + L' },
   { icon: '🎤', name: '麦克风录制', win: 'Ctrl + K', mac: 'Cmd + K' },
-  { icon: '📝', name: 'OCR 识题', win: 'Ctrl + ;', mac: 'Cmd + ;' },
-  { icon: '📋', name: '复制转发', win: 'Ctrl + C', mac: 'Cmd + C' },
+  { icon: '📝', name: '屏幕 OCR', win: 'Ctrl + ;', mac: 'Cmd + ;' },
+  { icon: '📋', name: '复制内容', win: 'Ctrl + C', mac: 'Cmd + C' },
   { icon: '⬆️', name: '上一条响应', win: 'Ctrl + [', mac: 'Cmd + [' },
   { icon: '⬇️', name: '下一条响应', win: 'Ctrl + ]', mac: 'Cmd + ]' },
   { icon: '↕️', name: '响应滚动', win: 'Ctrl + Shift + 方向键', mac: 'Cmd + Shift + 方向键' },
   { icon: '🗑️', name: '清除历史', win: "Ctrl + '", mac: "Cmd + '" },
   { icon: '🧹', name: '清空转写', win: 'Ctrl + Shift + L', mac: 'Cmd + Shift + L' },
-  { icon: '🚨', name: '紧急擦除', win: 'Ctrl + Shift + E', mac: 'Cmd + Shift + E' },
   { icon: '💬', name: '发送文本', win: 'Enter', mac: 'Enter' },
   { icon: '↩️', name: '文本换行', win: 'Shift + Enter', mac: 'Shift + Enter' },
 ]
@@ -74,7 +73,7 @@ export function CheatingBuddyPage() {
             <span className={styles.titleCn}>露森西娅</span>
           </h1>
           <p className={styles.desc}>
-            实时 AI 助手 — 基于屏幕截图与音频分析，在视频通话、面试、演示与会议中提供上下文辅助与回答草稿。
+            跨国会议与无障碍沟通 AI 协同助手 — 提供实时翻译、屏幕智能解析与知识库集成，让每一次全球协作都清晰高效。
           </p>
         </div>
       </header>

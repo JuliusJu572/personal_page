@@ -3,7 +3,9 @@ import { useAuth } from '../lib/authContext'
 import styles from './appLayout.module.css'
 
 const navItems: Array<{ to: string; label: string }> = [
-  { to: '/lucencia', label: 'Lucencia' },
+  { to: '/lucencia', label: '产品概览' },
+  { to: '/brand-story', label: '品牌故事' },
+  { to: '/features', label: '核心功能' },
   { to: '/guide', label: '使用说明' },
   { to: '/knowledge-cards', label: '知识卡片' },
 ]
@@ -77,7 +79,11 @@ export function AppLayout() {
 
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
-          <span>© {new Date().getFullYear()} JuliusJu</span>
+          <div className={styles.footerLinks}>
+            <a href="/terms" className={styles.footerLink}>用户服务协议</a>
+            <a href="/privacy" className={styles.footerLink}>隐私政策</a>
+          </div>
+          <span>© {new Date().getFullYear()} Lucencia Tech</span>
         </div>
       </footer>
     </div>
