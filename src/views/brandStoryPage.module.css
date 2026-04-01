@@ -44,6 +44,20 @@
   line-height: var(--line-height-relaxed);
 }
 
+.heroImage {
+  margin-top: var(--spacing-3xl);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.heroImg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--depth-xl);
+}
+
 .section {
   margin-bottom: var(--spacing-6xl);
 }

@@ -28,15 +28,6 @@ function Step({ title, children }: { title: string; children: React.ReactNode })
   )
 }
 
-function Img({ src, alt, caption }: { src: string; alt: string; caption?: string }) {
-  return (
-    <figure className={styles.figure}>
-      <img src={src} alt={alt} className={styles.img} loading="lazy" />
-      {caption && <figcaption className={styles.caption}>{caption}</figcaption>}
-    </figure>
-  )
-}
-
 function Note({ children }: { children: React.ReactNode }) {
   return <div className={styles.note}>{children}</div>
 }
@@ -60,9 +51,7 @@ export function GuidePage() {
       <nav className={styles.toc}>
         <div className={styles.tocTitle}>目录</div>
         <a className={styles.tocLink} href="#features">核心功能</a>
-        <a className={styles.tocLink} href="#download">下载说明</a>
         <a className={styles.tocLink} href="#install">安装说明</a>
-        <a className={styles.tocLink} href="#login">登录界面</a>
         <a className={styles.tocLink} href="#usage">使用界面</a>
         <a className={styles.tocLink} href="#settings">重要设置</a>
         <a className={styles.tocLink} href="#ending">结语</a>
@@ -102,11 +91,6 @@ export function GuidePage() {
             <li>🔑 <strong>License Key 系统：</strong>一次激活，自动验证</li>
           </ul>
         </SubSection>
-      </Section>
-
-      <Section id="download" title="📥 下载说明">
-        <p className={styles.text}>通过夸克网盘下载安装包。</p>
-        <Img src="/guide-images/image_2.png" alt="下载说明截图" />
       </Section>
 
       <Section id="install" title="安装说明">
@@ -159,25 +143,7 @@ export function GuidePage() {
         </SubSection>
       </Section>
 
-      <Section id="login" title="登录界面">
-        <Step title="步骤 1：输入激活码">
-          <Img src="/guide-images/image_1.png" alt="输入激活码" />
-        </Step>
-
-        <Step title="步骤 2：输入账户密码">
-          <p className={styles.text}>输入分配给你的用户名和密码进行登录</p>
-          <Img src="/guide-images/image_0.png" alt="输入账户密码" />
-        </Step>
-
-        <Step title="步骤 3：登录成功">
-          <Img src="/guide-images/image_10.png" alt="登录成功" />
-          <Note>如果遇到账号冻结，额度不够。请联系@雎。</Note>
-        </Step>
-      </Section>
-
       <Section id="usage" title="使用界面">
-        <Img src="/guide-images/image_19.png" alt="使用界面总览" />
-
         <SubSection title="文本输入">
           <p className={styles.text}>在文本框中输入问题或指令，按 <Kbd>Enter</Kbd> 键发送。Lucencia 会结合会议上下文为您提供精准回答。</p>
           <div className={styles.newFeature}>
@@ -187,60 +153,54 @@ export function GuidePage() {
               <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 启用屏幕 OCR，自动提取并翻译屏幕上的文字。</li>
             </ul>
           </div>
-          <div className={styles.imgRow}>
-            <Img src="/guide-images/image_9.png" alt="文本输入示例" />
-            <Img src="/guide-images/image_8.png" alt="文本输入示例2" />
-          </div>
         </SubSection>
 
         <SubSection title="屏幕翻译">
           <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd> 截取屏幕内容并自动翻译。</p>
-          <Img src="/guide-images/image_11.png" alt="屏幕翻译功能" />
+          <p className={styles.text}>系统会自动识别屏幕上的文字、图表和代码，并提供精准的翻译结果。支持多种语言互译，包括中英日韩等主流语言。</p>
           <Note>提示：为获得最佳识别效果，建议将屏幕上的文字适当放大。</Note>
         </SubSection>
 
         <SubSection title="系统音频">
           <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd> 开始录制，再次按下停止录制。</p>
-          <Img src="/guide-images/image_12.png" alt="系统音频录制" />
-          <Img src="/guide-images/image_18.png" alt="系统音频录制示例" />
+          <p className={styles.text}>Lucencia 可以捕获系统音频，实时转写并翻译会议中的语音内容。支持识别多种语言，自动区分说话人，并生成结构化的会议纪要。</p>
         </SubSection>
 
         <SubSection title="麦克风录制">
           <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd> 开始录制麦克风声音，再次按下停止录制。</p>
-          <Img src="/guide-images/image_21.png" alt="麦克风录制" />
+          <p className={styles.text}>通过麦克风捕获您的语音，Lucencia 会实时转写并提供翻译支持。适用于需要记录个人发言或进行语音输入的场景。</p>
         </SubSection>
 
         <SubSection title="智能屏幕解析">
           <p className={styles.text}>一键捕获屏幕内容，自动识别并翻译外语 PPT、图表和文档。</p>
-          <div className={styles.imgGrid}>
-            <Img src="/guide-images/image_11.png" alt="屏幕解析1" />
-            <Img src="/guide-images/image_12.png" alt="屏幕解析2" />
-          </div>
+          <p className={styles.text}>Lucencia 的智能屏幕解析功能可以识别屏幕上的文字、表格、图表等多种内容形式，并提供结构化的翻译结果。支持实时更新，让您随时掌握屏幕上的最新信息。</p>
         </SubSection>
 
         <SubSection title="清理上下文">
           <p className={styles.text}>对话界面，快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>'</Kbd> 清理上下文，防止上下文累积。</p>
+          <p className={styles.text}>定期清理上下文可以释放内存，提高响应速度，并确保 AI 助手专注于当前对话内容。</p>
         </SubSection>
       </Section>
 
       <Section id="settings" title="重要设置">
         <SubSection title="账号与计费">
           <p className={styles.text}>设置中，第一栏可以查看用户余额。一次对话大约消耗 1,000 tokens，建议在重要会议前预留足够额度。</p>
-          <Img src="/guide-images/image_14.png" alt="账号与计费" />
+          <p className={styles.text}>您可以在设置页面查看当前账户的 token 余额、使用历史和订阅状态。系统会在余额不足时提前提醒您充值。</p>
         </SubSection>
 
         <SubSection title="默认用户提示词">
           <p className={styles.text}>此处编辑用户提示词，针对不同的场景个性化编辑。</p>
-          <Img src="/guide-images/image_23.png" alt="默认用户提示词" />
+          <p className={styles.text}>您可以为不同类型的会议（如技术讨论、商务谈判、项目汇报等）设置专属的提示词模板，让 AI 助手更好地理解您的需求并提供更精准的回答。</p>
         </SubSection>
 
         <SubSection title="界面设置 - 透明度与字体大小">
-          <Img src="/guide-images/image_24.png" alt="界面设置" />
+          <p className={styles.text}>调整悬浮窗的透明度和字体大小，以适应不同的使用环境和个人偏好。</p>
+          <p className={styles.text}>透明度设置可以让悬浮窗更好地融入您的桌面环境，而字体大小调整则确保在不同屏幕尺寸下都能清晰阅读。</p>
         </SubSection>
 
         <SubSection title="界面优化配置">
           <p className={styles.text}>根据您的使用习惯，调整界面显示效果和性能设置。</p>
-          <Img src="/guide-images/image_16.png" alt="界面配置" />
+          <p className={styles.text}>包括窗口置顶、点击穿透、防录屏保护等高级功能，让 Lucencia 更好地融入您的工作流程。</p>
         </SubSection>
 
         <SubSection title="模型设置">
@@ -251,32 +211,19 @@ export function GuidePage() {
             <li>多轮对话默认开启，保持上下文连贯性。</li>
             <li>智能追问可预判会议中的后续问题，按需开启。</li>
           </ul>
-          <Img src="/guide-images/image_7.png" alt="模型设置" />
-
-          <div className={styles.subSubSection}>
-            <h4 className={styles.h4}>智能追问示例</h4>
-            <div className={styles.imgRow}>
-              <Img src="/guide-images/image_6.png" alt="智能追问示例1" />
-              <Img src="/guide-images/image_15.png" alt="智能追问示例2" />
-            </div>
-          </div>
+          <p className={styles.text}>您可以根据会议的重要性和复杂度，灵活调整模型参数。对于重要会议，建议使用更强大的模型并开启智能追问功能。</p>
         </SubSection>
 
         <SubSection title="更换 License Key">
-          <div className={styles.imgRow}>
-            <Img src="/guide-images/image_5.png" alt="更换License Key 1" />
-            <Img src="/guide-images/image_4.png" alt="更换License Key 2" />
-          </div>
-          <Img src="/guide-images/image_3.png" alt="更换License Key 3" />
+          <p className={styles.text}>在设置页面可以更换您的 License Key。输入新的 License Key 后，系统会自动验证并激活。</p>
+          <p className={styles.text}>如果您需要获取新的 License Key，请联系管理员或访问官方网站。</p>
         </SubSection>
       </Section>
 
       <Section id="ending" title="📌 结语">
         <div className={styles.ending}>
           <p>🚀 让每一场跨国会议都高效、无障碍、充满价值！</p>
-          <p>� Lucencia 致力于打破语言壁垒，提升团队协作效率</p>
-          <p>� 商务合作与技术支持</p>
-          <p>� 邮箱：contact@lucencia.com</p>
+          <p>💡 Lucencia 致力于打破语言壁垒，提升团队协作效率</p>
           <p>✨ 祝您的团队协作更加顺畅！</p>
         </div>
       </Section>

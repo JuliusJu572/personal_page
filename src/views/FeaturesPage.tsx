@@ -16,7 +16,7 @@ const features = [
       '专业术语库定制',
       '会议纪要自动生成',
     ],
-    image: '/guide-images/image_12.png',
+    image: '/features-images/translation.png',
   },
   {
     id: 'ocr',
@@ -31,7 +31,7 @@ const features = [
       '图表数据智能提取',
       '结构化内容摘要',
     ],
-    image: '/guide-images/image_11.png',
+    image: '/features-images/ocr.png',
   },
   {
     id: 'knowledge',
@@ -46,7 +46,7 @@ const features = [
       '上下文关联推荐',
       '标准回答生成',
     ],
-    image: '/guide-images/image_19.png',
+    image: '/features-images/knowledge.png',
   },
 ]
 

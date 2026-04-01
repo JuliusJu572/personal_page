@@ -110,7 +110,7 @@ export function PrivacyPage() {
             <li>撤回同意</li>
           </ul>
           <p className={styles.text}>
-            如需行使这些权利，请通过本政策末尾的联系方式与我们联系。
+            如需行使这些权利，请通过 support@lucencia.com 与我们联系。
           </p>
         </section>
 
@@ -146,12 +146,6 @@ export function PrivacyPage() {
           </p>
         </section>
 
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>11. 联系我们</h2>
-          <p className={styles.text}>
-            如果您对本隐私政策有任何疑问或建议，请通过以下方式联系我们：
-          </p>
-        </section>
       </Card>
     </Container>
   )

@@ -14,6 +14,9 @@ export function BrandStoryPage() {
           </h1>
           <p className={styles.subtitle}>让沟通的每一个暗角，皆有光亮。</p>
         </div>
+        <div className={styles.heroImage}>
+          <img src="/features-images/hero.png" alt="Lucencia - 照亮每一次全球协作" className={styles.heroImg} />
+        </div>
       </header>
 
       <section className={styles.section}>

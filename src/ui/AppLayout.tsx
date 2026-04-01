@@ -83,7 +83,7 @@ export function AppLayout() {
             <a href="/terms" className={styles.footerLink}>用户服务协议</a>
             <a href="/privacy" className={styles.footerLink}>隐私政策</a>
           </div>
-          <span>© {new Date().getFullYear()} Lucencia Tech</span>
+          <span>© {new Date().getFullYear()} Daedalus Tech</span>
         </div>
       </footer>
     </div>
