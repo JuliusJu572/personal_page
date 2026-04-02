@@ -107,12 +107,22 @@ export function GuidePage() {
             <p className={styles.text}>双击打开，将应用图标拖拽到"应用程序"文件夹。</p>
           </Step>
 
-          <Step title="步骤 2：移除隔离属性">
-            <p className={styles.text}>由于应用未经 Apple 公证，需要手动移除隔离属性：</p>
+          <Step title="步骤 2：移除隔离属性 (Quarantine)">
+            <p className={styles.text}>苹果的 Gatekeeper 会拦截未经过 Apple 开发者账号签名和公证（Notarization）的非 Mac App Store 应用，因此需要手动移除隔离属性：</p>
+            <ol className={styles.orderedList}>
+              <li>打开终端（Terminal），快捷键 <Kbd>Command (⌘)</Kbd> + <Kbd>空格键</Kbd> 搜索"终端"</li>
+              <li>输入以下命令（<strong>末尾必须保留一个空格</strong>）：</li>
+            </ol>
+            <div className={styles.codeBlock}>
+              <code>xattr -rd com.apple.quarantine&nbsp;</code>
+            </div>
+            <ol className={styles.orderedList} start={3}>
+              <li>将 <code>Lucencia.app</code> 从 Finder 拖拽到终端窗口中，命令会自动补全路径</li>
+              <li>按下 <Kbd>Enter</Kbd> 执行，然后重新双击打开应用即可</li>
+            </ol>
             <Note>
-              如下的 <code>/Applications/Lucencia.app</code> 需要指向 Lucencia 实际的目录
+              如果提示找不到应用，请确认路径是否正确，默认路径为 <code>/Applications/Lucencia.app</code>
             </Note>
-            <p className={styles.text}>打开终端 <Kbd>Command (⌘)</Kbd> + <Kbd>空格键</Kbd></p>
           </Step>
 
           <Step title="步骤 3：安装 ffmpeg">
