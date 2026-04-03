@@ -17,6 +17,8 @@ type AuthContextValue = {
   user: UserInfo | null
   loading: boolean
   refresh: () => Promise<void>
+  login: (username: string, password: string) => Promise<void>
+  register: (username: string, password: string) => Promise<void>
   logout: () => void
 }
 
@@ -24,6 +26,8 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: true,
   refresh: async () => {},
+  login: async (_username: string, _password: string) => {},
+  register: async (_username: string, _password: string) => {},
   logout: () => {},
 })
 
@@ -58,6 +62,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const login = useCallback(async (username: string, password: string) => {
+    const data = await api.login(username, password)
+    api.setToken(data.token)
+    await refresh()
+  }, [refresh])
+
+  const register = useCallback(async (username: string, password: string) => {
+    await api.register(username, password)
+  }, [])
+
   const logout = useCallback(() => {
     api.clearToken()
     setUser(null)
@@ -68,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh])
 
   return (
-    <AuthContext.Provider value={{ user, loading, refresh, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, refresh, logout }}>
       {children}
     </AuthContext.Provider>
   )
