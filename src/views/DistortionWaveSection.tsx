@@ -14,8 +14,8 @@ function WaveMesh() {
     meshRef.current.rotation.x = Math.sin(t * 0.3) * 0.05
     meshRef.current.rotation.y = Math.cos(t * 0.2) * 0.03
 
-    const mat = meshRef.current.material as MeshDistortMaterial
-    if (mat && 'uniforms' in mat) {
+    const mat = meshRef.current.material
+    if (mat) {
       mouseRef.current.x += ((state.mouse.x - mouseRef.current.x) * 0.05)
       mouseRef.current.y += ((state.mouse.y - mouseRef.current.y) * 0.05)
     }
