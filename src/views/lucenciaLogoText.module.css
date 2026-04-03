@@ -1,0 +1,145 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+
+.svgLayer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textSvg {
+  width: 100%;
+  height: auto;
+  max-width: 700px;
+  overflow: visible;
+}
+
+.mainText {
+  fill: none;
+  stroke: #fff;
+  strokeWidth: 1.2;
+  fontFamily: 'Orbitron', 'Rajdhani', 'Share Tech Mono', sans-serif;
+  fontSize: 72px;
+  fontWeight: 300;
+  letterSpacing: 0.2em;
+  filter: drop-shadow(0 0 6px rgba(0,114,227,0.4));
+}
+
+.glowCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(0,150,255,0.3) 25%, rgba(0,114,227,0.1) 50%, transparent 70%);
+  animation: glowPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+}
+
+.beamContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.beam {
+  position: absolute;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 20%, rgba(100,200,255,0.9) 50%, rgba(255,255,255,0.8) 80%, transparent 100%);
+  animation: beamSweep var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+  opacity: 0;
+  top: calc(50% + var(--offset));
+  left: -10%;
+  width: 120%;
+  filter: blur(0.3px);
+}
+
+.beamWide {
+  height: 4px;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,150,255,0.15) 30%, rgba(255,255,255,0.08) 50%, rgba(0,150,255,0.15) 70%, transparent 100%);
+  animation-duration: 4s;
+  filter: blur(2px);
+}
+
+@keyframes beamSweep {
+  0% { opacity: 0; transform: scaleX(0) translateX(-30%); }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: scaleX(1) translateX(30%); }
+}
+
+.sparkContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.spark {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  animation: sparkTwinkle var(--dur) ease-in-out infinite;
+  animation-delay: var(--del);
+  box-shadow: 0 0 4px rgba(255,255,255,0.8), 0 0 8px rgba(0,150,255,0.4);
+}
+
+.sparkLarge {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 14px rgba(0,150,255,0.5), 0 0 24px rgba(0,114,227,0.3);
+}
+
+@keyframes sparkTwinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.fallbackImg {
+  max-width: 90vw;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(1.05) drop-shadow(0 0 20px rgba(0,114,227,0.3));
+}
+
+@media (max-width: 768px) {
+  .mainText {
+    fontSize: 36px;
+    strokeWidth: 0.9;
+    letterSpacing: 0.12em;
+  }
+
+  .textSvg {
+    max-width: 95vw;
+  }
+
+  .glowCenter {
+    width: 120px;
+    height: 120px;
+  }
+
+  .beam {
+    height: 1px;
+  }
+}

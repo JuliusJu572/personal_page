@@ -1,0 +1,89 @@
+.section {
+  position: relative;
+  padding: var(--spacing-5xl) var(--spacing-4xl);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0 0 var(--spacing-sm);
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin: 0 0 var(--spacing-4xl);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+}
+
+.card {
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+.iconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.iconShield { background: rgba(0,114,227,0.12); border: 1px solid rgba(0,114,227,0.2); }
+.iconKey { background: rgba(0,200,83,0.12); border: 1px solid rgba(0,200,83,0.2); }
+.iconGlobeSeg { background: rgba(90,200,250,0.12); border: 1px solid rgba(90,200,250,0.2); }
+
+.cardTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}

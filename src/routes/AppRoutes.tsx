@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '../ui/AppLayout'
+import { HomePage } from '../views/HomePage'
 import { CheatingBuddyPage } from '../views/CheatingBuddyPage'
 import { BrandStoryPage } from '../views/BrandStoryPage'
 import { FeaturesPage } from '../views/FeaturesPage'
@@ -15,6 +16,8 @@ import { LoginPage } from '../views/LoginPage'
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
+
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
         <Route path="lucencia" element={<CheatingBuddyPage />} />
