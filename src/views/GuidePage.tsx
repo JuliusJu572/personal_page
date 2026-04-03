@@ -138,7 +138,7 @@ export function GuidePage() {
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         }>
           <SubSection title="Windows 安装">
-            <p className={styles.text}>双击 <code>Cheating.Buddy.exe</code> 安装包即可下载软件。</p>
+            <p className={styles.text}>双击 <code>Lucencia.Setup.exe</code> 安装包即可下载软件。</p>
             <Note>如果某个功能无法使用，请尝试安装 ffmpeg</Note>
           </SubSection>
 
@@ -146,7 +146,7 @@ export function GuidePage() {
             <Note>macOS 安装较为复杂，烦请按以下步骤操作。如有问题请联系管理员。</Note>
 
             <Step num={1} title="安装应用程序">
-              <p className={styles.text}>双击 <code>Cheating.Buddy.dmg</code> 安装包开始安装。将应用图标拖拽到"应用程序"文件夹。</p>
+              <p className={styles.text}>双击 <code>Lucencia.dmg</code> 安装包开始安装。将应用图标拖拽到"应用程序"文件夹。</p>
             </Step>
 
             <Step num={2} title="移除隔离属性 (Quarantine)">

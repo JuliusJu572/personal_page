@@ -54,65 +54,35 @@
   text-align: center;
 }
 
-.downloadGrid {
+.actions {
   display: flex;
   gap: var(--spacing-md);
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.downloadBtn {
+.primaryBtn {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: 14px 28px;
-  border-radius: 14px;
+  justify-content: center;
+  padding: 14px 40px;
+  border-radius: 999px;
   background: linear-gradient(135deg, #003d99 0%, #0052cc 50%, #0071e3 100%);
   color: #fff;
   font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 650;
+  letter-spacing: 0.03em;
   cursor: pointer;
   border: 1px solid rgba(0, 150, 255, 0.3);
   transition: all 0.28s ease;
   white-space: nowrap;
-  text-decoration: none;
 }
 
-.downloadBtn:hover {
+.primaryBtn:hover {
   background: linear-gradient(135deg, #0052cc 0%, #0071e3 50%, #3399ff 100%);
-  transform: scale(1.04) translateY(-1px);
+  transform: scale(1.05) translateY(-1px);
   box-shadow: 0 6px 30px rgba(0, 82, 204, 0.45), 0 0 48px rgba(0, 113, 227, 0.15);
   border-color: rgba(0, 150, 255, 0.5);
-}
-
-.downloadIcon {
-  font-size: 22px;
-  line-height: 1;
-}
-
-.downloadInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-}
-
-.downloadOs {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.downloadNote {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.downloadVersion {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  padding-left: var(--spacing-sm);
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .secondaryBtn {
