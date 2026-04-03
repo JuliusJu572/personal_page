@@ -1,0 +1,75 @@
+.footer {
+  position: relative;
+  padding: 28px var(--spacing-4xl) 32px;
+  background: rgba(0, 0, 0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footerLine {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 114, 227, 0.25), transparent);
+}
+
+.footerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.brand {
+  font-family: 'Orbitron', 'Rajdhani', 'Share Tech Mono', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footerLinks {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.footerLink {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.footerLink:hover {
+  color: rgba(90, 200, 250, 0.8);
+}
+
+.copyright {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .footerInner {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+    padding: var(--spacing-sm) 0;
+  }
+
+  .footer {
+    padding: 24px var(--spacing-lg) 28px;
+  }
+}

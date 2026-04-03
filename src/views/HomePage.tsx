@@ -1,4 +1,5 @@
 import { HomeNavbar } from '../ui/HomeNavbar'
+import { HomeFooter } from '../ui/HomeFooter'
 import { HeroSection } from './HeroSection'
 import { DistortionWaveSection } from './DistortionWaveSection'
 import { HomeFeaturesSection } from './HomeFeaturesSection'
@@ -15,6 +16,7 @@ export function HomePage() {
       <HomeFeaturesSection />
       <PrivacySecuritySection />
       <GetStartedSection />
+      <HomeFooter />
     </div>
   )
 }

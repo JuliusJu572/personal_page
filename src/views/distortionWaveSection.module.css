@@ -1,9 +1,9 @@
 .section {
   position: relative;
   width: 100%;
-  height: 280px;
+  height: 300px;
   overflow: hidden;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,10,30,0.6) 50%, rgba(0,0,0,0) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,8,24,0.7) 50%, rgba(0,0,0,0) 100%);
 }
 
 .canvasWrap {
@@ -20,27 +20,53 @@
   align-items: center;
   justify-content: center;
   font-family: 'Orbitron', 'Rajdhani', monospace;
-  font-size: clamp(28px, 5vw, 56px);
-  font-weight: 300;
-  letter-spacing: 0.25em;
-  color: rgba(255, 255, 255, 0.12);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.55);
   text-transform: uppercase;
   pointer-events: none;
   user-select: none;
-  animation: textFloat 6s ease-in-out infinite;
+  animation: textFloat 5s ease-in-out infinite, textGlow 3s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 10px rgba(0, 150, 255, 0.5),
+    0 0 30px rgba(0, 113, 227, 0.3),
+    0 0 60px rgba(0, 82, 204, 0.15),
+    0 0 100px rgba(0, 60, 180, 0.08);
+  transform: translate(calc(var(--mx, 0px)), calc(var(--my, 0px)));
+  transition: transform 0.15s ease-out;
 }
 
 @keyframes textFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%, 100% { transform: translate(calc(var(--mx, 0px)), calc(var(--my, 0px))); }
+  50% { transform: translate(calc(var(--mx, 0px) + 0px), calc(var(--my, 0px) - 10px)); }
+}
+
+@keyframes textGlow {
+  0% {
+    color: rgba(255, 255, 255, 0.4);
+    text-shadow:
+      0 0 10px rgba(0, 150, 255, 0.3),
+      0 0 30px rgba(0, 113, 227, 0.15),
+      0 0 60px rgba(0, 82, 204, 0.06);
+  }
+  100% {
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow:
+      0 0 15px rgba(100, 200, 255, 0.7),
+      0 0 40px rgba(0, 150, 255, 0.5),
+      0 0 80px rgba(0, 113, 227, 0.3),
+      0 0 120px rgba(0, 82, 204, 0.15);
+  }
 }
 
 @media (max-width: 768px) {
   .section {
-    height: 200px;
+    height: 220px;
   }
 
   .overlayText {
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
+    font-size: clamp(26px, 7vw, 48px);
   }
 }

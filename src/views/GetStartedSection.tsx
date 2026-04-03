@@ -1,31 +1,38 @@
-import { Link } from 'react-router-dom'
 import styles from './getStartedSection.module.css'
 
-const STATS = [
-  { num: '50+', label: '语种支持' },
-  { num: '99.2%', label: '翻译准确率' },
-  { num: '<50ms', label: '响应延迟' },
-  { num: '10K+', label: '企业用户' },
+const stats = [
+  { value: '50+', label: '支持语言' },
+  { value: '99.2%', label: '翻译准确率' },
+  { value: '<50ms', label: '响应延迟' },
+  { value: '10K+', label: '全球用户' },
 ]
 
 export function GetStartedSection() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <section className={styles.section}>
-      <div className={styles.bgGlow} />
-      <div className={styles.content}>
-        <h2 className={styles.title}>Get Started with LUCENCIA</h2>
+      <div className={styles.inner}>
+        <h2 className={styles.title}>开始使用 LUCENCIA</h2>
         <p className={styles.subtitle}>Try it for Free</p>
+
         <p className={styles.desc}>
           让全球协作变得简单高效。立即下载，开启无障碍沟通新体验。
         </p>
-        <div className={styles.btnGroup}>
-          <a href="#hero-download" className={styles.primaryBtn}>立即免费下载</a>
-          <Link to="/guide" className={styles.secondaryBtn}>查看使用说明</Link>
+
+        <div className={styles.actions}>
+          <button type="button" className={styles.primaryBtn} onClick={scrollToTop}>
+            立即免费下载
+          </button>
+          <a href="/guide" className={styles.secondaryBtn}>查看使用说明</a>
         </div>
+
         <div className={styles.stats}>
-          {STATS.map((s, i) => (
-            <div key={i} className={styles.statItem}>
-              <span className={styles.statNum}>{s.num}</span>
+          {stats.map((s) => (
+            <div key={s.label} className={styles.statItem}>
+              <span className={styles.statValue}>{s.value}</span>
               <span className={styles.statLabel}>{s.label}</span>
             </div>
           ))}

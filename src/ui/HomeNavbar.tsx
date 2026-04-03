@@ -16,18 +16,13 @@ export function HomeNavbar() {
   }, [])
 
   const handleLogoClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    navigate('/lucencia')
+    window.scrollTo(0, 0)
   }
 
   const handlePricingClick = (e: React.MouseEvent) => {
     e.preventDefault()
     const el = document.getElementById('pricing')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
-
-  const handleDownloadClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    const el = document.getElementById('hero-download')
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -46,22 +41,18 @@ export function HomeNavbar() {
           <div className={styles.navLinks}>
             <a href="#pricing" className={styles.navLink} onClick={handlePricingClick}>定价</a>
             <Link to="/guide" className={styles.navLink}>使用说明</Link>
-            <a href="#hero-download" className={styles.navLink} onClick={handleDownloadClick}>下载</a>
+            <Link to="/knowledge-cards" className={styles.navLink}>知识卡片</Link>
           </div>
         </div>
 
         <div className={styles.right}>
-          <a href="#hero-download" className={styles.downloadBtn} onClick={handleDownloadClick}>
-            Download
-          </a>
-
           {user ? (
             <div className={styles.userArea}>
               <span className={styles.userName}>{user.username}</span>
               <button type="button" className={styles.logoutBtn} onClick={handleLogout}>退出</button>
             </div>
           ) : (
-            <Link to="/login" className={styles.loginLink}>登录</Link>
+            <Link to="/login" className={styles.loginBtnSolid}>登录</Link>
           )}
 
           <button
@@ -78,7 +69,7 @@ export function HomeNavbar() {
       <div className={[styles.mobileMenu, menuOpen ? styles.mobileMenuOpen : undefined].filter(Boolean).join(' ')}>
         <a href="#pricing" className={styles.mobileMenuLink} onClick={(e) => { handlePricingClick(e); setMenuOpen(false) }}>定价</a>
         <Link to="/guide" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>使用说明</Link>
-        <a href="#hero-download" className={styles.mobileMenuLink} onClick={(e) => { handleDownloadClick(e); setMenuOpen(false) }}>下载</a>
+        <Link to="/knowledge-cards" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>知识卡片</Link>
         {user ? (
           <>
             <span className={styles.userName}>{user.username}</span>

@@ -1,112 +1,102 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Card } from '../ui/Card'
-import { Container } from '../ui/Container'
-import { Button } from '../ui/Button'
-import { api, ApiError } from '../lib/api'
+import { useAuth } from '../lib/authContext'
+import { Background } from '../ui/Background'
+import { HomeNavbar } from '../ui/HomeNavbar'
 import styles from './registerPage.module.css'
 
 export function RegisterPage() {
-  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { register } = useAuth()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    alert('暂停创建，请联系管理员。')
-    return
-
     setError('')
 
-    if (!username.trim() || !password) {
-      setError('请填写用户名和密码')
-      return
-    }
-    if (password.length < 8) {
-      setError('密码至少 8 位')
-      return
-    }
     if (password !== confirmPassword) {
       setError('两次输入的密码不一致')
       return
     }
 
     setLoading(true)
+
     try {
-      const data = await api.register(username.trim().toLowerCase(), password)
-      api.setToken(data.token)
-      navigate('/login')
-    } catch (err: unknown) {
-      if (err instanceof ApiError) {
-        setError((err as ApiError).message)
-      } else {
-        setError('注册失败，请稍后重试')
-      }
+      await register(username, password)
+      navigate('/lucencia')
+    } catch (err: any) {
+      setError(err.message || '注册失败，请稍后重试')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Container className={styles.page}>
-      <div className={styles.wrapper}>
-        <Card variant="thick" className={styles.card}>
+    <div className={styles.page}>
+      <Background />
+      <HomeNavbar />
+
+      <main className={styles.main}>
+        <div className={styles.card}>
           <div className={styles.header}>
-            <h1 className={styles.title}>创建账号</h1>
-            <p className={styles.subtitle}>
-              注册即可获得 50,000 Token 免费额度
-            </p>
+            <div className={styles.logoIcon}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="20" y1="8" x2="20" y2="14"/>
+                <line x1="23" y1="11" x2="17" y2="11"/>
+              </svg>
+            </div>
+            <h1 className={styles.title}>创建账户</h1>
+            <p className={styles.subtitle}>注册您的 LUCENCIA 账户</p>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.field}>
-              <label htmlFor="username" className={styles.label}>
-                用户名
-              </label>
+              <label htmlFor="username" className={styles.label}>用户名 / 邮箱</label>
               <input
                 id="username"
                 type="text"
-                className={styles.input}
-                placeholder="请输入用户名"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                placeholder="输入您的用户名或邮箱"
+                required
                 autoComplete="username"
-                disabled={loading}
+                className={styles.input}
               />
             </div>
 
             <div className={styles.field}>
-              <label htmlFor="password" className={styles.label}>
-                密码
-              </label>
+              <label htmlFor="password" className={styles.label}>密码</label>
               <input
                 id="password"
                 type="password"
-                className={styles.input}
-                placeholder="至少 8 位"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="设置您的密码（至少6位）"
+                required
+                minLength={6}
                 autoComplete="new-password"
-                disabled={loading}
+                className={styles.input}
               />
             </div>
 
             <div className={styles.field}>
-              <label htmlFor="confirm-password" className={styles.label}>
-                确认密码
-              </label>
+              <label htmlFor="confirmPassword" className={styles.label}>确认密码</label>
               <input
-                id="confirm-password"
+                id="confirmPassword"
                 type="password"
-                className={styles.input}
-                placeholder="再次输入密码"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="再次输入密码"
+                required
+                minLength={6}
                 autoComplete="new-password"
-                disabled={loading}
+                className={styles.input}
               />
             </div>
 
@@ -114,24 +104,23 @@ export function RegisterPage() {
               <div className={styles.error}>{error}</div>
             )}
 
-            <Button
+            <button
               type="submit"
-              variant="primary"
+              disabled={loading || !username || !password || !confirmPassword}
               className={styles.submitBtn}
-              disabled={loading}
             >
-              {loading ? '注册中...' : '注册'}
-            </Button>
-          </form>
+              {loading ? (
+                <span className={styles.spinner} />
+              ) : '创建账户'}
+            </button>
 
-          <div className={styles.footer}>
-            已有账号？
-            <Link to="/login" className={styles.link}>
-              立即登录
-            </Link>
-          </div>
-        </Card>
-      </div>
-    </Container>
+            <p className={styles.switchText}>
+              已有账户？{' '}
+              <Link to="/login" className={styles.link}>立即登录</Link>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
   )
 }
