@@ -42,9 +42,9 @@ export function HeroSection() {
             </p>
             <p className={styles.subtitleCn}>让每一次全球协作都清晰高效</p>
             <div className={styles.tags}>
-              <span className={styles.tag}>实时翻译</span>
+              <span className={styles.tag}>实时回答</span>
               <span className={styles.tag}>屏幕智能解析</span>
-              <span className={styles.tag}>企业知识库</span>
+              <span className={styles.tag}>知识库</span>
             </div>
           </div>
 
