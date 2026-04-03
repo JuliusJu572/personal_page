@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react'
 import { WorldMapParticles } from './WorldMapParticles'
 import { LucenciaLogoText } from './LucenciaLogoText'
-import { fetchLatestRelease, pickReleaseAsset } from '../lib/github'
-import { projects } from '../config/projects'
 import styles from './heroSection.module.css'
 
+const RELEASES_BASE = '/releases'
+const LATEST_URL = '/releases/latest.txt'
+
+interface ReleaseInfo {
+  version: string
+}
+
 export function HeroSection() {
-  const [winUrl, setWinUrl] = useState<string>('#')
-  const [macUrl, setMacUrl] = useState<string>('#')
-  const [version, setVersion] = useState<string>('')
+  const [release, setRelease] = useState<ReleaseInfo | null>(null)
 
   useEffect(() => {
-    const cfg = projects.cheatingBuddy
-    fetchLatestRelease({ owner: cfg.owner, repo: cfg.repo })
-      .then((release) => {
-        setVersion(release.tag_name)
-        const winAsset = pickReleaseAsset(release, 'windows')
-        const macAsset = pickReleaseAsset(release, 'mac')
-        if (winAsset) setWinUrl(winAsset.browser_download_url)
-        if (macAsset) setMacUrl(macAsset.browser_download_url)
-      })
+    fetch(LATEST_URL)
+      .then((r) => r.json())
+      .then((data) => setRelease({ version: data.version || '' }))
       .catch(() => {})
   }, [])
+
+  const winUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.Setup.exe` : '#'
+  const macUrl = release ? `${RELEASES_BASE}/${release.version}/Lucencia.dmg` : '#'
 
   return (
     <section className={styles.hero} id="hero-download">
@@ -56,14 +56,14 @@ export function HeroSection() {
                   <svg className={styles.btnIcon} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
                   <div className={styles.btnText}>
                     <div>Windows</div>
-                    <div className={styles.btnSubtext}>Windows 10 / 11{version ? ` · ${version}` : ''}</div>
+                    <div className={styles.btnSubtext}>Windows 10 / 11{release ? ` · v${release.version}` : ''}</div>
                   </div>
                 </a>
                 <a href={macUrl} className={styles.downloadBtn}>
                   <svg className={styles.btnIcon} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.477 2 2 6.145 2 11.24c0 2.885 1.41 5.45 3.62 7.16A9.03 9.03 0 0 1 12 19c2.27 0 4.36-.68 6.08-1.84C20.39 16.57 22 13.99 22 11.24 22 6.145 17.523 2 12 2z"/><path d="M12 18.5V22m-3-2h6"/></svg>
                   <div className={styles.btnText}>
                     <div>macOS</div>
-                    <div className={styles.btnSubtext}>Apple Silicon (M){version ? ` · ${version}` : ''}</div>
+                    <div className={styles.btnSubtext}>Apple Silicon (M){release ? ` · v${release.version}` : ''}</div>
                   </div>
                 </a>
               </div>

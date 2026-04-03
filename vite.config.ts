@@ -7,6 +7,7 @@ const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)),
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/lucencia/',
   plugins: [react()],
   server: {
     fs: {

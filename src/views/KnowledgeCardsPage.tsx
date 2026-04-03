@@ -23,6 +23,8 @@ import type { SavedKnowledgeCardMeta } from '../knowledgeCards/storage'
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
+import { HomeNavbar } from '../ui/HomeNavbar'
+import { Background } from '../ui/Background'
 import styles from './knowledgeCardsPage.module.css'
 
 const NUMPAD_MAP = [7, 8, 9, 4, 5, 6, 1, 2, 3]
@@ -615,8 +617,11 @@ export function KnowledgeCardsPage() {
   )
 
   return (
-    <Container className={styles.page}>
-      <div className={styles.layout}>
+    <div className={styles.page}>
+      <Background />
+      <HomeNavbar />
+      <Container className={styles.pageInner}>
+        <div className={styles.layout}>
         <aside className={[styles.sidebar, sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed].join(' ')}>
           <div className={styles.sidebarHeader}>
             <span className={styles.sidebarTitle}>我的知识卡片</span>
@@ -740,5 +745,6 @@ export function KnowledgeCardsPage() {
         </div>
       ) : null}
     </Container>
+    </div>
   )
 }

@@ -17,6 +17,8 @@ import {
 import { Button } from '../ui/Button'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
+import { HomeNavbar } from '../ui/HomeNavbar'
+import { Background } from '../ui/Background'
 import styles from './knowledgeCardEditorPage.module.css'
 
 function downloadTextFile(filename: string, content: string, mime: string) {
@@ -189,8 +191,11 @@ export function KnowledgeCardEditorPage() {
   }, [previewHtml])
 
   return (
-    <Container className={styles.page}>
-      <div className={styles.header}>
+    <div className={styles.page}>
+      <Background />
+      <HomeNavbar />
+      <Container className={styles.pageInner}>
+        <div className={styles.header}>
         <div className={styles.headerCopy}>
           <h1 className={styles.title}>知识卡片编辑</h1>
           <p className={styles.subtitle}>加载/编辑 Markdown，并实时预览与发布。</p>
@@ -379,5 +384,6 @@ export function KnowledgeCardEditorPage() {
         </Card>
       </div>
     </Container>
+    </div>
   )
 }
