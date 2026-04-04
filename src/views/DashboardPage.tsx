@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Container } from '../ui/Container'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
+import { Badge } from '../ui/Badge'
 import { useAuth } from '../lib/authContext'
 import { api, type DashboardResponse } from '../lib/api'
 import styles from './dashboardPage.module.css'
@@ -81,7 +82,7 @@ export function DashboardPage() {
         <h1 className={styles.title}>工作台</h1>
         <div className={styles.userInfo}>
           <span className={styles.userName}>{user?.username}</span>
-          <Badge variant="primary">{data.payModeLabel}</Badge>
+          <Badge tone="accent">{data.payModeLabel}</Badge>
           {user?.expiresAt && (
             <span className={styles.expiresAt}>
               到期: {new Date(user.expiresAt).toLocaleDateString('zh-CN')}

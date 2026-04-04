@@ -89,7 +89,7 @@ export function PricingPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const handlePurchase = (planId: string) => {
+  const handlePurchase = (_planId: string) => {
     if (!user) {
       navigate('/login?redirect=/pricing')
       return
@@ -113,7 +113,7 @@ export function PricingPage() {
             className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
           >
             {plan.popular && (
-              <Badge variant="primary" className={styles.popularBadge}>
+              <Badge tone="accent" className={styles.popularBadge}>
                 最受欢迎
               </Badge>
             )}
@@ -163,7 +163,6 @@ export function PricingPage() {
             <Button
               variant={plan.popular ? 'primary' : 'secondary'}
               size="lg"
-              fullWidth
               className={styles.purchaseBtn}
               onClick={() => handlePurchase(plan.id)}
             >

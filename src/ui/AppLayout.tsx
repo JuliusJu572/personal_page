@@ -10,10 +10,6 @@ const navItems: Array<{ to: string; label: string }> = [
   { to: '/knowledge-cards', label: '知识卡片' },
 ]
 
-const authNavItems: Array<{ to: string; label: string }> = [
-  { to: '/dashboard', label: '工作台' },
-]
-
 export function AppLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()

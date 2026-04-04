@@ -20,11 +20,6 @@ export function HomeNavbar() {
     window.scrollTo(0, 0)
   }
 
-  const handlePricingClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    navigate('/pricing')
-  }
-
   const handleLogout = () => {
     logout()
     navigate('/login', { replace: true })
