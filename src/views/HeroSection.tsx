@@ -47,6 +47,8 @@ export function HeroSection() {
               <span className={styles.tag}>自定义提示词</span>
               <span className={styles.tag}>屏幕智能识别</span>
               <span className={styles.tag}>知识库解析</span>
+              <span className={styles.tag}>语音转录</span>
+              <span className={styles.tag}>支持多平台</span>
             </div>
           </div>
 
