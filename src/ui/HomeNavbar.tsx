@@ -42,8 +42,7 @@ export function HomeNavbar() {
         <div className={styles.right}>
           {user ? (
             <div className={styles.userArea}>
-              <Link to="/dashboard" className={styles.dashboardLink}>工作台</Link>
-              <span className={styles.userName}>{user.username}</span>
+              <Link to="/dashboard" className={styles.dashboardLink}>{user.username || '工作台'}</Link>
               <button type="button" className={styles.logoutBtn} onClick={handleLogout}>退出</button>
             </div>
           ) : (
@@ -67,8 +66,7 @@ export function HomeNavbar() {
         <Link to="/knowledge-cards" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>知识卡片</Link>
         {user ? (
           <>
-            <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>工作台</Link>
-            <span className={styles.userName}>{user.username}</span>
+            <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>{user.username || '工作台'}</Link>
             <button type="button" className={styles.logoutBtn} onClick={() => { handleLogout(); setMenuOpen(false) }}>退出</button>
           </>
         ) : (
