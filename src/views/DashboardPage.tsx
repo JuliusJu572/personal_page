@@ -81,6 +81,8 @@ export function DashboardPage() {
   const monthlyRatio = data.monthlyLimit > 0 ? data.monthlyUsedPoints / data.monthlyLimit : 0
   const weeklyPercent = Math.max(0, Math.min(100, weeklyRatio * 100))
   const monthlyPercent = Math.max(0, Math.min(100, monthlyRatio * 100))
+  const payModeLabelMap: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
+  const displayPayModeLabel = payModeLabelMap[data.payMode] || data.payModeLabel
 
   return (
     <div className={styles.pageShell}>
@@ -90,7 +92,7 @@ export function DashboardPage() {
           <h1 className={styles.title}>工作台</h1>
           <div className={styles.userInfo}>
             <span className={styles.userName}>{user?.username}</span>
-            <Badge tone="accent">{data.payModeLabel}</Badge>
+            <Badge tone="accent">{displayPayModeLabel}</Badge>
             {user?.expiresAt && (
               <span className={styles.expiresAt}>
                 到期: {new Date(user.expiresAt).toLocaleDateString('zh-CN')}
