@@ -72,6 +72,12 @@
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.energyCard:hover {
+  background: rgba(12, 18, 34, 0.9);
+  border-color: rgba(0, 150, 255, 0.28);
+  box-shadow: 0 16px 46px rgba(0, 50, 120, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
 .sectionTitle {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
@@ -84,15 +90,15 @@
   margin-bottom: var(--spacing-xl);
   padding: var(--spacing-md);
   border-radius: var(--radius-xl);
-  background: rgba(0, 20, 50, 0.35);
-  border: 1px solid rgba(0, 113, 227, 0.08);
+  background: rgba(10, 24, 52, 0.56);
+  border: 1px solid rgba(0, 113, 227, 0.14);
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .barGroup:hover {
-  background: rgba(12, 18, 34, 0.78);
-  border-color: rgba(0, 150, 255, 0.16);
-  box-shadow: 0 8px 24px rgba(0, 50, 120, 0.1);
+  background: rgba(12, 18, 34, 0.88);
+  border-color: rgba(0, 150, 255, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 50, 120, 0.18);
 }
 
 .barGroup:last-child {
@@ -109,7 +115,7 @@
 .barLabel {
   font-size: 12px;
   font-weight: var(--font-weight-semibold);
-  color: rgba(120, 200, 255, 0.6);
+  color: rgba(150, 214, 255, 0.88);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -118,7 +124,7 @@
   font-family: 'Orbitron', monospace;
   font-size: 12px;
   font-weight: var(--font-weight-semibold);
-  color: rgba(160, 216, 255, 0.85);
+  color: rgba(189, 231, 255, 0.95);
 }
 
 .barTrack {
@@ -148,7 +154,7 @@
   align-items: center;
   margin-top: var(--spacing-sm);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.46);
+  color: rgba(255, 255, 255, 0.78);
   opacity: 1;
   gap: var(--spacing-sm);
 }
@@ -156,7 +162,7 @@
 .resetHint {
   font-family: 'Orbitron', monospace;
   font-size: 10px;
-  color: rgba(120, 200, 255, 0.65);
+  color: rgba(150, 214, 255, 0.86);
 }
 
 .statsGrid {
@@ -180,6 +186,12 @@
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(0, 113, 227, 0.14);
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.statCard:hover {
+  background: rgba(12, 18, 34, 0.9);
+  border-color: rgba(0, 150, 255, 0.24);
+  box-shadow: 0 14px 42px rgba(0, 50, 120, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .statLabel {
