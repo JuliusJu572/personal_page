@@ -139,7 +139,7 @@ export function DashboardPage() {
           <StatCard label="本周对话次数" value={data.weekCallCount} />
           <StatCard
             label="本周消耗积分"
-            value={formatNumber(data.weeklyQuota - Math.round(data.currentPoints))}
+            value={formatNumber(data.weeklyUsedPoints)}
             sub={`周额 ${formatNumber(data.weeklyQuota)}`}
           />
           <StatCard
@@ -147,22 +147,13 @@ export function DashboardPage() {
             value={formatNumber(data.monthlyUsedPoints)}
             sub={`月额 ${formatNumber(data.monthlyLimit)}`}
           />
-          <StatCard
-            label="常用模型 TOP3"
-            value={
-              data.topModels.length > 0
-                ? data.topModels.map(m => m.model.split('/').pop()).join(' / ')
-                : '暂无数据'
-            }
-            sub={data.topModels.length > 0 ? `${data.topModels[0].count} 次调用` : undefined}
-          />
         </section>
 
         <section className={styles.actionsSection}>
           <Button variant="primary" className={styles.actionPrimaryBtn} onClick={() => navigate('/pricing')}>
             升级套餐
           </Button>
-          <Button variant="secondary" className={styles.actionSecondaryBtn} onClick={() => window.open('https://juliusju.xyz/lucencia', '_blank')}>
+          <Button variant="secondary" className={styles.actionSecondaryBtn} onClick={() => navigate('/lucencia')}>
             下载桌面客户端
           </Button>
         </section>

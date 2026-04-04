@@ -103,6 +103,7 @@ export interface DashboardResponse {
   weeklyQuota: number
   monthlyLimit: number
   currentPoints: number
+  weeklyUsedPoints: number
   monthlyUsedPoints: number
   lastWeeklyReset: string | null
   nextWeeklyReset: string
