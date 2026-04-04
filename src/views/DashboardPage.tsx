@@ -32,22 +32,6 @@ function getBarColor(ratio: number): string {
   return 'var(--color-accent-error)'
 }
 
-interface StatCardProps {
-  label: string
-  value: string | number
-  sub?: string
-}
-
-function StatCard({ label, value, sub }: StatCardProps) {
-  return (
-    <Card className={styles.statCard}>
-      <div className={styles.statLabel}>{label}</div>
-      <div className={styles.statValue}>{value}</div>
-      {sub && <div className={styles.statSub}>{sub}</div>}
-    </Card>
-  )
-}
-
 export function DashboardPage() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
@@ -133,20 +117,6 @@ export function DashboardPage() {
               </div>
             </div>
           </Card>
-        </section>
-
-        <section className={styles.statsGrid}>
-          <StatCard label="本周对话次数" value={data.weekCallCount} />
-          <StatCard
-            label="本周消耗积分"
-            value={formatNumber(data.weeklyUsedPoints)}
-            sub={`周额 ${formatNumber(data.weeklyQuota)}`}
-          />
-          <StatCard
-            label="本月消耗积分"
-            value={formatNumber(data.monthlyUsedPoints)}
-            sub={`月额 ${formatNumber(data.monthlyLimit)}`}
-          />
         </section>
 
         <section className={styles.actionsSection}>
