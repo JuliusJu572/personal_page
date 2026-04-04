@@ -6,6 +6,7 @@ import { HomeNavbar } from '../ui/HomeNavbar'
 import styles from './registerPage.module.css'
 
 export function RegisterPage() {
+  const REGISTRATION_OPEN = false
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -17,6 +18,10 @@ export function RegisterPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    if (!REGISTRATION_OPEN) {
+      setError('当前暂未开放注册，请联系管理员开通账号')
+      return
+    }
 
     if (password !== confirmPassword) {
       setError('两次输入的密码不一致')
@@ -27,7 +32,7 @@ export function RegisterPage() {
 
     try {
       await register(username, password)
-      navigate('/lucencia')
+      navigate('/dashboard')
     } catch (err: any) {
       setError(err.message || '注册失败，请稍后重试')
     } finally {
@@ -106,12 +111,12 @@ export function RegisterPage() {
 
             <button
               type="submit"
-              disabled={loading || !username || !password || !confirmPassword}
+              disabled={!REGISTRATION_OPEN || loading || !username || !password || !confirmPassword}
               className={styles.submitBtn}
             >
               {loading ? (
                 <span className={styles.spinner} />
-              ) : '创建账户'}
+              ) : (REGISTRATION_OPEN ? '创建账户' : '暂未开放注册')}
             </button>
 
             <p className={styles.switchText}>

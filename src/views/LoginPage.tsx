@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/authContext'
 import { Background } from '../ui/Background'
 import { HomeNavbar } from '../ui/HomeNavbar'
@@ -91,8 +91,7 @@ export function LoginPage() {
             </button>
 
             <p className={styles.switchText}>
-              还没有账户？{' '}
-              <Link to="/register" className={styles.link}>立即注册</Link>
+              当前暂未开放注册
             </p>
           </form>
         </div>
