@@ -24,6 +24,7 @@ interface PricingPlan {
   modelTier: string
   icon: string
   modelLogos: ModelLogo[]
+  overseasOnly?: boolean
   features: string[]
   limitations: string[]
   popular?: boolean
@@ -43,16 +44,12 @@ const plans: PricingPlan[] = [
     icon: '/Qwen.png',
     modelLogos: [
       { src: '/Qwen.png', alt: 'Qwen' },
-      { src: '/Kimi.png', alt: 'Kimi' },
-      { src: '/MiniMax.png', alt: 'MiniMax' },
-      { src: '/gemini-ai.png', alt: 'Gemini' },
     ],
     features: [
       `每周发放 ${'1,000,000'} 基础算力积分`,
-      '畅享 Qwen 等基础极速大模型矩阵',
-      '无限次日常对话',
+      'Qwen 系列基础极速大模型',
     ],
-    limitations: ['不支持文档解析功能'],
+    limitations: ['不支持 MiniMax 等国产旗舰模型', '不支持文档解析功能'],
     payMode: 1,
   },
   {
@@ -63,22 +60,21 @@ const plans: PricingPlan[] = [
     monthlyLimit: 10000000,
     weeklyDisplay: '2,000,000',
     monthlyDisplay: '10,000,000',
-    modelTier: 'GLM 5 Turbo 等进阶大模型',
+    modelTier: '国产进阶大模型全家桶',
     icon: '/智谱.png',
     modelLogos: [
-      { src: '/智谱.png', alt: 'Zhipu' },
-      { src: '/ChatGPT.png', alt: 'ChatGPT' },
-      { src: '/Kimi.png', alt: 'Kimi' },
+      { src: '/Qwen.png', alt: 'Qwen' },
       { src: '/MiniMax.png', alt: 'MiniMax' },
-      { src: '/gemini-ai.png', alt: 'Gemini' },
-      { src: '/Grok.png', alt: 'Grok' },
+      { src: '/智谱.png', alt: 'Zhipu' },
+      { src: '/Kimi.png', alt: 'Kimi' },
     ],
     features: [
       `每周发放 ${'2,000,000'} 专业算力积分`,
-      '解锁 GLM 5 Turbo 等进阶大模型',
+      '解锁国产进阶大模型全家桶',
       '支持专业级长文档解析（轻松应对万字研报）',
     ],
     limitations: [],
+    popular: true,
     payMode: 2,
   },
   {
@@ -89,11 +85,12 @@ const plans: PricingPlan[] = [
     monthlyLimit: 20000000,
     weeklyDisplay: '4,000,000',
     monthlyDisplay: '20,000,000',
-    modelTier: 'Claude Sonnet 4.6 等全球顶尖算力',
+    modelTier: '全球全量算力矩阵',
     icon: '/Claude.png',
+    overseasOnly: true,
     modelLogos: [
-      { src: '/Claude.png', alt: 'Claude' },
       { src: '/ChatGPT.png', alt: 'ChatGPT' },
+      { src: '/Claude.png', alt: 'Claude' },
       { src: '/gemini-ai.png', alt: 'Gemini' },
       { src: '/Grok.png', alt: 'Grok' },
       { src: '/智谱.png', alt: 'Zhipu' },
@@ -103,12 +100,11 @@ const plans: PricingPlan[] = [
     ],
     features: [
       `每周发放 ${'4,000,000'} 超级算力积分`,
-      '解锁 Claude Sonnet 4.6 等全球顶尖算力',
+      '解锁全球全量模型（国产 + 海外）',
       '支持超长巨型文档解析矩阵，代码库级全局构建',
       '优先响应与专属通道',
     ],
-    limitations: [],
-    popular: true,
+    limitations: ['适用范围：非中国大陆地区'],
     payMode: 3,
   },
 ]
@@ -147,17 +143,31 @@ export function PricingPage() {
               className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
             >
               {plan.popular && (
-                <Badge tone="accent" className={styles.popularBadge}>
-                  最受欢迎
-                </Badge>
-              )}
+              <Badge tone="accent" className={styles.popularBadge}>
+                最受欢迎
+              </Badge>
+            )}
+            {plan.overseasOnly && (
+              <Badge tone="warn" className={styles.overseasBadge}>
+                仅海外用户可用
+              </Badge>
+            )}
 
-              <div className={styles.planIcon}>
-                <img src={plan.icon} alt="" loading="lazy" />
+              <div className={`${styles.planIconGroup} ${plan.modelLogos.length > 4 ? styles.planIconGroupGrid : ''}`}>
+                {plan.modelLogos.map((logo) => (
+                  <img
+                    key={logo.alt}
+                    src={logo.src}
+                    alt={logo.alt}
+                    className={styles.planLogoImg}
+                    loading="lazy"
+                    title={logo.alt}
+                  />
+                ))}
               </div>
 
               <h2 className={styles.planName}>
-                {plan.id === 'normal' ? '普通版' : plan.id === 'advanced' ? '进阶版' : '高级版'}
+                {plan.id === 'normal' ? '普通版' : plan.id === 'advanced' ? '进阶版' : plan.id === 'overseas' ? '海外版' : '高级版'}
               </h2>
 
               <div className={styles.priceRow}>
@@ -166,21 +176,6 @@ export function PricingPage() {
               </div>
 
               <p className={styles.tagline}>{plan.tagline}</p>
-
-            {plan.modelLogos.length > 0 && (
-              <div className={styles.modelLogos}>
-                {plan.modelLogos.map((logo) => (
-                  <img
-                    key={logo.alt}
-                    src={logo.src}
-                    alt={logo.alt}
-                    className={styles.modelLogoImg}
-                    loading="lazy"
-                    title={logo.alt}
-                  />
-                ))}
-              </div>
-            )}
 
             <div className={styles.quotaInfo}>
                 <div className={styles.quotaItem}>

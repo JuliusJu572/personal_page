@@ -1,134 +1,167 @@
 .pageShell {
   min-height: 100vh;
+  background: #000;
 }
 
 .page {
   padding: calc(64px + var(--spacing-4xl)) 0 var(--spacing-4xl);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .hero {
-  position: relative;
   text-align: center;
-  padding: var(--spacing-6xl) var(--spacing-lg);
   margin-bottom: var(--spacing-4xl);
+  position: relative;
 }
 
 .bgGlow {
   position: absolute;
-  top: 50%;
+  top: -80px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 350px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(0,114,227,0.1) 0%, rgba(90,200,250,0.05) 40%, transparent 70%);
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(0, 100, 220, 0.12), transparent 70%);
   pointer-events: none;
 }
 
 .heroContent {
   position: relative;
   z-index: 1;
-  max-width: 680px;
-  margin: 0 auto;
 }
 
 .title {
-  font-size: clamp(28px, 3.5vw, 42px);
-  font-weight: 800;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--spacing-md) 0;
-  letter-spacing: -0.02em;
+  font-size: clamp(28px, 3.5vw, var(--font-size-3xl));
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+  margin: 0 0 var(--spacing-sm) 0;
+  letter-spacing: 0.04em;
 }
 
 .subtitle {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.4);
+  font-size: clamp(var(--font-size-base), 1.4vw, var(--font-size-lg));
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 .plansGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-2xl);
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-  align-items: start;
+  gap: var(--spacing-xl);
+  align-items: stretch;
 }
 
 .planCard {
   position: relative;
+  background: rgba(14, 20, 38, 0.82);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(0, 113, 227, 0.14);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-2xl) var(--spacing-xl);
-  background: var(--glass-bg-regular);
-  border: 1px solid var(--glass-border-regular);
-  border-radius: var(--radius-2xl);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  min-height: 650px;
 }
 
 .planCard:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 48px rgba(0, 82, 204, 0.15), 0 0 64px rgba(0, 113, 227, 0.08);
   border-color: rgba(0, 150, 255, 0.25);
+  background: rgba(12, 18, 34, 0.9);
+  box-shadow: 0 20px 60px rgba(0, 50, 120, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
 .planCardPopular {
-  border-color: rgba(0, 150, 255, 0.35);
-  background: linear-gradient(180deg, rgba(0, 82, 204, 0.06) 0%, var(--glass-bg-regular) 30%);
+  border-color: rgba(0, 150, 255, 0.28);
+  background: linear-gradient(165deg, rgba(0, 45, 110, 0.6), rgba(14, 20, 38, 0.85));
+  box-shadow: 0 8px 40px rgba(0, 82, 204, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .planCardPopular:hover {
-  border-color: rgba(0, 150, 255, 0.5);
-  box-shadow: 0 16px 56px rgba(0, 82, 204, 0.25), 0 0 80px rgba(0, 113, 227, 0.12);
+  border-color: rgba(0, 180, 255, 0.35);
+  background: linear-gradient(165deg, rgba(0, 55, 130, 0.65), rgba(12, 18, 34, 0.92));
+  box-shadow: 0 20px 70px rgba(0, 82, 204, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-.popularBadge {
+.popularBadge,
+.overseasBadge {
   position: absolute;
-  top: -1px;
-  right: var(--spacing-xl);
-  transform: translateY(-50%);
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  padding: 5px 22px;
   z-index: 2;
+  white-space: nowrap;
+  border-radius: 999px;
 }
 
-.planIcon {
-  width: 56px;
-  height: 56px;
-  margin-bottom: var(--spacing-lg);
+.planIconGroup {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  margin-bottom: var(--spacing-md);
+  min-height: 240px;
+  flex-wrap: wrap;
 }
 
-.planIcon img {
-  width: 100%;
-  height: 100%;
+.planIconGroupGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 64px);
+  grid-auto-rows: 64px;
+  place-items: center;
+  place-content: center;
+  justify-content: center;
+  column-gap: 10px;
+  row-gap: 10px;
+  margin-bottom: var(--spacing-md);
+  min-height: 240px;
+}
+
+.planLogoImg {
+  width: 64px;
+  height: 64px;
   object-fit: contain;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px;
+}
+
+.planLogoImg:hover {
+  transform: scale(1.2);
+  opacity: 1;
 }
 
 .planName {
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: #fff;
   margin: 0 0 var(--spacing-sm) 0;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
 
 .priceRow {
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: 4px;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
 }
 
 .price {
   font-family: 'Orbitron', monospace;
-  font-size: 36px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #00a8ff 0%, #0071e3 60%, #0052cc 100%);
+  font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: var(--font-weight-bold);
+  background: linear-gradient(135deg, #78c8ff, #fff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -136,159 +169,140 @@
 }
 
 .period {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.35);
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: rgba(120, 200, 255, 0.75);
+  font-weight: var(--font-weight-medium);
 }
 
 .tagline {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  line-height: 1.6;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.5;
   margin: 0 0 var(--spacing-md) 0;
-  min-height: 42px;
-}
-
-.modelLogos {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
-}
-
-.modelLogoImg {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  border-radius: 6px;
-  opacity: 0.75;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.modelLogoImg:hover {
-  opacity: 1;
-  transform: scale(1.15);
+  text-align: center;
+  min-height: 36px;
 }
 
 .quotaInfo {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: rgba(0, 0, 0, 0.2);
+  align-items: stretch;
+  gap: 0;
+  padding: 8px var(--spacing-md);
+  background: rgba(0, 20, 50, 0.4);
   border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-lg);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 113, 227, 0.08);
+  margin-bottom: var(--spacing-md);
 }
 
 .quotaItem {
+  flex: 1;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1;
-  gap: 2px;
+  justify-content: center;
 }
 
 .quotaLabel {
-  font-size: 10px;
+  display: block;
+  font-size: 9px;
+  color: rgba(120, 200, 255, 0.45);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.14em;
+  margin-bottom: 2px;
+  font-weight: var(--font-weight-semibold);
 }
 
 .quotaValue {
+  display: block;
   font-family: 'Orbitron', monospace;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-accent-primary);
+  font-size: 11px;
+  color: rgba(160, 216, 255, 0.85);
+  font-weight: var(--font-weight-semibold);
 }
 
 .quotaDivider {
   width: 1px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.08);
+  height: auto;
+  align-self: stretch;
+  background: rgba(0, 113, 227, 0.12);
+  flex-shrink: 0;
 }
 
 .featuresList {
   list-style: none;
   padding: 0;
-  margin: 0 0 var(--spacing-xl) 0;
-  flex: 1;
+  margin: 0 0 var(--spacing-lg) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 6px;
+  flex: 1;
 }
 
 .featureItem,
 .limitItem {
   display: flex;
   align-items: flex-start;
-  gap: var(--spacing-sm);
-  font-size: 13px;
+  gap: 8px;
+  font-size: 12px;
   line-height: 1.5;
-  color: var(--color-text-secondary);
+}
+
+.featureItem {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.limitItem {
+  color: rgba(255, 255, 255, 0.32);
 }
 
 .checkIcon {
   color: #34c759;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: bold;
   flex-shrink: 0;
+  font-size: 12px;
   margin-top: 1px;
 }
 
 .crossIcon {
-  color: rgba(255, 255, 255, 0.2);
-  font-weight: 400;
-  font-size: 13px;
+  color: rgba(255, 69, 58, 0.6);
   flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.limitItem span:last-child {
-  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  margin-top: 1px;
 }
 
 .purchaseBtn {
+  width: 100%;
   margin-top: auto;
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.03em;
+  padding: 12px 20px;
+  font-size: var(--font-size-sm);
 }
 
 .noteSection {
-  max-width: 700px;
-  margin: var(--spacing-5xl) auto 0;
+  margin-top: var(--spacing-4xl);
   text-align: center;
-  padding: 0 var(--spacing-lg);
 }
 
 .noteText {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.25);
-  line-height: 1.7;
-  margin: 0;
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.28);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+  letter-spacing: 0.02em;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .plansGrid {
     grid-template-columns: 1fr;
-    max-width: 420px;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .planCardPopular {
-    order: -1;
-  }
-
-  .hero {
-    padding: var(--spacing-4xl) var(--spacing-lg);
-  }
-}
-
-@media (max-width: 600px) {
-  .plansGrid {
-    gap: var(--spacing-lg);
+  .planCard {
+    min-height: auto;
   }
 }
