@@ -1,5 +1,9 @@
+.pageShell {
+  min-height: 100vh;
+}
+
 .page {
-  padding: var(--spacing-4xl) 0;
+  padding: calc(64px + var(--spacing-4xl)) 0 var(--spacing-4xl);
   max-width: 860px;
   margin: 0 auto;
 }

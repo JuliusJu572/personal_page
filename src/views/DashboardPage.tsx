@@ -4,6 +4,8 @@ import { Container } from '../ui/Container'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Badge } from '../ui/Badge'
+import { HomeNavbar } from '../ui/HomeNavbar'
+import { HomeFooter } from '../ui/HomeFooter'
 import { useAuth } from '../lib/authContext'
 import { api, type DashboardResponse } from '../lib/api'
 import styles from './dashboardPage.module.css'
@@ -65,9 +67,13 @@ export function DashboardPage() {
 
   if (authLoading || loading || !data) {
     return (
-      <Container className={styles.page}>
-        <div className={styles.loading}>加载中...</div>
-      </Container>
+      <div className={styles.pageShell}>
+        <HomeNavbar />
+        <Container className={styles.page}>
+          <div className={styles.loading}>加载中...</div>
+        </Container>
+        <HomeFooter />
+      </div>
     )
   }
 
@@ -77,80 +83,84 @@ export function DashboardPage() {
   const monthlyPercent = Math.max(0, Math.min(100, monthlyRatio * 100))
 
   return (
-    <Container className={styles.page}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>工作台</h1>
-        <div className={styles.userInfo}>
-          <span className={styles.userName}>{user?.username}</span>
-          <Badge tone="accent">{data.payModeLabel}</Badge>
-          {user?.expiresAt && (
-            <span className={styles.expiresAt}>
-              到期: {new Date(user.expiresAt).toLocaleDateString('zh-CN')}
-            </span>
-          )}
-        </div>
-      </header>
-
-      <section className={styles.energySection}>
-        <Card className={styles.energyCard}>
-          <h2 className={styles.sectionTitle}>算力能量槽</h2>
-
-          <div className={styles.barGroup}>
-            <div className={styles.barHeader}>
-              <span className={styles.barLabel}>周额度</span>
-              <span className={styles.barPercent}>{weeklyPercent.toFixed(1)}%</span>
-            </div>
-            <div className={styles.barTrack} style={{ '--bar-color': getBarColor(weeklyRatio) } as React.CSSProperties}>
-              <div className={styles.barFill} style={{ width: `${weeklyPercent}%` }} />
-            </div>
-            <div className={styles.barTooltip}>
-              <span>剩余: {formatNumber(Math.round(data.currentPoints))} / {formatNumber(data.weeklyQuota)}</span>
-              <span className={styles.resetHint}>距下周刷新还有 {getTimeUntil(data.nextWeeklyReset)}</span>
-            </div>
+    <div className={styles.pageShell}>
+      <HomeNavbar />
+      <Container className={styles.page}>
+        <header className={styles.header}>
+          <h1 className={styles.title}>工作台</h1>
+          <div className={styles.userInfo}>
+            <span className={styles.userName}>{user?.username}</span>
+            <Badge tone="accent">{data.payModeLabel}</Badge>
+            {user?.expiresAt && (
+              <span className={styles.expiresAt}>
+                到期: {new Date(user.expiresAt).toLocaleDateString('zh-CN')}
+              </span>
+            )}
           </div>
+        </header>
 
-          <div className={styles.barGroup}>
-            <div className={styles.barHeader}>
-              <span className={styles.barLabel}>月度总额度</span>
-              <span className={styles.barPercent}>{monthlyPercent.toFixed(1)}%</span>
-            </div>
-            <div className={styles.barTrack} style={{ '--bar-color': getBarColor(1 - monthlyRatio) } as React.CSSProperties}>
-              <div className={`${styles.barFill} ${styles.barFillMonthly}`} style={{ width: `${monthlyPercent}%` }} />
-            </div>
-            <div className={styles.barTooltip}>
-              <span>本月已用: {formatNumber(data.monthlyUsedPoints)} / {formatNumber(data.monthlyLimit)}</span>
-              <span className={styles.resetHint}>距月度刷新还有 {getTimeUntil(data.nextMonthlyReset)}</span>
-            </div>
-          </div>
-        </Card>
-      </section>
+        <section className={styles.energySection}>
+          <Card className={styles.energyCard}>
+            <h2 className={styles.sectionTitle}>算力能量槽</h2>
 
-      <section className={styles.statsGrid}>
-        <StatCard label="本周对话次数" value={data.weekCallCount} />
-        <StatCard
-          label="本周消耗积分"
-          value={formatNumber(data.weeklyQuota - Math.round(data.currentPoints))}
-          sub={`周额 ${formatNumber(data.weeklyQuota)}`}
-        />
-        <StatCard
-          label="常用模型 TOP3"
-          value={
-            data.topModels.length > 0
-              ? data.topModels.map(m => m.model.split('/').pop()).join(' / ')
-              : '暂无数据'
-          }
-          sub={data.topModels.length > 0 ? `${data.topModels[0].count} 次调用` : undefined}
-        />
-      </section>
+            <div className={styles.barGroup}>
+              <div className={styles.barHeader}>
+                <span className={styles.barLabel}>周额度</span>
+                <span className={styles.barPercent}>{weeklyPercent.toFixed(1)}%</span>
+              </div>
+              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(weeklyRatio) } as React.CSSProperties}>
+                <div className={styles.barFill} style={{ width: `${weeklyPercent}%` }} />
+              </div>
+              <div className={styles.barTooltip}>
+                <span>剩余: {formatNumber(Math.round(data.currentPoints))} / {formatNumber(data.weeklyQuota)}</span>
+                <span className={styles.resetHint}>距下周刷新还有 {getTimeUntil(data.nextWeeklyReset)}</span>
+              </div>
+            </div>
 
-      <section className={styles.actionsSection}>
-        <Button variant="secondary" onClick={() => navigate('/pricing')}>
-          升级套餐
-        </Button>
-        <Button variant="ghost" onClick={() => window.open('https://github.com/lucencia-app/cheating-daddy/releases', '_blank')}>
-          下载桌面客户端
-        </Button>
-      </section>
-    </Container>
+            <div className={styles.barGroup}>
+              <div className={styles.barHeader}>
+                <span className={styles.barLabel}>月度总额度</span>
+                <span className={styles.barPercent}>{monthlyPercent.toFixed(1)}%</span>
+              </div>
+              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(1 - monthlyRatio) } as React.CSSProperties}>
+                <div className={`${styles.barFill} ${styles.barFillMonthly}`} style={{ width: `${monthlyPercent}%` }} />
+              </div>
+              <div className={styles.barTooltip}>
+                <span>本月已用: {formatNumber(data.monthlyUsedPoints)} / {formatNumber(data.monthlyLimit)}</span>
+                <span className={styles.resetHint}>距月度刷新还有 {getTimeUntil(data.nextMonthlyReset)}</span>
+              </div>
+            </div>
+          </Card>
+        </section>
+
+        <section className={styles.statsGrid}>
+          <StatCard label="本周对话次数" value={data.weekCallCount} />
+          <StatCard
+            label="本周消耗积分"
+            value={formatNumber(data.weeklyQuota - Math.round(data.currentPoints))}
+            sub={`周额 ${formatNumber(data.weeklyQuota)}`}
+          />
+          <StatCard
+            label="常用模型 TOP3"
+            value={
+              data.topModels.length > 0
+                ? data.topModels.map(m => m.model.split('/').pop()).join(' / ')
+                : '暂无数据'
+            }
+            sub={data.topModels.length > 0 ? `${data.topModels[0].count} 次调用` : undefined}
+          />
+        </section>
+
+        <section className={styles.actionsSection}>
+          <Button variant="secondary" onClick={() => navigate('/pricing')}>
+            升级套餐
+          </Button>
+          <Button variant="ghost" onClick={() => window.open('https://github.com/lucencia-app/cheating-daddy/releases', '_blank')}>
+            下载桌面客户端
+          </Button>
+        </section>
+      </Container>
+      <HomeFooter />
+    </div>
   )
 }

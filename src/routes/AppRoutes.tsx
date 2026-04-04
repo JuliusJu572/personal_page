@@ -25,6 +25,7 @@ export function AppRoutes() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
 
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
@@ -35,7 +36,6 @@ export function AppRoutes() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="pricing" element={<PricingPage />} />
-        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
