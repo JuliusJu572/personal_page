@@ -20,7 +20,7 @@ export function LoginPage() {
 
     try {
       await login(username, password)
-      navigate('/lucencia')
+      navigate('/dashboard')
     } catch (err: any) {
       setError(err.message || '登录失败，请检查用户名和密码')
     } finally {

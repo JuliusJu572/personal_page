@@ -143,6 +143,11 @@ export function DashboardPage() {
             sub={`周额 ${formatNumber(data.weeklyQuota)}`}
           />
           <StatCard
+            label="本月消耗积分"
+            value={formatNumber(data.monthlyUsedPoints)}
+            sub={`月额 ${formatNumber(data.monthlyLimit)}`}
+          />
+          <StatCard
             label="常用模型 TOP3"
             value={
               data.topModels.length > 0
@@ -154,10 +159,10 @@ export function DashboardPage() {
         </section>
 
         <section className={styles.actionsSection}>
-          <Button variant="secondary" onClick={() => navigate('/pricing')}>
+          <Button variant="primary" className={styles.actionPrimaryBtn} onClick={() => navigate('/pricing')}>
             升级套餐
           </Button>
-          <Button variant="ghost" onClick={() => window.open('https://github.com/lucencia-app/cheating-daddy/releases', '_blank')}>
+          <Button variant="secondary" className={styles.actionSecondaryBtn} onClick={() => window.open('https://juliusju.xyz/lucencia', '_blank')}>
             下载桌面客户端
           </Button>
         </section>
