@@ -12,6 +12,8 @@ import { TermsPage } from '../views/TermsPage'
 import { NotFoundPage } from '../views/NotFoundPage'
 import { RegisterPage } from '../views/RegisterPage'
 import { LoginPage } from '../views/LoginPage'
+import { PricingPage } from '../views/PricingPage'
+import { DashboardPage } from '../views/DashboardPage'
 
 export function AppRoutes() {
   return (
@@ -22,6 +24,7 @@ export function AppRoutes() {
       <Route path="/guide" element={<GuidePage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/pricing" element={<PricingPage />} />
 
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
@@ -31,6 +34,8 @@ export function AppRoutes() {
         <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="pricing" element={<PricingPage />} />
+        <Route path="dashboard" element={<DashboardPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

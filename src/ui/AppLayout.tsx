@@ -4,10 +4,14 @@ import styles from './appLayout.module.css'
 
 const navItems: Array<{ to: string; label: string }> = [
   { to: '/lucencia', label: '产品概览' },
-  { to: '/brand-story', label: '品牌故事' },
   { to: '/features', label: '核心功能' },
+  { to: '/pricing', label: '定价' },
   { to: '/guide', label: '使用说明' },
   { to: '/knowledge-cards', label: '知识卡片' },
+]
+
+const authNavItems: Array<{ to: string; label: string }> = [
+  { to: '/dashboard', label: '工作台' },
 ]
 
 export function AppLayout() {
@@ -48,6 +52,16 @@ export function AppLayout() {
 
             {user ? (
               <div className={styles.userMenu}>
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    [styles.navLink, isActive ? styles.navLinkActive : undefined]
+                      .filter(Boolean)
+                      .join(' ')
+                  }
+                >
+                  工作台
+                </NavLink>
                 <span className={styles.userName}>{user.username}</span>
                 <button
                   type="button"

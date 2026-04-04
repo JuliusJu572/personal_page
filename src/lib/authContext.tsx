@@ -11,6 +11,10 @@ type UserInfo = {
   payMode: number
   payModeLabel: string
   expiresAt: string | null
+  weeklyQuota: number
+  monthlyLimit: number
+  currentPoints: number
+  monthlyUsedPoints: number
 }
 
 type AuthContextValue = {
@@ -53,6 +57,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         payMode: data.user.payMode,
         payModeLabel: data.user.payModeLabel,
         expiresAt: data.user.expiresAt,
+        weeklyQuota: data.user.weeklyQuota,
+        monthlyLimit: data.user.monthlyLimit,
+        currentPoints: data.user.currentPoints,
+        monthlyUsedPoints: data.user.monthlyUsedPoints,
       })
     } catch {
       api.clearToken()

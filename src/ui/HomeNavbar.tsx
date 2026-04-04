@@ -22,8 +22,7 @@ export function HomeNavbar() {
 
   const handlePricingClick = (e: React.MouseEvent) => {
     e.preventDefault()
-    const el = document.getElementById('pricing')
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
+    navigate('/pricing')
   }
 
   const handleLogout = () => {
@@ -39,7 +38,7 @@ export function HomeNavbar() {
             <img className={styles.logoImg} src="/lucencia-logo.png" alt="LUCENCIA" />
           </button>
           <div className={styles.navLinks}>
-            <a href="#pricing" className={styles.navLink} onClick={handlePricingClick}>定价</a>
+            <Link to="/pricing" className={styles.navLink}>定价</Link>
             <Link to="/guide" className={styles.navLink}>使用说明</Link>
             <Link to="/knowledge-cards" className={styles.navLink}>知识卡片</Link>
           </div>
@@ -48,6 +47,7 @@ export function HomeNavbar() {
         <div className={styles.right}>
           {user ? (
             <div className={styles.userArea}>
+              <Link to="/dashboard" className={styles.dashboardLink}>工作台</Link>
               <span className={styles.userName}>{user.username}</span>
               <button type="button" className={styles.logoutBtn} onClick={handleLogout}>退出</button>
             </div>
@@ -67,11 +67,12 @@ export function HomeNavbar() {
       </nav>
 
       <div className={[styles.mobileMenu, menuOpen ? styles.mobileMenuOpen : undefined].filter(Boolean).join(' ')}>
-        <a href="#pricing" className={styles.mobileMenuLink} onClick={(e) => { handlePricingClick(e); setMenuOpen(false) }}>定价</a>
+        <Link to="/pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>定价</Link>
         <Link to="/guide" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>使用说明</Link>
         <Link to="/knowledge-cards" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>知识卡片</Link>
         {user ? (
           <>
+            <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>工作台</Link>
             <span className={styles.userName}>{user.username}</span>
             <button type="button" className={styles.logoutBtn} onClick={() => { handleLogout(); setMenuOpen(false) }}>退出</button>
           </>

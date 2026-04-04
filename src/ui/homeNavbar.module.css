@@ -168,6 +168,23 @@
   font-weight: var(--font-weight-medium);
 }
 
+.dashboardLink {
+  color: #00a8ff;
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(0, 168, 255, 0.25);
+  transition: all 0.2s ease;
+}
+
+.dashboardLink:hover {
+  background: rgba(0, 168, 255, 0.1);
+  border-color: rgba(0, 168, 255, 0.45);
+  color: #3399ff;
+}
+
 .logoutBtn {
   appearance: none;
   border: none;

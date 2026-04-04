@@ -89,8 +89,29 @@ export interface MeResponse {
     frozen: boolean
     quotaTokens: number
     usedTokens: number
+    weeklyQuota: number
+    monthlyLimit: number
+    currentPoints: number
+    monthlyUsedPoints: number
+    lastWeeklyReset: string | null
   }
   serverTime: string
+}
+
+export interface DashboardResponse {
+  success: boolean
+  weeklyQuota: number
+  monthlyLimit: number
+  currentPoints: number
+  monthlyUsedPoints: number
+  lastWeeklyReset: string | null
+  nextWeeklyReset: string
+  nextMonthlyReset: string
+  serverTime: string
+  payMode: number
+  payModeLabel: string
+  weekCallCount: number
+  topModels: Array<{ model: string; count: number }>
 }
 
 export interface BalanceResponse {
@@ -147,6 +168,10 @@ export const api = {
 
   getBalance() {
     return request<BalanceResponse>('/api/user/balance')
+  },
+
+  getDashboard() {
+    return request<DashboardResponse>('/api/user/dashboard')
   },
 
   listKnowledgeCards() {
