@@ -62,7 +62,8 @@ export function DashboardPage() {
   }
 
   const weeklyRatio = data.weeklyQuota > 0 ? data.currentPoints / data.weeklyQuota : 0
-  const monthlyRatio = data.monthlyLimit > 0 ? data.monthlyUsedPoints / data.monthlyLimit : 0
+  const monthlyRemainingPoints = Math.max(0, data.monthlyLimit - data.monthlyUsedPoints)
+  const monthlyRatio = data.monthlyLimit > 0 ? monthlyRemainingPoints / data.monthlyLimit : 0
   const weeklyPercent = Math.max(0, Math.min(100, weeklyRatio * 100))
   const monthlyPercent = Math.max(0, Math.min(100, monthlyRatio * 100))
   const payModeLabelMap: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
@@ -108,11 +109,11 @@ export function DashboardPage() {
                 <span className={styles.barLabel}>月度总额度</span>
                 <span className={styles.barPercent}>{monthlyPercent.toFixed(1)}%</span>
               </div>
-              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(1 - monthlyRatio) } as React.CSSProperties}>
+              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(monthlyRatio) } as React.CSSProperties}>
                 <div className={`${styles.barFill} ${styles.barFillMonthly}`} style={{ width: `${monthlyPercent}%` }} />
               </div>
               <div className={styles.barTooltip}>
-                <span>本月已用: {formatNumber(data.monthlyUsedPoints)} / {formatNumber(data.monthlyLimit)}</span>
+                <span>剩余: {formatNumber(monthlyRemainingPoints)} / {formatNumber(data.monthlyLimit)}</span>
                 <span className={styles.resetHint}>距月度刷新还有 {getTimeUntil(data.nextMonthlyReset)}</span>
               </div>
             </div>
