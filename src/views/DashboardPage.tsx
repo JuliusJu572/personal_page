@@ -39,6 +39,7 @@ export function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (authLoading) return
     if (!user) {
       navigate('/login?redirect=/dashboard')
       return
@@ -47,7 +48,7 @@ export function DashboardPage() {
       .then(setData)
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [user, navigate])
+  }, [user, authLoading, navigate])
 
   if (authLoading || loading || !data) {
     return (
