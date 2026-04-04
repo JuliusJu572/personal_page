@@ -61,7 +61,8 @@ export function DashboardPage() {
     )
   }
 
-  const weeklyRatio = data.weeklyQuota > 0 ? data.currentPoints / data.weeklyQuota : 0
+  const weeklyRemainingPoints = Math.max(0, data.weeklyQuota - data.weeklyUsedPoints)
+  const weeklyRatio = data.weeklyQuota > 0 ? weeklyRemainingPoints / data.weeklyQuota : 0
   const monthlyRemainingPoints = Math.max(0, data.monthlyLimit - data.monthlyUsedPoints)
   const monthlyRatio = data.monthlyLimit > 0 ? monthlyRemainingPoints / data.monthlyLimit : 0
   const weeklyPercent = Math.max(0, Math.min(100, weeklyRatio * 100))
@@ -99,7 +100,7 @@ export function DashboardPage() {
                 <div className={styles.barFill} style={{ width: `${weeklyPercent}%` }} />
               </div>
               <div className={styles.barTooltip}>
-                <span>剩余: {formatNumber(Math.round(data.currentPoints))} / {formatNumber(data.weeklyQuota)}</span>
+                <span>剩余: {formatNumber(weeklyRemainingPoints)} / {formatNumber(data.weeklyQuota)}</span>
                 <span className={styles.resetHint}>距下周刷新还有 {getTimeUntil(data.nextWeeklyReset)}</span>
               </div>
             </div>
