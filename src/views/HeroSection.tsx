@@ -38,9 +38,9 @@ export function HeroSection() {
           <div className={styles.left}>
             <p className={styles.subtitleEn}>
               <span className={styles.subtitleLine1}>AI-Powered</span>
-              <span className={styles.subtitleLine2}>Global Communication Assistant</span>
+              <span className={styles.subtitleLine2}>Global Meeting Communication Assistant</span>
             </p>
-            <p className={styles.subtitleCn}>让每一次全球协作都清晰高效</p>
+            <p className={styles.subtitleCn}>让每一次全球会议与协作都清晰高效</p>
             <div className={styles.tags}>
               <span className={styles.tag}>无痕隐身</span>
               <span className={styles.tag}>实时回答</span>
