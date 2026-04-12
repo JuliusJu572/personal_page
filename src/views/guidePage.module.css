@@ -344,6 +344,55 @@
   background: rgba(0, 0, 0, 0.24);
 }
 
+.shortcutTable {
+  margin: 14px 0 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.shortcutRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.6fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.shortcutRow:last-child {
+  border-bottom: none;
+}
+
+.shortcutAction {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.shortcutDesc {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.shortcutKey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 126px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  color: #d8e4ff;
+  font-family: 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
 .permGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -493,5 +542,14 @@ strong {
 
   .permGrid {
     grid-template-columns: 1fr;
+  }
+
+  .shortcutRow {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .shortcutKey {
+    justify-self: start;
   }
 }

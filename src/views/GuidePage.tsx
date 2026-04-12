@@ -72,6 +72,7 @@ const tocItems = [
   { id: 'features', label: '核心功能', icon: '⚡' },
   { id: 'install', label: '安装说明', icon: '📦' },
   { id: 'usage', label: '使用说明', icon: '🖥️' },
+  { id: 'shortcuts', label: '快捷键总览', icon: '⌨️' },
   { id: 'settings', label: '重要设置', icon: '⚙️' },
   { id: 'ending', label: '结语', icon: '🚀' },
 ]
@@ -218,6 +219,7 @@ export function GuidePage() {
             <GuideFigure src="/guide-images/guide-panel-shortcut.png" alt="主对话面板按钮说明" caption="主面板常用能力：文档、截图、OCR、录音、输入与发送" />
             <Note>按 <Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 可进入穿透模式：软件从任务栏隐藏，但悬浮区按钮仍可使用，适合避免遮挡演示内容。</Note>
             <ul className={styles.list}>
+              <li><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>：监听剪切板并快速读取复制内容，用于追问或补充上下文</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd>：执行截图识别</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd>：系统音录制开/关</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd>：麦克风录制开/关</li>
@@ -242,6 +244,97 @@ export function GuidePage() {
                 <li>每次修改后做一次小样本验证，保留效果最佳版本</li>
               </ul>
             </div>
+          </SubSection>
+        </Section>
+
+        <Section id="shortcuts" title="快捷键总览" icon={
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 8V5a2 2 0 114 0v3"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg>
+        }>
+          <SubSection title="完整快捷键列表（Windows）">
+            <p className={styles.text}>以下为当前版本可用的全量快捷键。建议在会议前先熟悉窗口控制、采集与回放三类操作，实战时切换更顺手。</p>
+            <div className={styles.shortcutTable}>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>窗口上移</div>
+                <div className={styles.shortcutDesc}>将窗口向上移动</div>
+                <div className={styles.shortcutKey}>Ctrl+Up</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>窗口下移</div>
+                <div className={styles.shortcutDesc}>将窗口向下移动</div>
+                <div className={styles.shortcutKey}>Ctrl+Down</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>窗口左移</div>
+                <div className={styles.shortcutDesc}>将窗口向左移动</div>
+                <div className={styles.shortcutKey}>Ctrl+Left</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>窗口右移</div>
+                <div className={styles.shortcutDesc}>将窗口向右移动</div>
+                <div className={styles.shortcutKey}>Ctrl+Right</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>切换窗口可见性</div>
+                <div className={styles.shortcutDesc}>快速显示或隐藏窗口</div>
+                <div className={styles.shortcutKey}>Ctrl+\</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>切换穿透模式</div>
+                <div className={styles.shortcutDesc}>启用或关闭窗口点击穿透</div>
+                <div className={styles.shortcutKey}>Ctrl+M</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>截图并追问下一步</div>
+                <div className={styles.shortcutDesc}>截图后直接触发 AI 分析</div>
+                <div className={styles.shortcutKey}>Ctrl+Enter</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>上一条响应</div>
+                <div className={styles.shortcutDesc}>查看上一条 AI 响应</div>
+                <div className={styles.shortcutKey}>Ctrl+[</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>下一条响应</div>
+                <div className={styles.shortcutDesc}>查看下一条 AI 响应</div>
+                <div className={styles.shortcutKey}>Ctrl+]</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>向上滚动响应</div>
+                <div className={styles.shortcutDesc}>滚动 AI 响应内容向上</div>
+                <div className={styles.shortcutKey}>Ctrl+Shift+Up</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>向下滚动响应</div>
+                <div className={styles.shortcutDesc}>滚动 AI 响应内容向下</div>
+                <div className={styles.shortcutKey}>Ctrl+Shift+Down</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>实时转写</div>
+                <div className={styles.shortcutDesc}>开始实时语音转写，再次按下停止</div>
+                <div className={styles.shortcutKey}>Ctrl+L</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>麦克风录制</div>
+                <div className={styles.shortcutDesc}>录制麦克风声音并转写</div>
+                <div className={styles.shortcutKey}>Ctrl+K</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>删除历史对话</div>
+                <div className={styles.shortcutDesc}>清空当前会话历史记录</div>
+                <div className={styles.shortcutKey}>Ctrl+'</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>OCR 识别并回答</div>
+                <div className={styles.shortcutDesc}>截图后先 OCR，再交由模型回答</div>
+                <div className={styles.shortcutKey}>Ctrl+;</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>监听剪切板</div>
+                <div className={styles.shortcutDesc}>读取最新复制内容并加入输入流程</div>
+                <div className={styles.shortcutKey}>Ctrl+C</div>
+              </div>
+            </div>
+            <Note>建议先记住 <strong>Ctrl+M、Ctrl+Enter、Ctrl+L、Ctrl+K、Ctrl+C</strong> 这 5 个高频键位，能覆盖大多数会议场景。</Note>
           </SubSection>
         </Section>
 
