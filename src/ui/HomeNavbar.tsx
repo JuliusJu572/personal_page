@@ -35,7 +35,6 @@ export function HomeNavbar() {
           <div className={styles.navLinks}>
             <Link to="/pricing" className={styles.navLink}>定价</Link>
             <Link to="/guide" className={styles.navLink}>使用说明</Link>
-            <Link to="/knowledge-cards" className={styles.navLink}>知识卡片</Link>
           </div>
         </div>
 
@@ -63,7 +62,6 @@ export function HomeNavbar() {
       <div className={[styles.mobileMenu, menuOpen ? styles.mobileMenuOpen : undefined].filter(Boolean).join(' ')}>
         <Link to="/pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>定价</Link>
         <Link to="/guide" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>使用说明</Link>
-        <Link to="/knowledge-cards" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>知识卡片</Link>
         {user ? (
           <>
             <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>{user.username || '工作台'}</Link>

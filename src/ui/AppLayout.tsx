@@ -7,7 +7,6 @@ const navItems: Array<{ to: string; label: string }> = [
   { to: '/features', label: '核心功能' },
   { to: '/pricing', label: '定价' },
   { to: '/guide', label: '使用说明' },
-  { to: '/knowledge-cards', label: '知识卡片' },
 ]
 
 export function AppLayout() {

@@ -17,12 +17,14 @@ export function Button(
     children: ReactNode
   },
 ) {
-  const { variant = 'primary', size = 'md', className, ...rest } = props
+  const { variant = 'primary', size = 'md', className, children, ...rest } = props
   return (
     <button
       {...rest}
       className={[styles.button, styles[variant], sizeClass[size], className].filter(Boolean).join(' ')}
-    />
+    >
+      {children}
+    </button>
   )
 }
 

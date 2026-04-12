@@ -1,5 +1,5 @@
 import { useRef, useMemo } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import styles from './distortionWaveSection.module.css'
@@ -38,14 +38,6 @@ function WaveMesh() {
   )
 }
 
-function MouseTracker() {
-  const { viewport } = useThree()
-  useFrame(({ pointer }) => {
-    ;(window as any).__mouseX = pointer.x * viewport.width
-    ;(window as any).__mouseY = pointer.y * viewport.height
-  })
-  return null
-}
 
 export function DistortionWaveSection() {
   const overlayStyle = useMemo(() => ({ '--mx': '0px', '--my': '0px' } as Record<string, string>), [])
@@ -63,7 +55,6 @@ export function DistortionWaveSection() {
           }}
         >
           <ambientLight intensity={0.4} />
-          <MouseTracker />
           <WaveMesh />
         </Canvas>
       </div>

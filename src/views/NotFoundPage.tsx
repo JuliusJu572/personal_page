@@ -9,7 +9,7 @@ export function NotFoundPage() {
       <div className={styles.wrap}>
         <h1 className={styles.title}>404</h1>
         <p className={styles.desc}>页面不存在或已被移动。</p>
-        <Link to="/">
+        <Link to="/lucencia">
           <Button>返回主页</Button>
         </Link>
       </div>
