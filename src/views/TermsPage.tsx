@@ -23,7 +23,7 @@ export function TermsPage() {
             <h2 className={styles.h2}>协议范围</h2>
             <div className={styles.sectionLine} />
           </div>
-          <p className={styles.text}>本协议是您与 LUCENCIA（以下简称"我们"）之间关于使用 LUCENCIA AI 会议协同助手服务的法律协议。请您仔细阅读并理解本协议的全部条款。</p>
+          <p className={styles.text}>本协议是您与 LUCENCIA（以下简称"我们"）之间关于使用 LUCENCIA AI 会议辅助助手服务的法律协议。请您仔细阅读并理解本协议的全部条款。</p>
           <p className={styles.text}>使用我们的服务即表示您同意受本协议的约束。如果您不同意本协议的任何条款，请勿使用我们的服务。</p>
         </section>
 
@@ -35,10 +35,10 @@ export function TermsPage() {
             <h2 className={styles.h2}>服务描述</h2>
             <div className={styles.sectionLine} />
           </div>
-          <p className={styles.text}>LUCENCIA 是一款专为企业打造的 AI 会议协同工具，提供以下核心功能：</p>
+          <p className={styles.text}>LUCENCIA 是一款专为企业打造的 AI 会议辅助工具，提供以下核心功能：</p>
           <ul className={styles.list}>
-            <li>多语种实时语音翻译 — 支持 50+ 语言，毫秒级响应</li>
-            <li>屏幕内容智能识别与翻译 — OCR + AI 翻译一体化</li>
+            <li>多语种实时语音转写 — 支持 50+ 语言，毫秒级响应</li>
+            <li>屏幕内容智能识别与解析 — OCR + AI 识别一体化</li>
             <li>企业知识库集成与问答 — 构建专属知识库，智能检索回答</li>
             <li>会议纪要自动生成 — 结构化摘要，一键导出</li>
           </ul>
@@ -77,7 +77,7 @@ export function TermsPage() {
 
           <div className={styles.highlightBox}>
             <p className={styles.highlightTitle}>⚠️ 特别声明</p>
-            <p className={styles.text}>此会议软件仅用于跨国会议等合法会议场景，严禁用于笔试、面试等违规场景。违反此规定使用本软件所产生的一切后果由用户自行承担。</p>
+            <p className={styles.text}>此会议辅助软件仅用于合法会议及办公场景，严禁用于笔试、面试等违规场景。违反此规定使用本软件所产生的一切后果由用户自行承担。</p>
           </div>
         </section>
 
@@ -122,7 +122,7 @@ export function TermsPage() {
             <li>我们的服务按"现状"提供，我们不对服务的准确性、完整性、可靠性作任何明示或暗示的保证。</li>
             <li>因不可抗力、网络故障、系统维护等原因导致的服务中断，我们不承担责任。</li>
             <li>因您违反本协议或法律法规导致的任何损失，由您自行承担。</li>
-            <li>AI 翻译结果仅供参考，我们不保证翻译内容在所有场景下的绝对准确性。</li>
+            <li>AI 识别结果仅供参考，我们不保证识别内容在所有场景下的绝对准确性。</li>
           </ul>
         </section>
 

@@ -117,12 +117,12 @@ export function GuidePage() {
             </ul>
           </SubSection>
 
-          <SubSection title="多语种同声传译">
+          <SubSection title="多语种实时语音转写">
             <ul className={styles.list}>
               <li>🎤 <strong>实时语音捕获：</strong>毫秒级语音识别与转写，支持 50+ 语种</li>
-              <li>📝 <strong>高精度翻译：</strong>专业术语库定制，确保翻译准确性</li>
+              <li>📝 <strong>高精度识别：</strong>专业术语库定制，确保识别准确性</li>
               <li>📊 <strong>会议纪要生成：</strong>自动记录会议要点，生成结构化摘要</li>
-              <li>👥 <strong>无障碍沟通：</strong>为听障人士提供实时字幕支持</li>
+              <li>👥 <strong>无障碍协作：</strong>为听障人士提供实时字幕支持</li>
             </ul>
           </SubSection>
 
@@ -196,31 +196,31 @@ export function GuidePage() {
             <div className={styles.featureBox}>
               <strong>智能功能：</strong>
               <ul className={styles.list}>
-                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制屏幕内容，Lucencia 会自动识别并翻译</li>
-                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 启用屏幕 OCR，自动提取并翻译屏幕上的文字</li>
+                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制屏幕内容，Lucencia 会自动识别并解析</li>
+                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 启用屏幕 OCR，自动提取并识别屏幕上的文字</li>
               </ul>
             </div>
           </SubSection>
 
-          <SubSection title="屏幕翻译">
-            <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd> 截取屏幕内容并自动翻译。</p>
-            <p className={styles.text}>系统会自动识别屏幕上的文字、图表和代码，并提供精准的翻译结果。支持多种语言互译，包括中英日韩等主流语言。</p>
+          <SubSection title="屏幕识别">
+            <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd> 截取屏幕内容并自动识别。</p>
+            <p className={styles.text}>系统会自动识别屏幕上的文字、图表和代码，并提供精准的识别结果。支持多种语言，包括中英日韩等主流语言。</p>
             <Note>提示：为获得最佳识别效果，建议将屏幕上的文字适当放大</Note>
           </SubSection>
 
           <SubSection title="系统音频录制">
             <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd> 开始录制，再次按下停止录制。</p>
-            <p className={styles.text}>Lucencia 可以捕获系统音频，实时转写并翻译会议中的语音内容。支持识别多种语言，自动区分说话人，并生成结构化的会议纪要。</p>
+            <p className={styles.text}>Lucencia 可以捕获系统音频，实时转写会议中的语音内容。支持识别多种语言，自动区分说话人，并生成结构化的会议纪要。</p>
           </SubSection>
 
           <SubSection title="麦克风录制">
             <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd> 开始录制麦克风声音，再次按下停止录制。</p>
-            <p className={styles.text}>通过麦克风捕获您的语音，Lucencia 会实时转写并提供翻译支持。适用于需要记录个人发言或进行语音输入的场景。</p>
+            <p className={styles.text}>通过麦克风捕获您的语音，Lucencia 会实时转写并提供内容解析支持。适用于需要记录个人发言或进行语音输入的场景。</p>
           </SubSection>
 
           <SubSection title="智能屏幕解析">
-            <p className={styles.text}>一键捕获屏幕内容，自动识别并翻译外语 PPT、图表和文档。</p>
-            <p className={styles.text}>Lucencia 的智能屏幕解析功能可以识别屏幕上的文字、表格、图表等多种内容形式，并提供结构化的翻译结果。支持实时更新，让您随时掌握屏幕上的最新信息。</p>
+            <p className={styles.text}>一键捕获屏幕内容，自动识别 PPT、图表和文档。</p>
+            <p className={styles.text}>Lucencia 的智能屏幕解析功能可以识别屏幕上的文字、表格、图表等多种内容形式，并提供结构化的识别结果。支持实时更新，让您随时掌握屏幕上的最新信息。</p>
           </SubSection>
 
           <SubSection title="清理上下文">
@@ -248,6 +248,7 @@ export function GuidePage() {
 
           <SubSection title="界面优化配置">
             <p className={styles.text}>根据您的使用习惯，调整界面显示效果和性能设置。包括窗口置顶、点击穿透、防录屏保护等高级功能。</p>
+            <Note>Ctrl+M 穿透模式下，软件将不再显示在任务栏，但是此时仍然可以点击界面按钮。</Note>
           </SubSection>
 
           <SubSection title="模型设置">
@@ -270,8 +271,8 @@ export function GuidePage() {
         }>
           <div className={styles.ending}>
             <div className={styles.endingIcon}>🚀</div>
-            <p className={styles.endingText}>让每一场跨国会议都高效、无障碍、充满价值</p>
-            <p className={styles.endingSub}>LUCENCIA 致力于打破语言壁垒，提升团队协作效率</p>
+            <p className={styles.endingText}>让每一场会议都高效、无障碍、充满价值</p>
+            <p className={styles.endingSub}>LUCENCIA 致力于提升信息获取效率，增强协作能力</p>
             <div className={styles.ctaWrap}>
               <a href="/lucencia" className={styles.ctaBtn}>返回首页</a>
             </div>

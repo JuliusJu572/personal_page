@@ -12,7 +12,7 @@ interface ReleaseInfo {
 }
 
 const shortcuts = [
-  { icon: '📸', name: '截屏翻译', win: 'Ctrl + Enter', mac: 'Cmd + Enter' },
+  { icon: '📸', name: '截屏识别', win: 'Ctrl + Enter', mac: 'Cmd + Enter' },
   { icon: '🖱️', name: '点击穿透', win: 'Ctrl + M', mac: 'Cmd + M' },
   { icon: '🪟', name: '窗口移动', win: 'Ctrl + 方向键', mac: 'Cmd + 方向键' },
   { icon: '🔇', name: '显示/隐藏', win: 'Ctrl + \\', mac: 'Cmd + \\' },
@@ -79,7 +79,7 @@ export function CheatingBuddyPage() {
             <span className={styles.titleCn}>露森西娅</span>
           </h1>
           <p className={styles.desc}>
-            跨国会议与无障碍沟通 AI 协同助手 — 提供实时翻译、屏幕智能解析与知识库集成，让每一次全球协作都清晰高效。
+            智能会议辅助 AI 助手 — 提供实时转写、屏幕智能解析与知识库集成，让每一次协作都清晰高效。
           </p>
         </div>
       </header>

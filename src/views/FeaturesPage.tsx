@@ -5,13 +5,13 @@ import styles from './featuresPage.module.css'
 const features = [
   {
     id: 'translation',
-    title: '多语种同声传译',
-    subtitle: 'Real-time Polyglot Translation',
+    title: '多语种实时语音转写',
+    subtitle: 'Real-time Voice Transcription',
     tagline: '听见世界，母语呈现。',
-    description: '无论会议使用的是英语、日语还是法语，Lucencia 都能进行毫秒级的语音捕获与高精度转写，并实时翻译为您熟悉的母语。为跨国业务团队和听障人士提供无延迟的"字幕级"沟通体验。',
+    description: '无论会议使用的是英语、日语还是法语，Lucencia 都能进行毫秒级的语音捕获与高精度转写，并实时识别为您熟悉的文字。为企业团队和听障人士提供无延迟的"字幕级"协作体验。',
     icon: '🌐',
     benefits: [
-      '支持 50+ 语种实时翻译',
+      '支持 50+ 语种实时转写',
       '毫秒级语音识别与转写',
       '专业术语库定制',
       '会议纪要自动生成',
@@ -22,8 +22,8 @@ const features = [
     id: 'ocr',
     title: '智能屏幕视界解析',
     subtitle: 'Smart Screen OCR & Translation',
-    tagline: '看懂每一页跨国演示。',
-    description: '开会时遇到复杂的外语 PPT 或图表？Lucencia 独创的智能屏幕捕获与 OCR 技术，能够一键解析共享屏幕上的外文资料，并在不打扰会议进程的情况下，在侧边栏为您提供精准的翻译与图文内容结构化摘要。',
+    tagline: '看懂每一页演示内容。',
+    description: '开会时遇到复杂的外语 PPT 或图表？Lucencia 独创的智能屏幕捕获与 OCR 技术，能够一键解析共享屏幕上的资料，并在不打扰会议进程的情况下，在侧边栏为您提供精准的识别与图文内容结构化摘要。',
     icon: '📸',
     benefits: [
       '一键屏幕内容捕获',
@@ -57,7 +57,7 @@ export function FeaturesPage() {
         <div className={styles.heroContent}>
           <h1 className={styles.title}>核心功能</h1>
           <p className={styles.subtitle}>
-            三大核心能力，重新定义跨国会议协作体验
+            三大核心能力，重新定义会议协作体验
           </p>
         </div>
       </header>
@@ -134,7 +134,7 @@ export function FeaturesPage() {
           </div>
           <div className={styles.statItem}>
             <div className={styles.statNumber}>99.2%</div>
-            <div className={styles.statLabel}>翻译准确率</div>
+            <div className={styles.statLabel}>识别准确率</div>
           </div>
           <div className={styles.statItem}>
             <div className={styles.statNumber}>50ms</div>

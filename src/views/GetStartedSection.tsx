@@ -2,9 +2,9 @@ import styles from './getStartedSection.module.css'
 
 const stats = [
   { value: '50+', label: '支持语言' },
-  { value: '99.2%', label: '翻译准确率' },
+  { value: '99.2%', label: '识别准确率' },
   { value: '<50ms', label: '响应延迟' },
-  { value: '10K+', label: '全球用户' },
+  { value: '10K+', label: '活跃用户' },
 ]
 
 export function GetStartedSection() {
@@ -21,7 +21,7 @@ export function GetStartedSection() {
         <p className={styles.subtitle}>Try it for Free</p>
 
         <p className={styles.desc}>
-          让全球协作变得简单高效。立即下载，开启无障碍沟通新体验。
+          让高效协作变得简单。立即下载，开启智能辅助新体验。
         </p>
 
         <div className={styles.actions}>

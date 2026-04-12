@@ -15,7 +15,7 @@ export function BrandStoryPage() {
           <p className={styles.subtitle}>让沟通的每一个暗角，皆有光亮。</p>
         </div>
         <div className={styles.heroImage}>
-          <img src="/features-images/hero.png" alt="Lucencia - 照亮每一次全球协作" className={styles.heroImg} />
+          <img src="/features-images/hero.png" alt="Lucencia - 照亮每一次高效协作" className={styles.heroImg} />
         </div>
       </header>
 
@@ -44,7 +44,7 @@ export function BrandStoryPage() {
               <div className={styles.storyIcon}>💡</div>
               <h3 className={styles.storyTitle}>起源</h3>
               <p className={styles.storyText}>
-                在全球化协作日益频繁的今天，语言障碍和信息不对称成为团队效率的最大瓶颈。我们创建 Lucencia，正是为了解决这一痛点。
+                在团队协作日益频繁的今天，信息不对称和沟通效率成为团队协作的最大瓶颈。我们创建 Lucencia，正是为了解决这一痛点。
               </p>
             </Card>
 
@@ -52,7 +52,7 @@ export function BrandStoryPage() {
               <div className={styles.storyIcon}>🌍</div>
               <h3 className={styles.storyTitle}>使命</h3>
               <p className={styles.storyText}>
-                我们的使命是打破语言壁垒，让跨国团队能够像本地团队一样高效协作。通过 AI 技术，我们让沟通变得无障碍。
+                我们的使命是让团队能够更高效地协作。通过 AI 技术，我们让信息获取与理解变得无障碍。
               </p>
             </Card>
 
@@ -60,7 +60,7 @@ export function BrandStoryPage() {
               <div className={styles.storyIcon}>✨</div>
               <h3 className={styles.storyTitle}>愿景</h3>
               <p className={styles.storyText}>
-                我们愿景是成为全球企业首选的会议协同工具，让每一次跨国会议都能产生最大价值，让每一个参与者都能充分表达。
+                我们愿景是成为企业首选的会议辅助工具，让每一次会议都能产生最大价值，让每一个参与者都能充分表达。
               </p>
             </Card>
           </div>
@@ -74,7 +74,7 @@ export function BrandStoryPage() {
             <div className={styles.valueItem}>
               <div className={styles.valueIcon}>🎯</div>
               <h3 className={styles.valueTitle}>精准</h3>
-              <p className={styles.valueText}>毫秒级响应，高精度翻译，确保信息传递的准确性</p>
+              <p className={styles.valueText}>毫秒级响应，高精度识别，确保信息传递的准确性</p>
             </div>
             <div className={styles.valueItem}>
               <div className={styles.valueIcon}>🔒</div>
@@ -102,13 +102,13 @@ export function BrandStoryPage() {
             <Card className={styles.techCard}>
               <h3 className={styles.techTitle}>AI 驱动</h3>
               <p className={styles.techText}>
-                基于最新的大语言模型和语音识别技术，提供行业领先的翻译准确率和响应速度。
+                基于最新的大语言模型和语音识别技术，提供行业领先的识别准确率和响应速度。
               </p>
             </Card>
             <Card className={styles.techCard}>
               <h3 className={styles.techTitle}>实时处理</h3>
               <p className={styles.techText}>
-                毫秒级延迟的实时翻译，让您几乎感觉不到语言转换的过程。
+                毫秒级延迟的实时转写，让您几乎感觉不到信息处理的过程。
               </p>
             </Card>
             <Card className={styles.techCard}>
@@ -123,9 +123,9 @@ export function BrandStoryPage() {
 
       <section className={styles.ctaSection}>
         <div className={styles.ctaContent}>
-          <h2 className={styles.ctaTitle}>准备好照亮您的跨国会议了吗？</h2>
+          <h2 className={styles.ctaTitle}>准备好照亮您的会议了吗？</h2>
           <p className={styles.ctaText}>
-            加入全球数千家企业的行列，体验无障碍沟通的力量。
+            加入全球数千家企业的行列，体验智能辅助的力量。
           </p>
           <div className={styles.ctaButtons}>
             <a href="/lucencia" className={styles.ctaPrimary}>

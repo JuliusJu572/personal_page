@@ -28,7 +28,7 @@ export function PrivacyPage() {
             <li><strong>账户信息：</strong>用户名、邮箱地址等注册信息</li>
             <li><strong>使用数据：</strong>功能使用频率、错误日志等匿名统计数据</li>
             <li><strong>设备信息：</strong>操作系统版本、设备型号（用于兼容性优化）</li>
-            <li><strong>对话内容：</strong>您的翻译和问答内容，用于 AI 模型优化（可随时删除）</li>
+            <li><strong>对话内容：</strong>您的识别与问答内容，用于 AI 模型优化（可随时删除）</li>
           </ul>
         </section>
 
@@ -89,7 +89,7 @@ export function PrivacyPage() {
             <h2 className={styles.h2}>第三方服务</h2>
             <div className={styles.sectionLine} />
           </div>
-          <p className={styles.text}>我们的 AI 翻译功能依赖以下第三方 API 服务：</p>
+          <p className={styles.text}>我们的 AI 识别与转写功能依赖以下第三方 API 服务：</p>
           <ul className={styles.list}>
             <li><strong>阿里云通义千问 (Qwen)</strong> — 文本理解和生成模型</li>
             <li><strong>阿里云视觉模型 (Qwen-VL)</strong> — 屏幕内容识别与分析</li>
