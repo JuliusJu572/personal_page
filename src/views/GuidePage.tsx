@@ -46,6 +46,15 @@ function Warn({ children }: { children: React.ReactNode }) {
   return <div className={styles.warn}>{children}</div>
 }
 
+function GuideFigure({ src, alt, caption }: { src: string; alt: string; caption: string }) {
+  return (
+    <figure className={styles.guideFigure}>
+      <img className={styles.guideImage} src={src} alt={alt} loading="lazy" />
+      <figcaption className={styles.guideCaption}>{caption}</figcaption>
+    </figure>
+  )
+}
+
 function Kbd({ children }: { children: React.ReactNode }) {
   return <kbd className={styles.kbd}>{children}</kbd>
 }
@@ -62,7 +71,7 @@ function PermCard({ title, lines }: { title: string; lines: string[] }) {
 const tocItems = [
   { id: 'features', label: '核心功能', icon: '⚡' },
   { id: 'install', label: '安装说明', icon: '📦' },
-  { id: 'usage', label: '使用界面', icon: '🖥️' },
+  { id: 'usage', label: '使用说明', icon: '🖥️' },
   { id: 'settings', label: '重要设置', icon: '⚙️' },
   { id: 'ending', label: '结语', icon: '🚀' },
 ]
@@ -188,44 +197,51 @@ export function GuidePage() {
           </SubSection>
         </Section>
 
-        <Section id="usage" title="使用界面" icon={
+        <Section id="usage" title="使用说明（含操作截图）" icon={
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         }>
-          <SubSection title="文本输入">
-            <p className={styles.text}>在文本框中输入问题或指令，按 <Kbd>Enter</Kbd> 键发送。Lucencia 会结合会议上下文为您提供精准回答。</p>
+          <SubSection title="步骤 1：登录界面与入口定位">
+            <p className={styles.text}>登录后，顶部右侧提供两个核心入口：<strong>文档解析</strong>与<strong>设置</strong>。建议首次使用时优先进入设置完成模型与快捷键确认，再开始会议。</p>
+            <GuideFigure src="/guide-images/guide-login-entry.png" alt="登录界面：文档解析和设置入口" caption="登录页顶部右侧：文档解析入口 + 设置入口" />
             <div className={styles.featureBox}>
-              <strong>智能功能：</strong>
+              <strong>此页建议完成：</strong>
               <ul className={styles.list}>
-                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> 复制屏幕内容，Lucencia 会自动识别并解析</li>
-                <li>使用 <Kbd>Ctrl</Kbd> + <Kbd>;</Kbd> 启用屏幕 OCR，自动提取并识别屏幕上的文字</li>
+                <li>确认账号已登录且可以开始会话</li>
+                <li>进入设置检查默认模型、截图模式、提示词模板</li>
+                <li>熟悉主操作区按钮位置，减少会议中切换成本</li>
               </ul>
             </div>
           </SubSection>
 
-          <SubSection title="屏幕识别">
-            <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd> 截取屏幕内容并自动识别。</p>
-            <p className={styles.text}>系统会自动识别屏幕上的文字、图表和代码，并提供精准的识别结果。支持多种语言，包括中英日韩等主流语言。</p>
-            <Note>提示：为获得最佳识别效果，建议将屏幕上的文字适当放大</Note>
+          <SubSection title="步骤 2：主对话面板与穿透模式（Ctrl + M）">
+            <p className={styles.text}>主面板包含清空会话、加载文档到上下文、截屏、OCR、系统音录制、麦克风录制、文本输入与发送/暂停。会议时建议将常用按钮保持在可见区域。</p>
+            <GuideFigure src="/guide-images/guide-panel-shortcut.png" alt="主对话面板按钮说明" caption="主面板常用能力：文档、截图、OCR、录音、输入与发送" />
+            <Note>按 <Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 可进入穿透模式：软件从任务栏隐藏，但悬浮区按钮仍可使用，适合避免遮挡演示内容。</Note>
+            <ul className={styles.list}>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd>：执行截图识别</li>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd>：系统音录制开/关</li>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd>：麦克风录制开/关</li>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>'</Kbd>：清理上下文</li>
+            </ul>
           </SubSection>
 
-          <SubSection title="系统音频录制">
-            <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd> 开始录制，再次按下停止录制。</p>
-            <p className={styles.text}>Lucencia 可以捕获系统音频，实时转写会议中的语音内容。支持识别多种语言，自动区分说话人，并生成结构化的会议纪要。</p>
+          <SubSection title="步骤 3：模型选择与两点截图">
+            <p className={styles.text}>在设置页中可配置文本模型与视觉模型，推荐默认组合先稳定使用，再按需求切换高能力模型。截图模式建议使用<strong>两点截图</strong>，在屏幕上点击两次即可完成局部区域框选。</p>
+            <GuideFigure src="/guide-images/guide-model-screenshot.png" alt="模型选择与两点截图说明" caption="模型配置页：选择模型 + 两点截图（鼠标两次点击完成局部截图）" />
+            <Warn>两点截图流程：第一次点击确定起点，第二次点击确定终点。为提升识别效果，建议覆盖完整题干与选项区域。</Warn>
           </SubSection>
 
-          <SubSection title="麦克风录制">
-            <p className={styles.text}>快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd> 开始录制麦克风声音，再次按下停止录制。</p>
-            <p className={styles.text}>通过麦克风捕获您的语音，Lucencia 会实时转写并提供内容解析支持。适用于需要记录个人发言或进行语音输入的场景。</p>
-          </SubSection>
-
-          <SubSection title="智能屏幕解析">
-            <p className={styles.text}>一键捕获屏幕内容，自动识别 PPT、图表和文档。</p>
-            <p className={styles.text}>Lucencia 的智能屏幕解析功能可以识别屏幕上的文字、表格、图表等多种内容形式，并提供结构化的识别结果。支持实时更新，让您随时掌握屏幕上的最新信息。</p>
-          </SubSection>
-
-          <SubSection title="清理上下文">
-            <p className={styles.text}>对话界面，快捷键 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>'</Kbd> 清理上下文，防止上下文累积。</p>
-            <p className={styles.text}>定期清理上下文可以释放内存，提高响应速度，并确保 AI 助手专注于当前对话内容。</p>
+          <SubSection title="步骤 4：提示词模板与自定义指令">
+            <p className={styles.text}>设置中的提示词模板决定 AI 在不同场景下的行为方式。你可以先选模板，再在“自定义 AI 指令”中补充你的个人偏好或岗位上下文，形成稳定输出风格。</p>
+            <GuideFigure src="/guide-images/guide-prompt-template.png" alt="提示词模板与自定义提示词" caption="模板决定基础风格，自定义指令用于强化场景化表达" />
+            <div className={styles.featureBox}>
+              <strong>推荐模板维护方式：</strong>
+              <ul className={styles.list}>
+                <li>先选择最接近的模板（如答辩/会议/讲解）</li>
+                <li>将你的固定表达写成短句，避免过长提示词</li>
+                <li>每次修改后做一次小样本验证，保留效果最佳版本</li>
+              </ul>
+            </div>
           </SubSection>
         </Section>
 
@@ -238,8 +254,8 @@ export function GuidePage() {
           </SubSection>
 
           <SubSection title="默认用户提示词">
-            <p className={styles.text}>此处编辑用户提示词，针对不同的场景个性化编辑。</p>
-            <p className={styles.text}>您可以为不同类型的会议（如技术讨论、商务谈判、项目汇报等）设置专属的提示词模板，让 AI 助手更好地理解您的需求并提供更精准的回答。</p>
+            <p className={styles.text}>此处用于设置“模板 + 自定义指令”的最终提示词效果，建议按场景维护多套版本，例如技术答辩、项目周会、客户沟通。</p>
+            <p className={styles.text}>当输出风格不稳定时，优先缩短自定义指令并提高约束清晰度（角色、目标、输出格式），能明显提升回答一致性。</p>
           </SubSection>
 
           <SubSection title="界面设置 - 透明度与字体大小">
@@ -248,7 +264,7 @@ export function GuidePage() {
 
           <SubSection title="界面优化配置">
             <p className={styles.text}>根据您的使用习惯，调整界面显示效果和性能设置。包括窗口置顶、点击穿透、防录屏保护等高级功能。</p>
-            <Note>Ctrl+M 穿透模式下，软件将不再显示在任务栏，但是此时仍然可以点击界面按钮。</Note>
+            <Note><Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 穿透模式下，软件将不再显示在任务栏，但悬浮区按钮依然可点击使用。</Note>
           </SubSection>
 
           <SubSection title="模型设置">

@@ -321,6 +321,29 @@
   font-size: 14px;
 }
 
+.guideFigure {
+  margin: 16px 0 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.guideImage {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.guideCaption {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.52);
+  background: rgba(0, 0, 0, 0.24);
+}
+
 .permGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
