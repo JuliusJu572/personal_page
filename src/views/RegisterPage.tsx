@@ -82,9 +82,9 @@ export function RegisterPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="设置您的密码（至少6位）"
+                placeholder="设置您的密码（至少8位）"
                 required
-                minLength={6}
+                minLength={8}
                 autoComplete="new-password"
                 className={styles.input}
               />
@@ -99,7 +99,7 @@ export function RegisterPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="再次输入密码"
                 required
-                minLength={6}
+                minLength={8}
                 autoComplete="new-password"
                 className={styles.input}
               />

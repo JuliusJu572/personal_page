@@ -12,20 +12,21 @@ class ApiError extends Error {
   }
 }
 
+/**
+ * Core request helper.
+ * Tokens are stored in HttpOnly cookies managed by the server.
+ * We never touch localStorage for auth tokens.
+ */
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...((options.headers as Record<string, string>) || {}),
   }
 
-  const token = localStorage.getItem('userToken')
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
-
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
     headers,
+    credentials: 'include', // send & receive HttpOnly cookies automatically
   })
 
   const data = await res.json().catch(() => ({}))
@@ -167,6 +168,11 @@ export const api = {
     return request<MeResponse>('/auth/me')
   },
 
+  /** Log out: ask the server to clear the HttpOnly cookie. */
+  logout() {
+    return request<{ success: boolean }>('/auth/logout', { method: 'POST' })
+  },
+
   getBalance() {
     return request<BalanceResponse>('/api/user/balance')
   },
@@ -201,19 +207,6 @@ export const api = {
     return request<{ success: boolean }>(`/api/knowledge-cards/${cardId}`, {
       method: 'DELETE',
     })
-  },
-
-  getToken() {
-    return localStorage.getItem('userToken') || ''
-  },
-
-  setToken(token: string) {
-    if (token) localStorage.setItem('userToken', token)
-    else localStorage.removeItem('userToken')
-  },
-
-  clearToken() {
-    localStorage.removeItem('userToken')
   },
 }
 

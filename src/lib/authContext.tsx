@@ -23,7 +23,7 @@ type AuthContextValue = {
   refresh: () => Promise<void>
   login: (username: string, password: string) => Promise<void>
   register: (username: string, password: string) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -32,7 +32,7 @@ const AuthContext = createContext<AuthContextValue>({
   refresh: async () => {},
   login: async (_username: string, _password: string) => {},
   register: async (_username: string, _password: string) => {},
-  logout: () => {},
+  logout: async () => {},
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -40,11 +40,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   const refresh = useCallback(async () => {
-    if (!api.getToken()) {
-      setUser(null)
-      setLoading(false)
-      return
-    }
     try {
       const data = await api.getMe()
       setUser({
@@ -63,27 +58,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         monthlyUsedPoints: data.user.monthlyUsedPoints,
       })
     } catch {
-      api.clearToken()
+      // 401 means no valid cookie → user is not logged in
       setUser(null)
     } finally {
       setLoading(false)
     }
   }, [])
 
+  /** Login: server sets HttpOnly cookie; we then refresh user info. */
   const login = useCallback(async (username: string, password: string) => {
-    const data = await api.login(username, password)
-    api.setToken(data.token)
+    await api.login(username, password)
     await refresh()
   }, [refresh])
 
+  /** Register: server sets HttpOnly cookie; we then refresh user info. */
   const register = useCallback(async (username: string, password: string) => {
-    const data = await api.register(username, password)
-    api.setToken(data.token)
+    await api.register(username, password)
     await refresh()
   }, [refresh])
 
-  const logout = useCallback(() => {
-    api.clearToken()
+  /** Logout: server clears the cookie, we clear local state. */
+  const logout = useCallback(async () => {
+    try { await api.logout() } catch { /* ignore errors */ }
     setUser(null)
   }, [])
 
