@@ -76,7 +76,7 @@ export function PricingPage() {
         {/* ── Subscription Plans ── */}
         {!loading && subscriptionPlans.length > 0 && (
           <>
-            <h2 className={styles.sectionHeading}>📅 订阅制套餐 <span className={styles.sectionSub}>按月计费 · 每周自动充能</span></h2>
+            <h2 className={styles.sectionHeading}>订阅制套餐 <span className={styles.sectionSub}>按月计费 · 每周自动充能</span></h2>
             <div className={styles.plansGrid}>
               {subscriptionPlans.map((plan) => (
                 <Card
@@ -149,13 +149,13 @@ export function PricingPage() {
         {/* ── One-Time Plans ── */}
         {!loading && onetimePlans.length > 0 && (
           <>
-            <h2 className={styles.sectionHeading}>⚡ 单次付费模式 <span className={styles.sectionSub}>即用即买 · 限时体验</span></h2>
+            <h2 className={styles.sectionHeading}>单次付费模式 <span className={styles.sectionSub}>即用即买 · 限时体验</span></h2>
             <div className={styles.plansGrid}>
               {onetimePlans.map((plan) => (
                 <Card key={plan.id} className={styles.planCard}>
                   <div className={styles.onetimeBadgeArea}>
                     <Badge tone="accent" className={styles.onetimeBadge}>
-                      ⏱ {plan.durationDisplay} 限时
+                      {plan.durationDisplay} 限时
                     </Badge>
                   </div>
 
@@ -206,7 +206,7 @@ export function PricingPage() {
         {/* ── Feature Comparison Table ── */}
         {!loading && Object.keys(featureComparison).length > 0 && (
           <>
-            <h2 className={styles.sectionHeading}>📊 功能对比</h2>
+            <h2 className={styles.sectionHeading}>功能对比</h2>
             <div className={styles.comparisonTable}>
               <table>
                 <thead>
@@ -235,11 +235,14 @@ export function PricingPage() {
         {/* ── Available Models per Tier ── */}
         {!loading && subscriptionPlans.length > 0 && (
           <>
-            <h2 className={styles.sectionHeading}>🤖 各套餐可用模型</h2>
+            <h2 className={styles.sectionHeading}>各套餐可用模型</h2>
             <div className={styles.modelGrid}>
-              {subscriptionPlans.map((plan) => (
+              {[...subscriptionPlans, ...onetimePlans].filter(plan => (plan.models || []).length > 0).map((plan) => (
                 <div key={plan.id} className={styles.modelCard}>
-                  <h3 className={styles.modelCardTitle}>{planNameMap[plan.id] || plan.id}</h3>
+                  <h3 className={styles.modelCardTitle}>
+                    {planNameMap[plan.id] || plan.id}
+                    {plan.billingType === 'one_time' && <span className={styles.modelCardTag}>单次</span>}
+                  </h3>
                   <ul className={styles.modelList}>
                     {(plan.models || []).map((m, i) => (
                       <li key={i} className={styles.modelItem}>{m}</li>
