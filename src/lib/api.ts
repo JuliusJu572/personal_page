@@ -149,6 +149,41 @@ export interface KnowledgeCardSaveResponse {
   card: KnowledgeCardData
 }
 
+export interface PricingPlanApi {
+  id: string
+  payMode: number
+  billingType: 'subscription' | 'one_time'
+  price: number
+  weeklyQuota?: number
+  monthlyLimit?: number
+  quota?: number
+  durationSeconds?: number
+  durationDisplay?: string
+  tagline: string
+  modelTier: string
+  icon?: string
+  overseasOnly?: boolean
+  modelLogos?: Array<{ src: string; alt: string }>
+  models?: string[]
+  features: string[]
+  limitations?: string[]
+  popular?: boolean
+}
+
+export interface FeatureComparisonItem {
+  label: string
+  normal: string
+  advanced: string
+  premium: string
+}
+
+export interface PricingResponse {
+  success: boolean
+  subscriptionPlans: PricingPlanApi[]
+  onetimePlans: PricingPlanApi[]
+  featureComparison: Record<string, FeatureComparisonItem>
+}
+
 export const api = {
   login(username: string, password: string) {
     return request<LoginResponse>('/auth/login', {
@@ -207,6 +242,10 @@ export const api = {
     return request<{ success: boolean }>(`/api/knowledge-cards/${cardId}`, {
       method: 'DELETE',
     })
+  },
+
+  getPricing() {
+    return request<PricingResponse>('/api/pricing')
   },
 }
 

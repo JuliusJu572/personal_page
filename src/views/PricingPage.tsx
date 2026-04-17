@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Container } from '../ui/Container'
 import { Card } from '../ui/Card'
@@ -6,122 +7,55 @@ import { Badge } from '../ui/Badge'
 import { HomeNavbar } from '../ui/HomeNavbar'
 import { HomeFooter } from '../ui/HomeFooter'
 import { useAuth } from '../lib/authContext'
+import { api } from '../lib/api'
+import type { PricingPlanApi, FeatureComparisonItem } from '../lib/api'
 import styles from './pricingPage.module.css'
-
-interface ModelLogo {
-  src: string
-  alt: string
-}
-
-interface PricingPlan {
-  id: string
-  price: number
-  tagline: string
-  weeklyQuota: number
-  monthlyLimit: number
-  weeklyDisplay: string
-  monthlyDisplay: string
-  modelTier: string
-  icon: string
-  modelLogos: ModelLogo[]
-  overseasOnly?: boolean
-  features: string[]
-  limitations: string[]
-  popular?: boolean
-  payMode: number
-}
-
-const plans: PricingPlan[] = [
-  {
-    id: 'normal',
-    price: 99,
-    tagline: '极速流畅的 AI 对话引擎，日常创作利器',
-    weeklyQuota: 1000000,
-    monthlyLimit: 5000000,
-    weeklyDisplay: '1,000,000',
-    monthlyDisplay: '5,000,000',
-    modelTier: 'Qwen 等基础极速大模型矩阵',
-    icon: '/Qwen.png',
-    modelLogos: [
-      { src: '/Qwen.png', alt: 'Qwen' },
-    ],
-    features: [
-      `每周发放 ${'1,000,000'} 基础算力积分`,
-      'Qwen 系列基础极速大模型',
-    ],
-    limitations: ['不支持 MiniMax 等国产旗舰模型', '不支持文档解析功能'],
-    payMode: 1,
-  },
-  {
-    id: 'advanced',
-    price: 199,
-    tagline: '专业知识工作者的生产力中枢',
-    weeklyQuota: 2000000,
-    monthlyLimit: 10000000,
-    weeklyDisplay: '2,000,000',
-    monthlyDisplay: '10,000,000',
-    modelTier: '国产进阶大模型全家桶',
-    icon: '/智谱.png',
-    modelLogos: [
-      { src: '/Qwen.png', alt: 'Qwen' },
-      { src: '/MiniMax.png', alt: 'MiniMax' },
-      { src: '/智谱.png', alt: 'Zhipu' },
-      { src: '/Kimi.png', alt: 'Kimi' },
-    ],
-    features: [
-      `每周发放 ${'2,000,000'} 专业算力积分`,
-      '解锁国产进阶大模型全家桶',
-      '支持专业级长文档解析（轻松应对万字研报）',
-    ],
-    limitations: [],
-    popular: true,
-    payMode: 2,
-  },
-  {
-    id: 'premium',
-    price: 399,
-    tagline: '全能数据分析与极客工程站',
-    weeklyQuota: 4000000,
-    monthlyLimit: 20000000,
-    weeklyDisplay: '4,000,000',
-    monthlyDisplay: '20,000,000',
-    modelTier: '全球全量算力矩阵',
-    icon: '/Claude.png',
-    overseasOnly: true,
-    modelLogos: [
-      { src: '/ChatGPT.png', alt: 'ChatGPT' },
-      { src: '/Claude.png', alt: 'Claude' },
-      { src: '/gemini-ai.png', alt: 'Gemini' },
-      { src: '/Grok.png', alt: 'Grok' },
-      { src: '/智谱.png', alt: 'Zhipu' },
-      { src: '/Qwen.png', alt: 'Qwen' },
-      { src: '/Kimi.png', alt: 'Kimi' },
-      { src: '/MiniMax.png', alt: 'MiniMax' },
-    ],
-    features: [
-      `每周发放 ${'4,000,000'} 超级算力积分`,
-      '解锁全球全量模型（国产 + 海外）',
-      '支持超长巨型文档解析矩阵，代码库级全局构建',
-      '优先响应与专属通道',
-    ],
-    limitations: ['适用范围：非中国大陆地区'],
-    payMode: 3,
-  },
-]
 
 function formatPrice(price: number) {
   return `\u00a5${price}`
 }
 
+function formatNumber(n: number) {
+  return n.toLocaleString()
+}
+
 export function PricingPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const [subscriptionPlans, setSubscriptionPlans] = useState<PricingPlanApi[]>([])
+  const [onetimePlans, setOnetimePlans] = useState<PricingPlanApi[]>([])
+  const [featureComparison, setFeatureComparison] = useState<Record<string, FeatureComparisonItem>>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    api.getPricing()
+      .then((data) => {
+        setSubscriptionPlans(data.subscriptionPlans || [])
+        setOnetimePlans(data.onetimePlans || [])
+        setFeatureComparison(data.featureComparison || {})
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message || '获取定价信息失败')
+        setLoading(false)
+      })
+  }, [])
 
   const handlePurchase = (_planId: string) => {
     if (!user) {
       navigate('/login?redirect=/pricing')
       return
     }
+  }
+
+  const planNameMap: Record<string, string> = {
+    normal: '普通版',
+    advanced: '进阶版',
+    premium: '高级版',
+    'onetime-normal': '普通版',
+    'onetime-advanced': '进阶版',
+    'onetime-premium': '高级版',
   }
 
   return (
@@ -136,90 +70,192 @@ export function PricingPage() {
           </div>
         </header>
 
-        <div className={styles.plansGrid}>
-          {plans.map((plan) => (
-            <Card
-              key={plan.id}
-              className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
-            >
-              {plan.popular && (
-              <Badge tone="accent" className={styles.popularBadge}>
-                最受欢迎
-              </Badge>
-            )}
-            {plan.overseasOnly && (
-              <Badge tone="warn" className={styles.overseasBadge}>
-                仅海外用户可用
-              </Badge>
-            )}
+        {loading && <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>加载中...</p>}
+        {error && <p style={{ textAlign: 'center', color: '#ff6b6b' }}>{error}</p>}
 
-              <div className={`${styles.planIconGroup} ${plan.modelLogos.length > 4 ? styles.planIconGroupGrid : ''}`}>
-                {plan.modelLogos.map((logo) => (
-                  <img
-                    key={logo.alt}
-                    src={logo.src}
-                    alt={logo.alt}
-                    className={styles.planLogoImg}
-                    loading="lazy"
-                    title={logo.alt}
-                  />
-                ))}
-              </div>
+        {/* ── Subscription Plans ── */}
+        {!loading && subscriptionPlans.length > 0 && (
+          <>
+            <h2 className={styles.sectionHeading}>📅 订阅制套餐 <span className={styles.sectionSub}>按月计费 · 每周自动充能</span></h2>
+            <div className={styles.plansGrid}>
+              {subscriptionPlans.map((plan) => (
+                <Card
+                  key={plan.id}
+                  className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
+                >
+                  {plan.popular && (
+                    <Badge tone="accent" className={styles.popularBadge}>最受欢迎</Badge>
+                  )}
+                  {plan.overseasOnly && (
+                    <Badge tone="warn" className={styles.overseasBadge}>仅海外用户可用</Badge>
+                  )}
 
-              <h2 className={styles.planName}>
-                {plan.id === 'normal' ? '普通版' : plan.id === 'advanced' ? '进阶版' : plan.id === 'overseas' ? '海外版' : '高级版'}
-              </h2>
+                  <div className={`${styles.planIconGroup} ${(plan.modelLogos?.length || 0) > 4 ? styles.planIconGroupGrid : ''}`}>
+                    {(plan.modelLogos || []).map((logo) => (
+                      <img key={logo.alt} src={logo.src} alt={logo.alt} className={styles.planLogoImg} loading="lazy" title={logo.alt} />
+                    ))}
+                  </div>
 
-              <div className={styles.priceRow}>
-                <span className={styles.price}>{formatPrice(plan.price)}</span>
-                <span className={styles.period}>/月</span>
-              </div>
+                  <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
 
-              <p className={styles.tagline}>{plan.tagline}</p>
+                  <div className={styles.priceRow}>
+                    <span className={styles.price}>{formatPrice(plan.price)}</span>
+                    <span className={styles.period}>/月</span>
+                  </div>
 
-            <div className={styles.quotaInfo}>
-                <div className={styles.quotaItem}>
-                  <span className={styles.quotaLabel}>周额度</span>
-                  <span className={styles.quotaValue}>{plan.weeklyDisplay}</span>
+                  <p className={styles.tagline}>{plan.tagline}</p>
+
+                  <div className={styles.quotaInfo}>
+                    <div className={styles.quotaItem}>
+                      <span className={styles.quotaLabel}>周额度</span>
+                      <span className={styles.quotaValue}>{formatNumber(plan.weeklyQuota || 0)}</span>
+                    </div>
+                    <div className={styles.quotaDivider} />
+                    <div className={styles.quotaItem}>
+                      <span className={styles.quotaLabel}>月限额</span>
+                      <span className={styles.quotaValue}>{formatNumber(plan.monthlyLimit || 0)}</span>
+                    </div>
+                  </div>
+
+                  <ul className={styles.featuresList}>
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className={styles.featureItem}>
+                        <span className={styles.checkIcon}>✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                    {(plan.limitations || []).map((limitation, i) => (
+                      <li key={`lim-${i}`} className={styles.limitItem}>
+                        <span className={styles.crossIcon}>✗</span>
+                        <span>{limitation}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    variant={plan.popular ? 'primary' : 'secondary'}
+                    size="lg"
+                    className={styles.purchaseBtn}
+                    onClick={() => handlePurchase(plan.id)}
+                  >
+                    立即购买
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ── One-Time Plans ── */}
+        {!loading && onetimePlans.length > 0 && (
+          <>
+            <h2 className={styles.sectionHeading}>⚡ 单次付费模式 <span className={styles.sectionSub}>即用即买 · 限时体验</span></h2>
+            <div className={styles.plansGrid}>
+              {onetimePlans.map((plan) => (
+                <Card key={plan.id} className={styles.planCard}>
+                  <div className={styles.onetimeBadgeArea}>
+                    <Badge tone="accent" className={styles.onetimeBadge}>
+                      ⏱ {plan.durationDisplay} 限时
+                    </Badge>
+                  </div>
+
+                  <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
+
+                  <div className={styles.priceRow}>
+                    <span className={styles.price}>{formatPrice(plan.price)}</span>
+                    <span className={styles.period}>/次</span>
+                  </div>
+
+                  <p className={styles.tagline}>{plan.tagline}</p>
+
+                  <div className={styles.quotaInfo}>
+                    <div className={styles.quotaItem}>
+                      <span className={styles.quotaLabel}>算力额度</span>
+                      <span className={styles.quotaValue}>{formatNumber(plan.quota || 0)}</span>
+                    </div>
+                    <div className={styles.quotaDivider} />
+                    <div className={styles.quotaItem}>
+                      <span className={styles.quotaLabel}>限时</span>
+                      <span className={styles.quotaValue}>{plan.durationDisplay}</span>
+                    </div>
+                  </div>
+
+                  <ul className={styles.featuresList}>
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className={styles.featureItem}>
+                        <span className={styles.checkIcon}>✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className={styles.purchaseBtn}
+                    onClick={() => handlePurchase(plan.id)}
+                  >
+                    立即购买
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ── Feature Comparison Table ── */}
+        {!loading && Object.keys(featureComparison).length > 0 && (
+          <>
+            <h2 className={styles.sectionHeading}>📊 功能对比</h2>
+            <div className={styles.comparisonTable}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>功能</th>
+                    <th>普通版</th>
+                    <th>进阶版</th>
+                    <th>高级版</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.values(featureComparison).map((row, i) => (
+                    <tr key={i}>
+                      <td className={styles.compLabel}>{row.label}</td>
+                      <td>{row.normal}</td>
+                      <td>{row.advanced}</td>
+                      <td>{row.premium}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {/* ── Available Models per Tier ── */}
+        {!loading && subscriptionPlans.length > 0 && (
+          <>
+            <h2 className={styles.sectionHeading}>🤖 各套餐可用模型</h2>
+            <div className={styles.modelGrid}>
+              {subscriptionPlans.map((plan) => (
+                <div key={plan.id} className={styles.modelCard}>
+                  <h3 className={styles.modelCardTitle}>{planNameMap[plan.id] || plan.id}</h3>
+                  <ul className={styles.modelList}>
+                    {(plan.models || []).map((m, i) => (
+                      <li key={i} className={styles.modelItem}>{m}</li>
+                    ))}
+                  </ul>
                 </div>
-                <div className={styles.quotaDivider} />
-                <div className={styles.quotaItem}>
-                  <span className={styles.quotaLabel}>月限额</span>
-                  <span className={styles.quotaValue}>{plan.monthlyDisplay}</span>
-                </div>
-              </div>
-
-              <ul className={styles.featuresList}>
-                {plan.features.map((feature, i) => (
-                  <li key={i} className={styles.featureItem}>
-                    <span className={styles.checkIcon}>✓</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-                {plan.limitations.map((limitation, i) => (
-                  <li key={`lim-${i}`} className={styles.limitItem}>
-                    <span className={styles.crossIcon}>✗</span>
-                    <span>{limitation}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                variant={plan.popular ? 'primary' : 'secondary'}
-                size="lg"
-                className={styles.purchaseBtn}
-                onClick={() => handlePurchase(plan.id)}
-              >
-                立即购买
-              </Button>
-            </Card>
-          ))}
-        </div>
+              ))}
+            </div>
+          </>
+        )}
 
         <section className={styles.noteSection}>
           <p className={styles.noteText}>
-            所有套餐均按月计费，周额度于每周一自动刷新，月度限额于付费日重置。
+            订阅套餐按月计费，周额度于每周一自动刷新，月度限额于付费日重置。
             随时可升级或降级套餐，差价按比例折算。
+            单次付费模式在客户端激活后开始计时，不可暂停，到期后自动结束。
           </p>
         </section>
       </Container>
