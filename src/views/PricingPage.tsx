@@ -159,6 +159,12 @@ export function PricingPage() {
                     </Badge>
                   </div>
 
+                  <div className={`${styles.planIconGroup} ${(plan.modelLogos?.length || 0) > 4 ? styles.planIconGroupGrid : ''}`}>
+                    {(plan.modelLogos || []).map((logo) => (
+                      <img key={logo.alt} src={logo.src} alt={logo.alt} className={styles.planLogoImg} loading="lazy" title={logo.alt} />
+                    ))}
+                  </div>
+
                   <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
 
                   <div className={styles.priceRow}>
@@ -185,6 +191,12 @@ export function PricingPage() {
                       <li key={i} className={styles.featureItem}>
                         <span className={styles.checkIcon}>✓</span>
                         <span>{feature}</span>
+                      </li>
+                    ))}
+                    {(plan.limitations || []).map((limitation, i) => (
+                      <li key={`lim-${i}`} className={styles.limitItem}>
+                        <span className={styles.crossIcon}>✗</span>
+                        <span>{limitation}</span>
                       </li>
                     ))}
                   </ul>
