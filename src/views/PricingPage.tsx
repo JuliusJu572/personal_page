@@ -8,7 +8,7 @@ import { HomeNavbar } from '../ui/HomeNavbar'
 import { HomeFooter } from '../ui/HomeFooter'
 import { useAuth } from '../lib/authContext'
 import { api } from '../lib/api'
-import type { PricingPlanApi, FeatureComparisonItem } from '../lib/api'
+import type { PricingPlanApi } from '../lib/api'
 import styles from './pricingPage.module.css'
 
 function formatPrice(price: number) {
@@ -19,21 +19,22 @@ function formatNumber(n: number) {
   return n.toLocaleString()
 }
 
+type BillingTab = 'subscription' | 'one_time'
+
 export function PricingPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [subscriptionPlans, setSubscriptionPlans] = useState<PricingPlanApi[]>([])
   const [onetimePlans, setOnetimePlans] = useState<PricingPlanApi[]>([])
-  const [featureComparison, setFeatureComparison] = useState<Record<string, FeatureComparisonItem>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [billingTab, setBillingTab] = useState<BillingTab>('subscription')
 
   useEffect(() => {
     api.getPricing()
       .then((data) => {
         setSubscriptionPlans(data.subscriptionPlans || [])
         setOnetimePlans(data.onetimePlans || [])
-        setFeatureComparison(data.featureComparison || {})
         setLoading(false)
       })
       .catch((err) => {
@@ -58,6 +59,10 @@ export function PricingPage() {
     'onetime-premium': '高级版',
   }
 
+  // Pair subscription and one-time plans by payMode for unified rendering
+  const activePlans = billingTab === 'subscription' ? subscriptionPlans : onetimePlans
+  const isOneTime = billingTab === 'one_time'
+
   return (
     <div className={styles.pageShell}>
       <HomeNavbar />
@@ -66,194 +71,133 @@ export function PricingPage() {
           <div className={styles.bgGlow} />
           <div className={styles.heroContent}>
             <h1 className={styles.title}>选择适合你的算力引擎</h1>
-            <p className={styles.subtitle}>每周自动充能，按需释放潜能</p>
+            <p className={styles.subtitle}>
+              {isOneTime ? '即用即买，灵活释放潜能' : '每周自动充能，按需释放潜能'}
+            </p>
           </div>
         </header>
 
         {loading && <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>加载中...</p>}
         {error && <p style={{ textAlign: 'center', color: '#ff6b6b' }}>{error}</p>}
 
-        {/* ── Subscription Plans ── */}
-        {!loading && subscriptionPlans.length > 0 && (
-          <>
-            <h2 className={styles.sectionHeading}>订阅制套餐 <span className={styles.sectionSub}>按月计费 · 每周自动充能</span></h2>
-            <div className={styles.plansGrid}>
-              {subscriptionPlans.map((plan) => (
-                <Card
-                  key={plan.id}
-                  className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
-                >
-                  {plan.popular && (
-                    <Badge tone="accent" className={styles.popularBadge}>最受欢迎</Badge>
-                  )}
-                  {plan.overseasOnly && (
-                    <Badge tone="warn" className={styles.overseasBadge}>仅海外用户可用</Badge>
-                  )}
-
-                  <div className={`${styles.planIconGroup} ${(plan.modelLogos?.length || 0) > 4 ? styles.planIconGroupGrid : ''}`}>
-                    {(plan.modelLogos || []).map((logo) => (
-                      <img key={logo.alt} src={logo.src} alt={logo.alt} className={styles.planLogoImg} loading="lazy" title={logo.alt} />
-                    ))}
-                  </div>
-
-                  <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
-
-                  <div className={styles.priceRow}>
-                    <span className={styles.price}>{formatPrice(plan.price)}</span>
-                    <span className={styles.period}>/月</span>
-                  </div>
-
-                  <p className={styles.tagline}>{plan.tagline}</p>
-
-                  <div className={styles.quotaInfo}>
-                    <div className={styles.quotaItem}>
-                      <span className={styles.quotaLabel}>周额度</span>
-                      <span className={styles.quotaValue}>{formatNumber(plan.weeklyQuota || 0)}</span>
-                    </div>
-                    <div className={styles.quotaDivider} />
-                    <div className={styles.quotaItem}>
-                      <span className={styles.quotaLabel}>月限额</span>
-                      <span className={styles.quotaValue}>{formatNumber(plan.monthlyLimit || 0)}</span>
-                    </div>
-                  </div>
-
-                  <ul className={styles.featuresList}>
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className={styles.featureItem}>
-                        <span className={styles.checkIcon}>✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {(plan.limitations || []).map((limitation, i) => (
-                      <li key={`lim-${i}`} className={styles.limitItem}>
-                        <span className={styles.crossIcon}>✗</span>
-                        <span>{limitation}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    variant={plan.popular ? 'primary' : 'secondary'}
-                    size="lg"
-                    className={styles.purchaseBtn}
-                    onClick={() => handlePurchase(plan.id)}
-                  >
-                    立即购买
-                  </Button>
-                </Card>
-              ))}
-            </div>
-          </>
+        {/* ── Billing Mode Toggle ── */}
+        {!loading && (
+          <div className={styles.billingToggle}>
+            <button
+              className={`${styles.billingToggleBtn} ${billingTab === 'subscription' ? styles.billingToggleBtnActive : ''}`}
+              onClick={() => setBillingTab('subscription')}
+            >
+              月包制
+            </button>
+            <button
+              className={`${styles.billingToggleBtn} ${billingTab === 'one_time' ? styles.billingToggleBtnActive : ''}`}
+              onClick={() => setBillingTab('one_time')}
+            >
+              单次制
+            </button>
+          </div>
         )}
 
-        {/* ── One-Time Plans ── */}
-        {!loading && onetimePlans.length > 0 && (
-          <>
-            <h2 className={styles.sectionHeading}>单次付费模式 <span className={styles.sectionSub}>即用即买 · 限时体验</span></h2>
-            <div className={styles.plansGrid}>
-              {onetimePlans.map((plan) => (
-                <Card key={plan.id} className={styles.planCard}>
-                  <div className={styles.onetimeBadgeArea}>
-                    <Badge tone="accent" className={styles.onetimeBadge}>
-                      {plan.durationDisplay} 限时
-                    </Badge>
-                  </div>
+        {/* ── Plan Cards (shared layout) ── */}
+        {!loading && activePlans.length > 0 && (
+          <div className={styles.plansGrid}>
+            {activePlans.map((plan) => (
+              <Card
+                key={plan.id}
+                className={`${styles.planCard} ${plan.popular ? styles.planCardPopular : ''}`}
+              >
+                {plan.popular && (
+                  <Badge tone="accent" className={styles.popularBadge}>最受欢迎</Badge>
+                )}
+                {plan.overseasOnly && (
+                  <Badge tone="warn" className={styles.overseasBadge}>仅海外用户可用</Badge>
+                )}
+                {isOneTime && (
+                  <Badge tone="accent" className={styles.onetimeTimeBadge}>
+                    {plan.durationDisplay} 限时
+                  </Badge>
+                )}
 
-                  <div className={`${styles.planIconGroup} ${(plan.modelLogos?.length || 0) > 4 ? styles.planIconGroupGrid : ''}`}>
-                    {(plan.modelLogos || []).map((logo) => (
-                      <img key={logo.alt} src={logo.src} alt={logo.alt} className={styles.planLogoImg} loading="lazy" title={logo.alt} />
-                    ))}
-                  </div>
-
-                  <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
-
-                  <div className={styles.priceRow}>
-                    <span className={styles.price}>{formatPrice(plan.price)}</span>
-                    <span className={styles.period}>/次</span>
-                  </div>
-
-                  <p className={styles.tagline}>{plan.tagline}</p>
-
-                  <div className={styles.quotaInfo}>
-                    <div className={styles.quotaItem}>
-                      <span className={styles.quotaLabel}>算力额度</span>
-                      <span className={styles.quotaValue}>{formatNumber(plan.quota || 0)}</span>
-                    </div>
-                    <div className={styles.quotaDivider} />
-                    <div className={styles.quotaItem}>
-                      <span className={styles.quotaLabel}>限时</span>
-                      <span className={styles.quotaValue}>{plan.durationDisplay}</span>
-                    </div>
-                  </div>
-
-                  <ul className={styles.featuresList}>
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className={styles.featureItem}>
-                        <span className={styles.checkIcon}>✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                    {(plan.limitations || []).map((limitation, i) => (
-                      <li key={`lim-${i}`} className={styles.limitItem}>
-                        <span className={styles.crossIcon}>✗</span>
-                        <span>{limitation}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    variant="secondary"
-                    size="lg"
-                    className={styles.purchaseBtn}
-                    onClick={() => handlePurchase(plan.id)}
-                  >
-                    立即购买
-                  </Button>
-                </Card>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── Feature Comparison Table ── */}
-        {!loading && Object.keys(featureComparison).length > 0 && (
-          <>
-            <h2 className={styles.sectionHeading}>功能对比</h2>
-            <div className={styles.comparisonTable}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>功能</th>
-                    <th>普通版</th>
-                    <th>进阶版</th>
-                    <th>高级版</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.values(featureComparison).map((row, i) => (
-                    <tr key={i}>
-                      <td className={styles.compLabel}>{row.label}</td>
-                      <td>{row.normal}</td>
-                      <td>{row.advanced}</td>
-                      <td>{row.premium}</td>
-                    </tr>
+                <div className={`${styles.planIconGroup} ${(plan.modelLogos?.length || 0) > 4 ? styles.planIconGroupGrid : ''}`}>
+                  {(plan.modelLogos || []).map((logo) => (
+                    <img key={logo.alt} src={logo.src} alt={logo.alt} className={styles.planLogoImg} loading="lazy" title={logo.alt} />
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </>
+                </div>
+
+                <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
+
+                <div className={styles.priceRow}>
+                  <span className={styles.price}>{formatPrice(plan.price)}</span>
+                  <span className={styles.period}>{isOneTime ? '/次' : '/月'}</span>
+                </div>
+
+                <p className={styles.tagline}>{plan.tagline}</p>
+
+                <div className={styles.quotaInfo}>
+                  {isOneTime ? (
+                    <>
+                      <div className={styles.quotaItem}>
+                        <span className={styles.quotaLabel}>算力额度</span>
+                        <span className={styles.quotaValue}>{formatNumber(plan.quota || 0)}</span>
+                      </div>
+                      <div className={styles.quotaDivider} />
+                      <div className={styles.quotaItem}>
+                        <span className={styles.quotaLabel}>限时</span>
+                        <span className={styles.quotaValue}>{plan.durationDisplay}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className={styles.quotaItem}>
+                        <span className={styles.quotaLabel}>周额度</span>
+                        <span className={styles.quotaValue}>{formatNumber(plan.weeklyQuota || 0)}</span>
+                      </div>
+                      <div className={styles.quotaDivider} />
+                      <div className={styles.quotaItem}>
+                        <span className={styles.quotaLabel}>月限额</span>
+                        <span className={styles.quotaValue}>{formatNumber(plan.monthlyLimit || 0)}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <ul className={styles.featuresList}>
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className={styles.featureItem}>
+                      <span className={styles.checkIcon}>✓</span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                  {(plan.limitations || []).map((limitation, i) => (
+                    <li key={`lim-${i}`} className={styles.limitItem}>
+                      <span className={styles.crossIcon}>✗</span>
+                      <span>{limitation}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  variant={plan.popular ? 'primary' : 'secondary'}
+                  size="lg"
+                  className={styles.purchaseBtn}
+                  onClick={() => handlePurchase(plan.id)}
+                >
+                  立即购买
+                </Button>
+              </Card>
+            ))}
+          </div>
         )}
 
-        {/* ── Available Models per Tier ── */}
+        {/* ── Available Models per Tier (subscription only, same for one-time) ── */}
         {!loading && subscriptionPlans.length > 0 && (
           <>
             <h2 className={styles.sectionHeading}>各套餐可用模型</h2>
             <div className={styles.modelGrid}>
-              {[...subscriptionPlans, ...onetimePlans].filter(plan => (plan.models || []).length > 0).map((plan) => (
+              {subscriptionPlans.filter(plan => (plan.models || []).length > 0).map((plan) => (
                 <div key={plan.id} className={styles.modelCard}>
                   <h3 className={styles.modelCardTitle}>
                     {planNameMap[plan.id] || plan.id}
-                    {plan.billingType === 'one_time' && <span className={styles.modelCardTag}>单次</span>}
                   </h3>
                   <ul className={styles.modelList}>
                     {(plan.models || []).map((m, i) => (
