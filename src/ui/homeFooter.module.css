@@ -61,6 +61,25 @@
   white-space: nowrap;
 }
 
+.footerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.company {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.02em;
+}
+
+.companyEn {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.01em;
+}
+
 @media (max-width: 768px) {
   .footerInner {
     flex-direction: column;

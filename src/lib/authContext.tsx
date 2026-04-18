@@ -4,6 +4,8 @@ import { api } from './api'
 type UserInfo = {
   id: number
   username: string
+  email: string
+  inviteCode: string
   role: string
   frozen: boolean
   quotaTokens: number
@@ -22,7 +24,7 @@ type AuthContextValue = {
   loading: boolean
   refresh: () => Promise<void>
   login: (username: string, password: string) => Promise<void>
-  register: (username: string, password: string) => Promise<void>
+  register: (username: string, email: string, password: string, code: string, inviteCode?: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -30,8 +32,8 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   loading: true,
   refresh: async () => {},
-  login: async (_username: string, _password: string) => {},
-  register: async (_username: string, _password: string) => {},
+  login: async () => {},
+  register: async () => {},
   logout: async () => {},
 })
 
@@ -45,6 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser({
         id: data.user.id,
         username: data.user.username,
+        email: data.user.email || '',
+        inviteCode: data.user.inviteCode || '',
         role: data.user.role,
         frozen: data.user.frozen,
         quotaTokens: data.user.quotaTokens,
@@ -72,8 +76,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh])
 
   /** Register: server sets HttpOnly cookie; we then refresh user info. */
-  const register = useCallback(async (username: string, password: string) => {
-    await api.register(username, password)
+  const register = useCallback(async (username: string, email: string, password: string, code: string, inviteCode?: string) => {
+    await api.register(username, email, password, code, inviteCode)
     await refresh()
   }, [refresh])
 

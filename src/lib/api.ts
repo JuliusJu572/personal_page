@@ -80,6 +80,8 @@ export interface MeResponse {
   user: {
     id: number
     username: string
+    email: string
+    inviteCode: string
     licenseKey: string
     licenseType: string
     payMode: number
@@ -195,10 +197,17 @@ export const api = {
     })
   },
 
-  register(username: string, password: string) {
+  register(username: string, email: string, password: string, code: string, inviteCode?: string) {
     return request<RegisterResponse>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, email, password, code, inviteCode: inviteCode || undefined }),
+    })
+  },
+
+  sendVerificationCode(email: string) {
+    return request<{ success: boolean; message: string }>('/auth/send-code', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
     })
   },
 

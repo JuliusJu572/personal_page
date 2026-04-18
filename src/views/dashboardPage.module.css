@@ -265,3 +265,53 @@
     align-items: flex-start;
   }
 }
+
+/* ── Invite Section ── */
+.inviteSection {
+  margin-top: var(--spacing-xl);
+}
+
+.inviteCard {
+  text-align: center;
+}
+
+.inviteDesc {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 8px 0 20px;
+}
+
+.inviteCodeRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: rgba(0, 82, 204, 0.1);
+  border: 1px solid rgba(0, 114, 227, 0.25);
+  border-radius: 12px;
+}
+
+.inviteCodeText {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #5ac8fa;
+  font-family: 'Courier New', monospace;
+}
+
+.copyBtn {
+  padding: 6px 16px;
+  border-radius: 8px;
+  background: rgba(0, 113, 227, 0.2);
+  border: 1px solid rgba(0, 150, 255, 0.3);
+  color: #5ac8fa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background: rgba(0, 113, 227, 0.35);
+  border-color: rgba(0, 150, 255, 0.5);
+}

@@ -12,7 +12,11 @@ export function HomeFooter() {
           <a href="/terms" className={styles.footerLink}>用户服务协议</a>
           <a href="/privacy" className={styles.footerLink}>隐私政策</a>
         </nav>
-        <span className={styles.copyright}>© {new Date().getFullYear()} Daedalus Tech</span>
+        <div className={styles.footerRight}>
+          <span className={styles.company}>上海岱达罗智信息科技有限公司</span>
+          <span className={styles.companyEn}>Shanghai Daedalus Intelligence Technology Co., Ltd.</span>
+          <span className={styles.copyright}>© {new Date().getFullYear()} Daedalus Tech</span>
+        </div>
       </div>
     </footer>
   )
