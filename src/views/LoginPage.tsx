@@ -94,6 +94,9 @@ export function LoginPage() {
               还没有账户？{' '}
               <Link to="/register" className={styles.link}>立即注册</Link>
             </p>
+            <p className={styles.switchText}>
+              <Link to="/forgot-password" className={styles.link}>忘记密码？</Link>
+            </p>
           </form>
         </div>
       </main>

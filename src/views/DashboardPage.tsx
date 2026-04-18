@@ -195,8 +195,11 @@ export function DashboardPage() {
             <Card className={styles.inviteCard}>
               <h2 className={styles.sectionTitle}>邀请好友</h2>
               <p className={styles.inviteDesc}>分享您的邀请码，双方均可获得 7 天进阶版试用</p>
-              <div className={styles.inviteCodeRow}>
-                <span className={styles.inviteCodeText}>{user.inviteCode}</span>
+              <div className={styles.inviteCodeGroup}>
+                <div>
+                  <div className={styles.inviteCodeLabel}>我的邀请码</div>
+                  <div className={styles.inviteCodeText}>{user.inviteCode}</div>
+                </div>
                 <button
                   className={styles.copyBtn}
                   onClick={() => {

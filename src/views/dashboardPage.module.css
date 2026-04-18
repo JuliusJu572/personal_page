@@ -268,50 +268,79 @@
 
 /* ── Invite Section ── */
 .inviteSection {
-  margin-top: var(--spacing-xl);
+  margin-top: var(--spacing-3xl);
 }
 
 .inviteCard {
-  text-align: center;
+  padding: var(--spacing-2xl);
+  background: rgba(14, 20, 38, 0.82);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(0, 113, 227, 0.14);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.inviteCard:hover {
+  background: rgba(12, 18, 34, 0.9);
+  border-color: rgba(0, 150, 255, 0.28);
+  box-shadow: 0 16px 46px rgba(0, 50, 120, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .inviteDesc {
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.45);
-  margin: 8px 0 20px;
+  font-size: 13px;
+  color: rgba(150, 214, 255, 0.7);
+  margin: 4px 0 var(--spacing-xl);
+  letter-spacing: 0.02em;
 }
 
-.inviteCodeRow {
-  display: inline-flex;
+.inviteCodeGroup {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-xl);
+  background: rgba(10, 24, 52, 0.56);
+  border: 1px solid rgba(0, 113, 227, 0.14);
+  display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  background: rgba(0, 82, 204, 0.1);
-  border: 1px solid rgba(0, 114, 227, 0.25);
-  border-radius: 12px;
+  justify-content: space-between;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inviteCodeGroup:hover {
+  background: rgba(12, 18, 34, 0.88);
+  border-color: rgba(0, 150, 255, 0.3);
+  box-shadow: 0 12px 30px rgba(0, 50, 120, 0.18);
+}
+
+.inviteCodeLabel {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: rgba(150, 214, 255, 0.88);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .inviteCodeText {
-  font-size: 22px;
+  font-family: 'Orbitron', 'SF Mono', 'Courier New', monospace;
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: 0.2em;
-  color: #5ac8fa;
-  font-family: 'Courier New', monospace;
+  letter-spacing: 0.25em;
+  color: rgba(189, 231, 255, 0.95);
 }
 
 .copyBtn {
-  padding: 6px 16px;
+  padding: 8px 18px;
   border-radius: 8px;
-  background: rgba(0, 113, 227, 0.2);
-  border: 1px solid rgba(0, 150, 255, 0.3);
-  color: #5ac8fa;
+  background: linear-gradient(135deg, rgba(0, 61, 153, 0.5), rgba(0, 113, 227, 0.4));
+  border: 1px solid rgba(0, 150, 255, 0.25);
+  color: #fff;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  letter-spacing: 0.02em;
 }
 
 .copyBtn:hover {
-  background: rgba(0, 113, 227, 0.35);
-  border-color: rgba(0, 150, 255, 0.5);
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.6), rgba(51, 153, 255, 0.5));
+  border-color: rgba(0, 150, 255, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 82, 204, 0.3);
 }

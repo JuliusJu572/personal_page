@@ -211,6 +211,20 @@ export const api = {
     })
   },
 
+  forgotPassword(email: string) {
+    return request<{ success: boolean; message: string }>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  },
+
+  resetPassword(email: string, code: string, newPassword: string) {
+    return request<{ success: boolean; message: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ email, code, newPassword }),
+    })
+  },
+
   getMe() {
     return request<MeResponse>('/auth/me')
   },

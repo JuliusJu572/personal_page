@@ -12,6 +12,7 @@ import { TermsPage } from '../views/TermsPage'
 import { NotFoundPage } from '../views/NotFoundPage'
 import { RegisterPage } from '../views/RegisterPage'
 import { LoginPage } from '../views/LoginPage'
+import { ForgotPasswordPage } from '../views/ForgotPasswordPage'
 import { PricingPage } from '../views/PricingPage'
 import { DashboardPage } from '../views/DashboardPage'
 import { PaymentResultPage } from '../views/PaymentResultPage'
@@ -37,6 +38,7 @@ export function AppRoutes() {
         <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="forgot-password" element={<ForgotPasswordPage />} />
         <Route path="pricing" element={<PricingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
