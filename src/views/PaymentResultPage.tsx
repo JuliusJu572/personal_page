@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Container } from '../ui/Container'
-import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { HomeNavbar } from '../ui/HomeNavbar'
 import { HomeFooter } from '../ui/HomeFooter'
@@ -22,7 +21,7 @@ const planNameMap: Record<string, string> = {
 export function PaymentResultPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  // Alipay redirects with out_trade_no; our own flow uses orderNo
+  // Alipay redirects with out_trade_no; our own return route uses orderNo
   const orderNo = searchParams.get('orderNo') || searchParams.get('out_trade_no') || ''
   const [status, setStatus] = useState<OrderStatus>('loading')
   const [planName, setPlanName] = useState('')
@@ -36,7 +35,7 @@ export function PaymentResultPage() {
     }
 
     let attempts = 0
-    const maxAttempts = 30 // poll for ~60 seconds
+    const maxAttempts = 60
 
     const poll = async () => {
       try {
@@ -56,13 +55,16 @@ export function PaymentResultPage() {
           }
         }
       } catch {
-        setStatus('error')
-        if (pollRef.current) clearInterval(pollRef.current)
+        if (attempts === 0) {
+          setStatus('error')
+          if (pollRef.current) clearInterval(pollRef.current)
+        }
+        attempts++
       }
     }
 
     poll()
-    pollRef.current = setInterval(poll, 2000)
+    pollRef.current = setInterval(poll, 3000)
 
     return () => {
       if (pollRef.current) clearInterval(pollRef.current)
@@ -73,32 +75,35 @@ export function PaymentResultPage() {
     <div className={styles.pageShell}>
       <HomeNavbar />
       <Container className={styles.page}>
-        <Card className={styles.resultCard}>
+        <div className={styles.resultCard}>
           {status === 'loading' && (
             <div className={styles.statusBlock}>
               <div className={styles.spinner} />
-              <h2 className={styles.statusTitle}>查询支付结果...</h2>
+              <h2 className={styles.statusTitle}>查询支付结果</h2>
             </div>
           )}
 
           {status === 'pending' && (
             <div className={styles.statusBlock}>
-              <div className={styles.spinner} />
-              <h2 className={styles.statusTitle}>等待支付确认中...</h2>
+              <div className={styles.pendingIcon}>⏳</div>
+              <h2 className={styles.statusTitle}>等待支付确认</h2>
               <p className={styles.statusDesc}>
-                订单号：{orderNo}
+                已完成支付？系统正在与支付宝同步，请稍候...
               </p>
-              <p className={styles.statusDesc}>
-                如果您已完成支付，请稍候片刻，系统正在确认...
-              </p>
+              <span className={styles.orderNo}>{orderNo}</span>
+              <div className={styles.actions}>
+                <Button variant="secondary" onClick={() => navigate('/dashboard')}>
+                  先去控制台看看
+                </Button>
+              </div>
             </div>
           )}
 
           {status === 'paid' && (
             <div className={styles.statusBlock}>
               <div className={styles.successIcon}>✓</div>
-              <h2 className={styles.statusTitle}>支付成功！</h2>
-              <p className={styles.statusDesc}>
+              <h2 className={styles.statusTitle}>支付成功</h2>
+              <p className={styles.planInfo}>
                 {planName} · {amount}
               </p>
               <p className={styles.statusDesc}>
@@ -120,7 +125,7 @@ export function PaymentResultPage() {
               <div className={styles.errorIcon}>✗</div>
               <h2 className={styles.statusTitle}>查询失败</h2>
               <p className={styles.statusDesc}>
-                {orderNo ? `未找到订单 ${orderNo}，请检查是否已登录。` : '缺少订单号参数。'}
+                {orderNo ? `未找到订单 ${orderNo}，请确认已登录` : '缺少订单号参数'}
               </p>
               <div className={styles.actions}>
                 <Button variant="secondary" onClick={() => navigate('/pricing')}>
@@ -129,7 +134,7 @@ export function PaymentResultPage() {
               </div>
             </div>
           )}
-        </Card>
+        </div>
       </Container>
       <HomeFooter />
     </div>
