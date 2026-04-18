@@ -71,6 +71,27 @@ export function DashboardPage() {
   const payModeLabelMap: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
   const displayPayModeLabel = payModeLabelMap[data.payMode] || data.payModeLabel
 
+  const isOneTime = data.billingType === 'one_time'
+
+  // One-time session helpers
+  const onetimeTotal = data.currentPoints + data.weeklyUsedPoints // approximate total quota
+  const onetimeUsed = data.weeklyUsedPoints
+  const onetimeRemaining = Math.max(0, data.currentPoints)
+  const onetimeRatio = onetimeTotal > 0 ? onetimeRemaining / onetimeTotal : 0
+  const onetimePercent = Math.max(0, Math.min(100, onetimeRatio * 100))
+
+  function getSessionTimeLeft(): string {
+    if (!data?.expiresAt) return '未激活'
+    const now = new Date()
+    const expires = new Date(data.expiresAt)
+    const diff = expires.getTime() - now.getTime()
+    if (diff <= 0) return '已过期'
+    const hours = Math.floor(diff / (1000 * 60 * 60))
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    if (hours > 0) return `${hours}小时 ${mins}分钟`
+    return `${mins}分钟`
+  }
+
   return (
     <div className={styles.pageShell}>
       <HomeNavbar />
@@ -79,7 +100,7 @@ export function DashboardPage() {
           <h1 className={styles.title}>工作台</h1>
           <div className={styles.userInfo}>
             <span className={styles.userName}>{user?.username}</span>
-            <Badge tone="accent">{displayPayModeLabel}</Badge>
+            <Badge tone="accent">{displayPayModeLabel}{isOneTime ? ' · 单次' : ''}</Badge>
             {user?.expiresAt && (
               <span className={styles.expiresAt}>
                 到期: {new Date(user.expiresAt).toLocaleDateString('zh-CN')}
@@ -92,33 +113,71 @@ export function DashboardPage() {
           <Card className={styles.energyCard}>
             <h2 className={styles.sectionTitle}>算力能量槽</h2>
 
-            <div className={styles.barGroup}>
-              <div className={styles.barHeader}>
-                <span className={styles.barLabel}>周额度</span>
-                <span className={styles.barPercent}>{weeklyPercent.toFixed(1)}%</span>
-              </div>
-              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(weeklyRatio) } as React.CSSProperties}>
-                <div className={styles.barFill} style={{ width: `${weeklyPercent}%` }} />
-              </div>
-              <div className={styles.barTooltip}>
-                <span>剩余: {formatNumber(weeklyRemainingPoints)} / {formatNumber(data.weeklyQuota)}</span>
-                <span className={styles.resetHint}>距下周刷新还有 {getTimeUntil(data.nextWeeklyReset)}</span>
-              </div>
-            </div>
+            {isOneTime ? (
+              <>
+                {/* ── One-time session display ── */}
+                <div className={styles.barGroup}>
+                  <div className={styles.barHeader}>
+                    <span className={styles.barLabel}>算力余额</span>
+                    <span className={styles.barPercent}>{onetimePercent.toFixed(1)}%</span>
+                  </div>
+                  <div className={styles.barTrack} style={{ '--bar-color': getBarColor(onetimeRatio) } as React.CSSProperties}>
+                    <div className={styles.barFill} style={{ width: `${onetimePercent}%` }} />
+                  </div>
+                  <div className={styles.barTooltip}>
+                    <span>剩余: {formatNumber(onetimeRemaining)} / {formatNumber(onetimeTotal)}</span>
+                    <span className={styles.resetHint}>已消耗: {formatNumber(onetimeUsed)}</span>
+                  </div>
+                </div>
 
-            <div className={styles.barGroup}>
-              <div className={styles.barHeader}>
-                <span className={styles.barLabel}>月度总额度</span>
-                <span className={styles.barPercent}>{monthlyPercent.toFixed(1)}%</span>
-              </div>
-              <div className={styles.barTrack} style={{ '--bar-color': getBarColor(monthlyRatio) } as React.CSSProperties}>
-                <div className={`${styles.barFill} ${styles.barFillMonthly}`} style={{ width: `${monthlyPercent}%` }} />
-              </div>
-              <div className={styles.barTooltip}>
-                <span>剩余: {formatNumber(monthlyRemainingPoints)} / {formatNumber(data.monthlyLimit)}</span>
-                <span className={styles.resetHint}>距月度刷新还有 {getTimeUntil(data.nextMonthlyReset)}</span>
-              </div>
-            </div>
+                <div className={styles.barGroup}>
+                  <div className={styles.barHeader}>
+                    <span className={styles.barLabel}>剩余时间</span>
+                  </div>
+                  <div className={styles.barTooltip}>
+                    <span style={{ fontSize: '1.25rem', fontWeight: 600, color: 'rgba(255,255,255,0.95)' }}>
+                      {getSessionTimeLeft()}
+                    </span>
+                    {data.expiresAt && (
+                      <span className={styles.resetHint}>
+                        到期: {new Date(data.expiresAt).toLocaleString('zh-CN')}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* ── Subscription display ── */}
+                <div className={styles.barGroup}>
+                  <div className={styles.barHeader}>
+                    <span className={styles.barLabel}>周额度</span>
+                    <span className={styles.barPercent}>{weeklyPercent.toFixed(1)}%</span>
+                  </div>
+                  <div className={styles.barTrack} style={{ '--bar-color': getBarColor(weeklyRatio) } as React.CSSProperties}>
+                    <div className={styles.barFill} style={{ width: `${weeklyPercent}%` }} />
+                  </div>
+                  <div className={styles.barTooltip}>
+                    <span>剩余: {formatNumber(weeklyRemainingPoints)} / {formatNumber(data.weeklyQuota)}</span>
+                    <span className={styles.resetHint}>距下周刷新还有 {getTimeUntil(data.nextWeeklyReset)}</span>
+                  </div>
+                </div>
+
+                <div className={styles.barGroup}>
+                  <div className={styles.barHeader}>
+                    <span className={styles.barLabel}>月度总额度</span>
+                    <span className={styles.barPercent}>{monthlyPercent.toFixed(1)}%</span>
+                  </div>
+                  <div className={styles.barTrack} style={{ '--bar-color': getBarColor(monthlyRatio) } as React.CSSProperties}>
+                    <div className={`${styles.barFill} ${styles.barFillMonthly}`} style={{ width: `${monthlyPercent}%` }} />
+                  </div>
+                  <div className={styles.barTooltip}>
+                    <span>剩余: {formatNumber(monthlyRemainingPoints)} / {formatNumber(data.monthlyLimit)}</span>
+                    <span className={styles.resetHint}>距月度刷新还有 {getTimeUntil(data.nextMonthlyReset)}</span>
+                  </div>
+                </div>
+              </>
+            )}
           </Card>
         </section>
 

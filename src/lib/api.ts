@@ -112,6 +112,9 @@ export interface DashboardResponse {
   serverTime: string
   payMode: number
   payModeLabel: string
+  billingType: 'subscription' | 'one_time'
+  sessionStartedAt: string | null
+  expiresAt: string | null
   weekCallCount: number
   topModels: Array<{ model: string; count: number }>
 }
