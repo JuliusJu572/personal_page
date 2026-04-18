@@ -14,6 +14,7 @@ import { RegisterPage } from '../views/RegisterPage'
 import { LoginPage } from '../views/LoginPage'
 import { PricingPage } from '../views/PricingPage'
 import { DashboardPage } from '../views/DashboardPage'
+import { PaymentResultPage } from '../views/PaymentResultPage'
 
 export function AppRoutes() {
   return (
@@ -25,6 +26,7 @@ export function AppRoutes() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/payment/result" element={<PaymentResultPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
 
       <Route element={<AppLayout />}>

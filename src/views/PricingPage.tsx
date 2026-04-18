@@ -43,10 +43,26 @@ export function PricingPage() {
       })
   }, [])
 
-  const handlePurchase = (_planId: string) => {
+  const [purchasing, setPurchasing] = useState<string | null>(null)
+
+  const handlePurchase = async (planId: string) => {
     if (!user) {
       navigate('/login?redirect=/pricing')
       return
+    }
+
+    setPurchasing(planId)
+    try {
+      const billingType = isOneTime ? 'one_time' : 'subscription'
+      const data = await api.createPayment(planId, billingType as 'subscription' | 'one_time')
+      if (data.payUrl) {
+        // Redirect to Alipay payment page
+        window.location.href = data.payUrl
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '创建订单失败')
+    } finally {
+      setPurchasing(null)
     }
   }
 
@@ -181,8 +197,9 @@ export function PricingPage() {
                   size="lg"
                   className={styles.purchaseBtn}
                   onClick={() => handlePurchase(plan.id)}
+                  disabled={purchasing === plan.id}
                 >
-                  立即购买
+                  {purchasing === plan.id ? '正在跳转...' : '立即购买'}
                 </Button>
               </Card>
             ))}

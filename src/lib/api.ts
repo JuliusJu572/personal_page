@@ -247,6 +247,28 @@ export const api = {
   getPricing() {
     return request<PricingResponse>('/api/pricing')
   },
+
+  createPayment(planId: string, billingType: 'subscription' | 'one_time') {
+    return request<{ success: boolean; payUrl: string; outTradeNo: string }>('/api/payment/create', {
+      method: 'POST',
+      body: JSON.stringify({ planId, billingType }),
+    })
+  },
+
+  getPaymentStatus(orderNo: string) {
+    return request<{
+      success: boolean
+      order: {
+        out_trade_no: string
+        plan_id: string
+        billing_type: string
+        pay_mode: number
+        amount: string
+        status: string
+        paid_at: string | null
+      }
+    }>(`/api/payment/status/${orderNo}`)
+  },
 }
 
 export { ApiError }
