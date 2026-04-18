@@ -29,6 +29,7 @@ export function PricingPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [billingTab, setBillingTab] = useState<BillingTab>('subscription')
+  const [eligibility, setEligibility] = useState<Record<string, { canPurchase: boolean; reason: string; isUpgrade: boolean; upgradePrice: number | null; isCurrent: boolean }>>({})
 
   useEffect(() => {
     api.getPricing()
@@ -42,6 +43,19 @@ export function PricingPage() {
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    if (!user) return
+    api.getEligibility()
+      .then((data) => {
+        const map: Record<string, typeof eligibility[string]> = {}
+        for (const p of data.plans) {
+          map[p.planId] = { canPurchase: p.canPurchase, reason: p.reason, isUpgrade: p.isUpgrade, upgradePrice: p.upgradePrice, isCurrent: p.isCurrent }
+        }
+        setEligibility(map)
+      })
+      .catch(() => {})
+  }, [user])
 
   const [purchasing, setPurchasing] = useState<string | null>(null)
 
@@ -105,12 +119,20 @@ export function PricingPage() {
             >
               月包制
             </button>
-            <button
-              className={`${styles.billingToggleBtn} ${billingTab === 'one_time' ? styles.billingToggleBtnActive : ''}`}
-              onClick={() => setBillingTab('one_time')}
-            >
-              单次制
-            </button>
+            {(() => {
+              const onetimeBlocked = ['onetime-normal', 'onetime-advanced', 'onetime-premium'].every(
+                id => eligibility[id] && !eligibility[id].canPurchase
+              )
+              return (
+                <button
+                  className={`${styles.billingToggleBtn} ${billingTab === 'one_time' ? styles.billingToggleBtnActive : ''}`}
+                  onClick={() => setBillingTab('one_time')}
+                  title={onetimeBlocked ? '月包有效期内不可购买单次制' : ''}
+                >
+                  单次制{onetimeBlocked ? ' 🔒' : ''}
+                </button>
+              )
+            })()}
           </div>
         )}
 
@@ -192,15 +214,31 @@ export function PricingPage() {
                   ))}
                 </ul>
 
-                <Button
-                  variant={plan.popular ? 'primary' : 'secondary'}
-                  size="lg"
-                  className={styles.purchaseBtn}
-                  onClick={() => handlePurchase(plan.id)}
-                  disabled={purchasing === plan.id}
-                >
-                  {purchasing === plan.id ? '正在跳转...' : '立即购买'}
-                </Button>
+                {(() => {
+                  const elig = eligibility[plan.id]
+                  const disabled = purchasing === plan.id || (elig && !elig.canPurchase)
+                  const isCurrent = elig?.isCurrent
+                  const isUpgrade = elig?.isUpgrade
+
+                  let label = '立即购买'
+                  if (purchasing === plan.id) label = '正在跳转...'
+                  else if (isCurrent) label = '当前套餐'
+                  else if (elig && !elig.canPurchase) label = elig.reason || '不可购买'
+                  else if (isUpgrade && elig?.upgradePrice != null) label = `升级 ¥${elig.upgradePrice.toFixed(2)}`
+
+                  return (
+                    <Button
+                      variant={isCurrent ? 'secondary' : (plan.popular ? 'primary' : 'secondary')}
+                      size="lg"
+                      className={styles.purchaseBtn}
+                      onClick={() => handlePurchase(plan.id)}
+                      disabled={disabled}
+                      title={elig?.reason || ''}
+                    >
+                      {label}
+                    </Button>
+                  )
+                })()}
               </Card>
             ))}
           </div>
@@ -230,7 +268,8 @@ export function PricingPage() {
         <section className={styles.noteSection}>
           <p className={styles.noteText}>
             订阅套餐按月计费，周额度于每周一自动刷新，月度限额于付费日重置。
-            随时可升级或降级套餐，差价按比例折算。
+            月包用户可随时升级更高套餐，剩余时间按比例折算为抵扣金额。
+            月包有效期内不可购买单次制，套餐过期后可自由选择任意计划。
             单次付费模式在客户端激活后开始计时，不可暂停，到期后自动结束。
           </p>
         </section>

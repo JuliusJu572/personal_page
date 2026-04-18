@@ -272,6 +272,27 @@ export const api = {
       }
     }>(`/api/payment/status/${orderNo}`)
   },
+
+  getEligibility() {
+    return request<{
+      success: boolean
+      currentPayMode: number
+      billingType: string
+      isActive: boolean
+      plans: Array<{
+        planId: string
+        billingType: string
+        payMode: number
+        label: string
+        price: number
+        canPurchase: boolean
+        reason: string
+        isUpgrade: boolean
+        upgradePrice: number | null
+        isCurrent: boolean
+      }>
+    }>('/api/payment/eligibility')
+  },
 }
 
 export { ApiError }
