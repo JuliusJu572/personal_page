@@ -166,14 +166,8 @@ export function PricingPage() {
                 <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
 
                 <div className={styles.priceRow}>
-                  {plan.price === 0 ? (
-                    <span className={styles.price}>免费</span>
-                  ) : (
-                    <>
-                      <span className={styles.price}>{formatPrice(plan.price)}</span>
-                      <span className={styles.period}>{isOneTime ? '/次' : '/月'}</span>
-                    </>
-                  )}
+                  <span className={styles.price}>{formatPrice(plan.price)}</span>
+                  <span className={styles.period}>{isOneTime ? '/次' : '/月'}</span>
                 </div>
 
                 <p className={styles.tagline}>{plan.tagline}</p>
