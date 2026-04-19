@@ -17,6 +17,7 @@ export function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [inviteCode, setInviteCode] = useState('')
   const [error, setError] = useState('')
+  const [resendHint, setResendHint] = useState('')
   const [loading, setLoading] = useState(false)
   const [countdown, setCountdown] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -85,6 +86,10 @@ export function RegisterPage() {
       setError('密码至少 8 位')
       return
     }
+    if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+      setError('密码需包含字母和数字')
+      return
+    }
     setLoading(true)
     try {
       await register(username, email, password, code, inviteCode || undefined)
@@ -103,6 +108,7 @@ export function RegisterPage() {
     try {
       await api.sendVerificationCode(email)
       startCountdown()
+      setResendHint('新验证码已发送，之前的验证码已失效')
     } catch (err: any) {
       setError(err.message || '发送验证码失败')
     } finally {
@@ -209,13 +215,14 @@ export function RegisterPage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setStep('email'); setError('') }}
+                  onClick={() => { setStep('email'); setError(''); setResendHint('') }}
                   className={styles.resendBtn}
                 >
                   更换邮箱
                 </button>
               </div>
 
+              {resendHint && <div className={styles.resendHint}>{resendHint}</div>}
               {error && <div className={styles.error}>{error}</div>}
 
               <button
@@ -223,7 +230,7 @@ export function RegisterPage() {
                 disabled={code.length !== 6}
                 className={styles.submitBtn}
               >
-                验证
+                下一步
               </button>
             </form>
           )}
@@ -237,15 +244,16 @@ export function RegisterPage() {
                   id="username"
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="3-20位，字母、数字、下划线"
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                  placeholder="3-20位，小写字母、数字、下划线"
                   required
                   minLength={3}
                   maxLength={20}
-                  pattern="[a-zA-Z0-9_]{3,20}"
+                  pattern="[a-z0-9_]{3,20}"
                   autoComplete="username"
                   className={styles.input}
                 />
+                <span className={styles.fieldHint}>用户名仅支持小写字母、数字和下划线</span>
               </div>
 
               <div className={styles.field}>

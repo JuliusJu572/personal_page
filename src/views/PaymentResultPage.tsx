@@ -7,7 +7,7 @@ import { HomeFooter } from '../ui/HomeFooter'
 import { api } from '../lib/api'
 import styles from './paymentResultPage.module.css'
 
-type OrderStatus = 'loading' | 'paid' | 'pending' | 'error'
+type OrderStatus = 'loading' | 'paid' | 'pending' | 'timeout' | 'error'
 
 const planNameMap: Record<string, string> = {
   normal: '普通版月包',
@@ -26,6 +26,7 @@ export function PaymentResultPage() {
   const [status, setStatus] = useState<OrderStatus>('loading')
   const [planName, setPlanName] = useState('')
   const [amount, setAmount] = useState('')
+  const [order, setOrder] = useState<{ billing_type?: string } | null>(null)
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export function PaymentResultPage() {
         const order = data.order
         setPlanName(planNameMap[order.plan_id] || order.plan_id)
         setAmount(`¥${order.amount}`)
+        setOrder(order)
 
         if (order.status === 'paid') {
           setStatus('paid')
@@ -52,6 +54,7 @@ export function PaymentResultPage() {
           attempts++
           if (attempts >= maxAttempts && pollRef.current) {
             clearInterval(pollRef.current)
+            setStatus('timeout')
           }
         }
       } catch {
@@ -107,7 +110,9 @@ export function PaymentResultPage() {
                 {planName} · {amount}
               </p>
               <p className={styles.statusDesc}>
-                套餐已自动开通，祝你使用愉快 🎉
+                {order?.billing_type === 'one_time'
+                  ? '套餐购买成功！请在客户端中激活会话后开始使用 🎉'
+                  : '套餐已自动开通，祝你使用愉快 🎉'}
               </p>
               <div className={styles.actions}>
                 <Button variant="primary" onClick={() => navigate('/dashboard')}>
@@ -115,6 +120,25 @@ export function PaymentResultPage() {
                 </Button>
                 <Button variant="secondary" onClick={() => navigate('/pricing')}>
                   返回定价页
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {status === 'timeout' && (
+            <div className={styles.statusBlock}>
+              <div className={styles.pendingIcon}>⏰</div>
+              <h2 className={styles.statusTitle}>支付确认超时</h2>
+              <p className={styles.statusDesc}>
+                如果您已完成支付，请刷新页面重试或联系客服
+              </p>
+              <span className={styles.orderNo}>{orderNo}</span>
+              <div className={styles.actions}>
+                <Button variant="primary" onClick={() => window.location.reload()}>
+                  刷新页面
+                </Button>
+                <Button variant="secondary" onClick={() => navigate('/dashboard')}>
+                  进入控制台
                 </Button>
               </div>
             </div>

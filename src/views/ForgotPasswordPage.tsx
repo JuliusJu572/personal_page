@@ -71,6 +71,10 @@ export function ForgotPasswordPage() {
       setError('密码至少 8 位')
       return
     }
+    if (!/[a-zA-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      setError('密码需包含字母和数字')
+      return
+    }
     if (newPassword !== confirmPassword) {
       setError('两次输入的密码不一致')
       return

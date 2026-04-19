@@ -22,7 +22,11 @@ export function LoginPage() {
       await login(username, password)
       navigate('/dashboard')
     } catch (err: any) {
-      setError(err.message || '登录失败，请检查用户名和密码')
+      if (err.code === 'ACCOUNT_FROZEN') {
+        setError('账号已被冻结，请联系管理员解除冻结')
+      } else {
+        setError(err.message || '登录失败，请检查用户名和密码')
+      }
     } finally {
       setLoading(false)
     }

@@ -80,6 +80,7 @@ export function DashboardPage() {
   const displayPayModeLabel = PAY_MODE_LABELS[data.payMode] || data.payModeLabel
 
   const isOneTime = data.billingType === 'one_time'
+  const isSubscriptionExpired = !isOneTime && data.expiresAt && data.serverTime && new Date(data.serverTime) >= new Date(data.expiresAt)
 
   const onetimeTotal = data.currentPoints + data.weeklyUsedPoints
   const onetimeUsed = data.weeklyUsedPoints
@@ -148,6 +149,11 @@ export function DashboardPage() {
         </header>
 
         <section className={styles.energySection}>
+          {isSubscriptionExpired && (
+            <div className={styles.expiredBanner}>
+              您的订阅已到期，请续费以继续使用
+            </div>
+          )}
           <Card className={styles.energyCard}>
             <h2 className={styles.sectionTitle}>算力能量槽</h2>
 
@@ -230,7 +236,7 @@ export function DashboardPage() {
                 <div className={styles.giftActiveInfo}>
                   <Badge className={styles.giftBadgeActive}>进行中</Badge>
                   <p className={styles.giftDesc}>
-                    赠送 {PAY_MODE_LABELS[2]} 正在生效中
+                    赠送 {PAY_MODE_LABELS[data.pendingGiftPayMode] || '进阶版'} 正在生效中
                   </p>
                   <div className={styles.giftExpiry}>
                     到期时间：{new Date(data.giftExpiresAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
@@ -240,7 +246,7 @@ export function DashboardPage() {
                 <div className={styles.giftPendingInfo}>
                   <Badge className={styles.giftBadgePending}>待激活</Badge>
                   <p className={styles.giftDesc}>
-                    您有 <strong>{data.pendingGiftDays} 天</strong> {PAY_MODE_LABELS[data.pendingGiftPayMode]} 赠送套餐可以激活
+                    您有 <strong>{data.pendingGiftDays} 天</strong> {PAY_MODE_LABELS[data.pendingGiftPayMode] || '进阶版'} 赠送套餐可以激活
                   </p>
                   <p className={styles.giftHint}>激活后立即开始计时，请选择合适时机使用</p>
                   {data.payMode === 1 && (

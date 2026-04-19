@@ -63,6 +63,18 @@
   margin-bottom: var(--spacing-3xl);
 }
 
+.expiredBanner {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg, 12px);
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+}
+
 .energyCard {
   padding: var(--spacing-2xl);
   background: rgba(14, 20, 38, 0.82);
