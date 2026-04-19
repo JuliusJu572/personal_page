@@ -373,10 +373,6 @@
   margin-bottom: var(--spacing-lg);
 }
 
-.giftIcon {
-  font-size: 22px;
-}
-
 .giftActiveInfo,
 .giftPendingInfo {
   display: flex;

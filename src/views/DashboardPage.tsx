@@ -223,7 +223,6 @@ export function DashboardPage() {
           <section className={styles.giftSection}>
             <Card className={styles.giftCard}>
               <div className={styles.giftHeader}>
-                <span className={styles.giftIcon}>🎁</span>
                 <h2 className={styles.sectionTitle}>赠送套餐</h2>
               </div>
               {data.giftActive && data.giftExpiresAt ? (
@@ -243,6 +242,9 @@ export function DashboardPage() {
                     您有 <strong>{data.pendingGiftDays} 天</strong> {PAY_MODE_LABELS[data.pendingGiftPayMode]} 赠送套餐可以激活
                   </p>
                   <p className={styles.giftHint}>激活后立即开始计时，请选择合适时机使用</p>
+                  {data.payMode === 1 && (
+                    <p className={styles.giftHint}>原先普通版套餐会正常延后，如果遇到问题请及时联系客服。</p>
+                  )}
                   <button
                     className={styles.giftActivateBtn}
                     disabled={giftActivating}
