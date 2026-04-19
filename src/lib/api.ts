@@ -333,6 +333,28 @@ export const api = {
       }>
     }>('/api/payment/eligibility')
   },
+
+  getPendingOrder() {
+    return request<{
+      success: boolean
+      order: {
+        outTradeNo: string
+        planId: string
+        planLabel: string
+        billingType: string
+        amount: string
+        createdAt: string
+        payUrl: string
+      } | null
+    }>('/api/payment/pending')
+  },
+
+  cancelOrder(outTradeNo: string) {
+    return request<{ success: boolean; message: string }>('/api/payment/cancel', {
+      method: 'POST',
+      body: JSON.stringify({ outTradeNo }),
+    })
+  },
 }
 
 export { ApiError }

@@ -58,6 +58,31 @@ export function PricingPage() {
   }, [user])
 
   const [purchasing, setPurchasing] = useState<string | null>(null)
+  const [pendingOrder, setPendingOrder] = useState<{
+    outTradeNo: string; planLabel: string; amount: string; payUrl: string; createdAt: string
+  } | null>(null)
+  const [cancellingOrder, setCancellingOrder] = useState(false)
+
+  // Check for pending orders
+  useEffect(() => {
+    if (!user) return
+    api.getPendingOrder()
+      .then((data) => setPendingOrder(data.order || null))
+      .catch(() => {})
+  }, [user])
+
+  const handleCancelOrder = async () => {
+    if (!pendingOrder) return
+    setCancellingOrder(true)
+    try {
+      await api.cancelOrder(pendingOrder.outTradeNo)
+      setPendingOrder(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '取消订单失败')
+    } finally {
+      setCancellingOrder(false)
+    }
+  }
 
   const handlePurchase = async (planId: string) => {
     if (!user) {
@@ -70,7 +95,13 @@ export function PricingPage() {
       const billingType = isOneTime ? 'one_time' : 'subscription'
       const data = await api.createPayment(planId, billingType as 'subscription' | 'one_time')
       if (data.payUrl) {
-        // Redirect to Alipay payment page
+        setPendingOrder({
+          outTradeNo: data.outTradeNo,
+          planLabel: planNameMap[planId] || planId,
+          amount: String(activePlans.find(p => p.id === planId)?.price || ''),
+          payUrl: data.payUrl,
+          createdAt: new Date().toISOString(),
+        })
         window.location.href = data.payUrl
       }
     } catch (err) {
@@ -110,6 +141,59 @@ export function PricingPage() {
 
         {loading && <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>加载中...</p>}
         {error && <p style={{ textAlign: 'center', color: '#ff6b6b' }}>{error}</p>}
+
+        {/* ── Pending Order Banner ── */}
+        {pendingOrder && (
+          <div style={{
+            margin: '0 auto 1.5rem',
+            maxWidth: '600px',
+            padding: '1rem 1.5rem',
+            borderRadius: '12px',
+            background: 'rgba(255, 170, 0, 0.1)',
+            border: '1px solid rgba(255, 170, 0, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '1.1rem' }}>⏳</span>
+              <span style={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>
+                您有一笔待支付订单：{pendingOrder.planLabel}（¥{pendingOrder.amount}）
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <a
+                href={pendingOrder.payUrl}
+                style={{
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '8px',
+                  background: '#ffaa00',
+                  color: '#000',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                }}
+              >
+                继续支付
+              </a>
+              <button
+                onClick={handleCancelOrder}
+                disabled={cancellingOrder}
+                style={{
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  cursor: cancellingOrder ? 'not-allowed' : 'pointer',
+                  fontSize: '0.9rem',
+                }}
+              >
+                {cancellingOrder ? '取消中...' : '取消订单'}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── Billing Mode Toggle ── */}
         {!loading && (
