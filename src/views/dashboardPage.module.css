@@ -549,3 +549,62 @@
     width: 100%;
   }
 }
+
+/* ── Redeem Success Modal ── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: rgba(30, 30, 36, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.modalIcon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 0.5rem;
+}
+
+.modalMessage {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.modalConfirmBtn {
+  display: inline-block;
+  padding: 0.625rem 2.5rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-accent, #6c5ce7);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.modalConfirmBtn:hover {
+  opacity: 0.85;
+}

@@ -32,7 +32,7 @@ function getBarColor(ratio: number): string {
   return 'var(--color-accent-error)'
 }
 
-const PAY_MODE_LABELS: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
+const PAY_MODE_LABELS: Record<number, string> = { 0: '免费版', 1: '普通版', 2: '进阶版', 3: '高级版' }
 
 export function DashboardPage() {
   const navigate = useNavigate()
@@ -44,6 +44,8 @@ export function DashboardPage() {
   const [redeemKey, setRedeemKey] = useState('')
   const [redeemLoading, setRedeemLoading] = useState(false)
   const [redeemMessage, setRedeemMessage] = useState('')
+  const [showRedeemSuccess, setShowRedeemSuccess] = useState(false)
+  const [redeemSuccessMsg, setRedeemSuccessMsg] = useState('')
 
   useEffect(() => {
     if (authLoading) return
@@ -118,10 +120,9 @@ export function DashboardPage() {
     setRedeemMessage('')
     try {
       const res = await api.redeemGiftKey(redeemKey.trim())
-      setRedeemMessage(res.message || '兑换成功')
+      setRedeemSuccessMsg(res.message || '兑换成功')
+      setShowRedeemSuccess(true)
       setRedeemKey('')
-      const refreshed = await api.getDashboard()
-      setData(refreshed)
     } catch (err: any) {
       setRedeemMessage(err?.message || '兑换失败')
     } finally {
@@ -323,6 +324,23 @@ export function DashboardPage() {
         )}
       </Container>
       <HomeFooter />
+
+      {/* 兑换成功 Modal */}
+      {showRedeemSuccess && (
+        <div className={styles.modalOverlay} onClick={() => { setShowRedeemSuccess(false); window.location.reload() }}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalIcon}>🎉</div>
+            <h3 className={styles.modalTitle}>兑换成功</h3>
+            <p className={styles.modalMessage}>{redeemSuccessMsg}</p>
+            <button
+              className={styles.modalConfirmBtn}
+              onClick={() => { setShowRedeemSuccess(false); window.location.reload() }}
+            >
+              确认
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

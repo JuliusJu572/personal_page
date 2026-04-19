@@ -81,6 +81,7 @@ export function PricingPage() {
   }
 
   const planNameMap: Record<string, string> = {
+    free: '免费版',
     normal: '普通版',
     advanced: '进阶版',
     premium: '高级版',
@@ -165,8 +166,14 @@ export function PricingPage() {
                 <h2 className={styles.planName}>{planNameMap[plan.id] || plan.id}</h2>
 
                 <div className={styles.priceRow}>
-                  <span className={styles.price}>{formatPrice(plan.price)}</span>
-                  <span className={styles.period}>{isOneTime ? '/次' : '/月'}</span>
+                  {plan.price === 0 ? (
+                    <span className={styles.price}>免费</span>
+                  ) : (
+                    <>
+                      <span className={styles.price}>{formatPrice(plan.price)}</span>
+                      <span className={styles.period}>{isOneTime ? '/次' : '/月'}</span>
+                    </>
+                  )}
                 </div>
 
                 <p className={styles.tagline}>{plan.tagline}</p>
@@ -215,6 +222,22 @@ export function PricingPage() {
                 </ul>
 
                 {(() => {
+                  const isFree = plan.payMode === 0
+
+                  if (isFree) {
+                    const isCurrentFree = user && user.payMode === 0
+                    return (
+                      <Button
+                        variant="secondary"
+                        size="lg"
+                        className={styles.purchaseBtn}
+                        disabled
+                      >
+                        {isCurrentFree ? '当前套餐' : (user ? '免费版' : '注册即享')}
+                      </Button>
+                    )
+                  }
+
                   const elig = eligibility[plan.id]
                   const disabled = purchasing === plan.id || (elig && !elig.canPurchase)
                   const isCurrent = elig?.isCurrent
@@ -249,7 +272,7 @@ export function PricingPage() {
           <>
             <h2 className={styles.sectionHeading}>各套餐可用模型</h2>
             <div className={styles.modelGrid}>
-              {subscriptionPlans.filter(plan => (plan.models || []).length > 0).map((plan) => (
+              {subscriptionPlans.filter(plan => (plan.models || []).length > 0 && plan.payMode !== 0).map((plan) => (
                 <div key={plan.id} className={styles.modelCard}>
                   <h3 className={styles.modelCardTitle}>
                     {planNameMap[plan.id] || plan.id}
