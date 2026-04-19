@@ -119,6 +119,10 @@ export interface DashboardResponse {
   expiresAt: string | null
   weekCallCount: number
   topModels: Array<{ model: string; count: number }>
+  pendingGiftDays: number
+  pendingGiftPayMode: number
+  giftActive: boolean
+  giftExpiresAt: string | null
 }
 
 export interface BalanceResponse {
@@ -240,6 +244,19 @@ export const api = {
 
   getDashboard() {
     return request<DashboardResponse>('/api/user/dashboard')
+  },
+
+  activateGift() {
+    return request<{ success: boolean; message: string; action: string; giftExpiresAt?: string }>('/api/user/activate-gift', {
+      method: 'POST',
+    })
+  },
+
+  redeemGiftKey(key: string) {
+    return request<{ success: boolean; message: string; giftDays: number; giftPayMode: number }>('/api/user/redeem-gift-key', {
+      method: 'POST',
+      body: JSON.stringify({ key }),
+    })
   },
 
   listKnowledgeCards() {

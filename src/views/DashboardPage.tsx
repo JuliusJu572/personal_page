@@ -32,11 +32,18 @@ function getBarColor(ratio: number): string {
   return 'var(--color-accent-error)'
 }
 
+const PAY_MODE_LABELS: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
+
 export function DashboardPage() {
   const navigate = useNavigate()
   const { user, loading: authLoading } = useAuth()
   const [data, setData] = useState<DashboardResponse | null>(null)
   const [loading, setLoading] = useState(true)
+  const [giftActivating, setGiftActivating] = useState(false)
+  const [giftMessage, setGiftMessage] = useState('')
+  const [redeemKey, setRedeemKey] = useState('')
+  const [redeemLoading, setRedeemLoading] = useState(false)
+  const [redeemMessage, setRedeemMessage] = useState('')
 
   useEffect(() => {
     if (authLoading) return
@@ -68,13 +75,11 @@ export function DashboardPage() {
   const monthlyRatio = data.monthlyLimit > 0 ? monthlyRemainingPoints / data.monthlyLimit : 0
   const weeklyPercent = Math.max(0, Math.min(100, weeklyRatio * 100))
   const monthlyPercent = Math.max(0, Math.min(100, monthlyRatio * 100))
-  const payModeLabelMap: Record<number, string> = { 0: '已注册未付费', 1: '普通版', 2: '进阶版', 3: '高级版' }
-  const displayPayModeLabel = payModeLabelMap[data.payMode] || data.payModeLabel
+  const displayPayModeLabel = PAY_MODE_LABELS[data.payMode] || data.payModeLabel
 
   const isOneTime = data.billingType === 'one_time'
 
-  // One-time session helpers
-  const onetimeTotal = data.currentPoints + data.weeklyUsedPoints // approximate total quota
+  const onetimeTotal = data.currentPoints + data.weeklyUsedPoints
   const onetimeUsed = data.weeklyUsedPoints
   const onetimeRemaining = Math.max(0, data.currentPoints)
   const onetimeRatio = onetimeTotal > 0 ? onetimeRemaining / onetimeTotal : 0
@@ -90,6 +95,38 @@ export function DashboardPage() {
     const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
     if (hours > 0) return `${hours}小时 ${mins}分钟`
     return `${mins}分钟`
+  }
+
+  async function handleActivateGift() {
+    setGiftActivating(true)
+    setGiftMessage('')
+    try {
+      const res = await api.activateGift()
+      setGiftMessage(res.message || '激活成功')
+      const refreshed = await api.getDashboard()
+      setData(refreshed)
+    } catch (err: any) {
+      setGiftMessage(err?.message || '激活失败')
+    } finally {
+      setGiftActivating(false)
+    }
+  }
+
+  async function handleRedeemKey() {
+    if (!redeemKey.trim()) return
+    setRedeemLoading(true)
+    setRedeemMessage('')
+    try {
+      const res = await api.redeemGiftKey(redeemKey.trim())
+      setRedeemMessage(res.message || '兑换成功')
+      setRedeemKey('')
+      const refreshed = await api.getDashboard()
+      setData(refreshed)
+    } catch (err: any) {
+      setRedeemMessage(err?.message || '兑换失败')
+    } finally {
+      setRedeemLoading(false)
+    }
   }
 
   return (
@@ -181,6 +218,71 @@ export function DashboardPage() {
           </Card>
         </section>
 
+        {/* 赠送套餐 */}
+        {(data.pendingGiftDays > 0 || data.giftActive) && (
+          <section className={styles.giftSection}>
+            <Card className={styles.giftCard}>
+              <div className={styles.giftHeader}>
+                <span className={styles.giftIcon}>🎁</span>
+                <h2 className={styles.sectionTitle}>赠送套餐</h2>
+              </div>
+              {data.giftActive && data.giftExpiresAt ? (
+                <div className={styles.giftActiveInfo}>
+                  <Badge className={styles.giftBadgeActive}>进行中</Badge>
+                  <p className={styles.giftDesc}>
+                    赠送 {PAY_MODE_LABELS[2]} 正在生效中
+                  </p>
+                  <div className={styles.giftExpiry}>
+                    到期时间：{new Date(data.giftExpiresAt).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                  </div>
+                </div>
+              ) : data.pendingGiftDays > 0 ? (
+                <div className={styles.giftPendingInfo}>
+                  <Badge className={styles.giftBadgePending}>待激活</Badge>
+                  <p className={styles.giftDesc}>
+                    您有 <strong>{data.pendingGiftDays} 天</strong> {PAY_MODE_LABELS[data.pendingGiftPayMode]} 赠送套餐可以激活
+                  </p>
+                  <p className={styles.giftHint}>激活后立即开始计时，请选择合适时机使用</p>
+                  <button
+                    className={styles.giftActivateBtn}
+                    disabled={giftActivating}
+                    onClick={handleActivateGift}
+                  >
+                    {giftActivating ? '激活中...' : '立即激活'}
+                  </button>
+                  {giftMessage && <p className={styles.giftMsg}>{giftMessage}</p>}
+                </div>
+              ) : null}
+            </Card>
+          </section>
+        )}
+
+        {/* 兑换礼品码 */}
+        <section className={styles.redeemSection}>
+          <Card className={styles.redeemCard}>
+            <h2 className={styles.sectionTitle}>兑换礼品码</h2>
+            <p className={styles.redeemDesc}>输入礼品激活码，获取赠送套餐</p>
+            <div className={styles.redeemGroup}>
+              <input
+                className={styles.redeemInput}
+                type="text"
+                placeholder="请输入礼品码 (GIFT-XXXX-XXXX)"
+                value={redeemKey}
+                onChange={e => setRedeemKey(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleRedeemKey()}
+              />
+              <button
+                className={styles.redeemBtn}
+                disabled={redeemLoading || !redeemKey.trim()}
+                onClick={handleRedeemKey}
+              >
+                {redeemLoading ? '兑换中...' : '兑换'}
+              </button>
+            </div>
+            {redeemMessage && <p className={styles.redeemMsg}>{redeemMessage}</p>}
+          </Card>
+        </section>
+
         <section className={styles.actionsSection}>
           <Button variant="primary" className={styles.actionPrimaryBtn} onClick={() => navigate('/pricing')}>
             升级套餐
@@ -194,7 +296,7 @@ export function DashboardPage() {
           <section className={styles.inviteSection}>
             <Card className={styles.inviteCard}>
               <h2 className={styles.sectionTitle}>邀请好友</h2>
-              <p className={styles.inviteDesc}>分享您的邀请码，双方均可获得 7 天进阶版试用</p>
+              <p className={styles.inviteDesc}>分享您的邀请码，双方均可获得赠送套餐奖励</p>
               <div className={styles.inviteCodeGroup}>
                 <div>
                   <div className={styles.inviteCodeLabel}>我的邀请码</div>

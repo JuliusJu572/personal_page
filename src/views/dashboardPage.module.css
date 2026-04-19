@@ -344,3 +344,212 @@
   border-color: rgba(0, 150, 255, 0.45);
   box-shadow: 0 4px 16px rgba(0, 82, 204, 0.3);
 }
+
+/* ── Gift Section ── */
+.giftSection {
+  margin-top: var(--spacing-3xl);
+}
+
+.giftCard {
+  padding: var(--spacing-2xl);
+  background: rgba(14, 20, 38, 0.82);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 180, 50, 0.18);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.3s ease;
+}
+
+.giftCard:hover {
+  background: rgba(12, 18, 34, 0.9);
+  border-color: rgba(255, 180, 50, 0.35);
+  box-shadow: 0 16px 46px rgba(120, 80, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.giftHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.giftIcon {
+  font-size: 22px;
+}
+
+.giftActiveInfo,
+.giftPendingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.giftBadgeActive {
+  align-self: flex-start;
+  background: rgba(40, 167, 69, 0.18) !important;
+  border: 1px solid rgba(40, 167, 69, 0.4) !important;
+  color: #5cd87a !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.giftBadgePending {
+  align-self: flex-start;
+  background: rgba(255, 180, 50, 0.15) !important;
+  border: 1px solid rgba(255, 180, 50, 0.4) !important;
+  color: #ffbb33 !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.giftDesc {
+  font-size: 14px;
+  color: rgba(189, 231, 255, 0.85);
+  margin: 4px 0;
+  line-height: 1.6;
+}
+
+.giftDesc strong {
+  color: #ffcc44;
+  font-family: 'Orbitron', 'SF Mono', monospace;
+}
+
+.giftHint {
+  font-size: 12px;
+  color: rgba(150, 214, 255, 0.5);
+  margin: 0;
+}
+
+.giftExpiry {
+  font-size: 13px;
+  color: rgba(150, 214, 255, 0.75);
+  font-family: 'Orbitron', 'SF Mono', monospace;
+  letter-spacing: 0.03em;
+}
+
+.giftActivateBtn {
+  margin-top: var(--spacing-md);
+  padding: 10px 28px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(180, 120, 0, 0.55), rgba(255, 180, 50, 0.45));
+  border: 1px solid rgba(255, 180, 50, 0.35);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.04em;
+  align-self: flex-start;
+}
+
+.giftActivateBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(200, 140, 0, 0.65), rgba(255, 200, 80, 0.55));
+  border-color: rgba(255, 200, 80, 0.55);
+  box-shadow: 0 6px 24px rgba(180, 120, 0, 0.35);
+}
+
+.giftActivateBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.giftMsg,
+.redeemMsg {
+  font-size: 13px;
+  color: rgba(150, 214, 255, 0.75);
+  margin-top: var(--spacing-sm);
+}
+
+/* ── Redeem Section ── */
+.redeemSection {
+  margin-top: var(--spacing-2xl);
+}
+
+.redeemCard {
+  padding: var(--spacing-2xl);
+  background: rgba(14, 20, 38, 0.82);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(0, 113, 227, 0.14);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.3s ease;
+}
+
+.redeemCard:hover {
+  background: rgba(12, 18, 34, 0.9);
+  border-color: rgba(0, 150, 255, 0.28);
+  box-shadow: 0 16px 46px rgba(0, 50, 120, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.redeemDesc {
+  font-size: 13px;
+  color: rgba(150, 214, 255, 0.7);
+  margin: 4px 0 var(--spacing-xl);
+}
+
+.redeemGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.redeemInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: rgba(10, 24, 52, 0.7);
+  border: 1px solid rgba(0, 113, 227, 0.2);
+  color: rgba(189, 231, 255, 0.95);
+  font-family: 'Orbitron', 'SF Mono', 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.redeemInput::placeholder {
+  color: rgba(150, 214, 255, 0.3);
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+
+.redeemInput:focus {
+  border-color: rgba(0, 150, 255, 0.45);
+  box-shadow: 0 0 12px rgba(0, 100, 200, 0.2);
+}
+
+.redeemBtn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 61, 153, 0.5), rgba(0, 113, 227, 0.4));
+  border: 1px solid rgba(0, 150, 255, 0.25);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.redeemBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.6), rgba(51, 153, 255, 0.5));
+  border-color: rgba(0, 150, 255, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 82, 204, 0.3);
+}
+
+.redeemBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .redeemGroup {
+    flex-direction: column;
+  }
+  .redeemInput {
+    width: 100%;
+  }
+  .redeemBtn {
+    width: 100%;
+  }
+}
