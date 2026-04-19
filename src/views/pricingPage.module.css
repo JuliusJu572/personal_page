@@ -53,6 +53,21 @@
   align-items: stretch;
 }
 
+.plansGrid3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Shrink model logos in 4-col subscription layout */
+.plansGrid:not(.plansGrid3) .planLogoImg {
+  width: 48px;
+  height: 48px;
+}
+
+.plansGrid:not(.plansGrid3) .planIconGroupGrid {
+  grid-template-columns: repeat(4, 48px);
+  grid-auto-rows: 48px;
+}
+
 .planCard {
   position: relative;
   background: rgba(14, 20, 38, 0.82);
@@ -295,8 +310,17 @@
 }
 
 @media (max-width: 1200px) {
-  .plansGrid {
+  .plansGrid:not(.plansGrid3) {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .plansGrid3 {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 

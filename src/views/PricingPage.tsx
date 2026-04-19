@@ -139,7 +139,7 @@ export function PricingPage() {
 
         {/* ── Plan Cards (shared layout) ── */}
         {!loading && activePlans.length > 0 && (
-          <div className={styles.plansGrid}>
+          <div className={`${styles.plansGrid} ${isOneTime ? styles.plansGrid3 : ''}`}>
             {activePlans.map((plan) => (
               <Card
                 key={plan.id}
