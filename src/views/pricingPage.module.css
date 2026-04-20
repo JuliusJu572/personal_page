@@ -487,6 +487,13 @@
   font-family: 'Orbitron', 'SF Mono', monospace;
 }
 
+.modelItemFeatured {
+  color: rgba(120, 200, 255, 0.95);
+  background: rgba(0, 113, 227, 0.15);
+  border: 1px solid rgba(0, 150, 255, 0.25);
+  font-weight: 600;
+}
+
 @media (max-width: 1000px) {
   .modelGrid {
     grid-template-columns: 1fr;

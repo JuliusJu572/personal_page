@@ -95,10 +95,14 @@ export function PricingPage() {
       const billingType = isOneTime ? 'one_time' : 'subscription'
       const data = await api.createPayment(planId, billingType as 'subscription' | 'one_time')
       if (data.payUrl) {
+        const elig = eligibility[planId]
+        const displayAmount = (elig?.isUpgrade && elig?.upgradePrice != null)
+          ? elig.upgradePrice.toFixed(2)
+          : String(activePlans.find(p => p.id === planId)?.price || '')
         setPendingOrder({
           outTradeNo: data.outTradeNo,
           planLabel: planNameMap[planId] || planId,
-          amount: String(activePlans.find(p => p.id === planId)?.price || ''),
+          amount: displayAmount,
           payUrl: data.payUrl,
           createdAt: new Date().toISOString(),
         })
@@ -119,6 +123,38 @@ export function PricingPage() {
     'onetime-normal': '普通版',
     'onetime-advanced': '进阶版',
     'onetime-premium': '高级版',
+  }
+
+  // Featured models: highlighted + sorted to the top
+  const featuredModels = new Set([
+    'Kimi-K2.5',
+    'GLM-5.1',
+    'MiniMax-M2.7-Highspeed',
+    'Claude-Sonnet-4.6',
+    'Claude-Haiku-4.5',
+    'Gemini-3.1-Pro',
+    'Gemini-3.1-Flash-Lite',
+    'Grok-4.1-Fast',
+    'GPT-5.4',
+    'GPT-5.4-Nano',
+  ])
+  const modelPriority: Record<string, number> = {
+    'Claude-Sonnet-4.6': 0,
+    'Gemini-3.1-Pro': 1,
+    'MiniMax-M2.7-Highspeed': 2,
+  }
+  function sortModels(models: string[]) {
+    return [...models].sort((a, b) => {
+      const af = featuredModels.has(a)
+      const bf = featuredModels.has(b)
+      if (af !== bf) return af ? -1 : 1
+      if (af && bf) {
+        const pa = modelPriority[a] ?? 99
+        const pb = modelPriority[b] ?? 99
+        return pa - pb
+      }
+      return 0
+    })
   }
 
   // Pair subscription and one-time plans by payMode for unified rendering
@@ -356,8 +392,8 @@ export function PricingPage() {
                     {planNameMap[plan.id] || plan.id}
                   </h3>
                   <ul className={styles.modelList}>
-                    {(plan.models || []).map((m, i) => (
-                      <li key={i} className={styles.modelItem}>{m}</li>
+                    {sortModels(plan.models || []).map((m, i) => (
+                      <li key={i} className={`${styles.modelItem} ${featuredModels.has(m) ? styles.modelItemFeatured : ''}`}>{m}</li>
                     ))}
                   </ul>
                 </div>
