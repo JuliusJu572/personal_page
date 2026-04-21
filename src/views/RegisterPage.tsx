@@ -16,6 +16,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [inviteCode, setInviteCode] = useState('')
+  const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const [resendHint, setResendHint] = useState('')
   const [loading, setLoading] = useState(false)
@@ -47,6 +48,10 @@ export function RegisterPage() {
     setError('')
     if (!email || !email.includes('@')) {
       setError('请输入有效的邮箱地址')
+      return
+    }
+    if (!agreed) {
+      setError('请先阅读并同意服务条款和隐私政策')
       return
     }
     setLoading(true)
@@ -167,11 +172,26 @@ export function RegisterPage() {
 
               {/* 【预留】CAPTCHA 验证位 */}
 
+              <label className={styles.agreement}>
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className={styles.checkbox}
+                />
+                <span className={styles.agreementText}>
+                  我已阅读并同意{' '}
+                  <Link to="/terms" target="_blank" className={styles.link}>服务条款</Link>
+                  {' '}和{' '}
+                  <Link to="/privacy" target="_blank" className={styles.link}>隐私政策</Link>
+                </span>
+              </label>
+
               {error && <div className={styles.error}>{error}</div>}
 
               <button
                 type="submit"
-                disabled={loading || !email}
+                disabled={loading || !email || !agreed}
                 className={styles.submitBtn}
               >
                 {loading ? <span className={styles.spinner} /> : '发送验证码'}
