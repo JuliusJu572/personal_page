@@ -20,10 +20,13 @@ jobs:
         with:
           node-version: '22.x'
 
-      # 3. 安装依赖并打包
+      # 3. 安装依赖并打包（含预渲染）
       - name: Install and Build
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'false'
         run: |
           npm install
+          npx puppeteer browsers install chrome
           npm run build
 
       # 4. 把打包好的 dist 文件夹传到阿里云
