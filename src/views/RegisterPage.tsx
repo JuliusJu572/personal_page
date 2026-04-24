@@ -353,7 +353,6 @@ export function RegisterPage() {
                   autoComplete="off"
                   readOnly={inviteFromUrl}
                   className={`${styles.input} ${inviteFromUrl ? styles.inputReadonly : ''}`}
-                  className={styles.input}
                 />
               </div>
 
