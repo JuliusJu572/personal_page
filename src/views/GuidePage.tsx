@@ -113,9 +113,9 @@ export function GuidePage() {
             <ul className={styles.list}>
               <li><strong>多模型支持：</strong>
                 <ul className={styles.subList}>
-                  <li>文本模型：默认搭载 Qwen3-Max，阿里云 Qwen3.5-Plus 暂不稳定</li>
-                  <li>视觉模型：集成 Qwen3-VL-Plus，精准识别屏幕代码与图表</li>
-                  <li>语音识别：采用 Qwen3-ASR-Flash，毫秒级实时语音转文字</li>
+                  <li>文本模型：Qwen3-Max（推荐）、Qwen3.6-Plus、Qwen3.5-Flash、DeepSeek-v3.2、Kimi-k2.5、GLM-5、MiniMax 等</li>
+                  <li>视觉模型：Qwen3-VL-Plus（推荐）、Qwen3-VL-Flash，精准识别屏幕代码与图表</li>
+                  <li>语音识别：Qwen3-ASR-Flash，毫秒级实时语音转文字</li>
                 </ul>
               </li>
               <li><strong>智能上下文管理：</strong>
@@ -125,6 +125,7 @@ export function GuidePage() {
                 </ul>
               </li>
             </ul>
+            <Note>文本模型推荐使用 Qwen3-Max，兼顾速度与质量。如需更换，可在设置中选择 DeepSeek、Kimi、GLM 或 MiniMax 等模型。</Note>
           </SubSection>
 
           <SubSection title="多语种实时语音转写">
@@ -226,11 +227,27 @@ export function GuidePage() {
             <Note>按 <Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 可进入穿透模式：软件从任务栏隐藏，但悬浮区按钮仍可使用，适合避免遮挡演示内容。</Note>
             <ul className={styles.list}>
               <li><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>：监听剪切板并快速读取复制内容，用于追问或补充上下文</li>
-              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd>：执行截图识别</li>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd>：执行截图识别（发给视觉模型）</li>
+              <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>;</Kbd>：OCR 识题模式（先提取文字，再交由文本模型回答）</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>L</Kbd>：系统音录制开/关</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>K</Kbd>：麦克风录制开/关</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>'</Kbd>：清理上下文</li>
             </ul>
+            <div className={styles.featureBox}>
+              <strong>📸 截图 vs OCR 的区别：</strong>
+              <ul className={styles.list}>
+                <li><strong>截图（Ctrl+Enter）：</strong>将屏幕画面直接发送给视觉模型（VLM）分析，适合包含图表、代码截图、UI 界面等视觉内容</li>
+                <li><strong>OCR（Ctrl+;）：</strong>先用 OCR 引擎提取屏幕中的文字，再交给文本模型回答，适合纯文字内容（如编程题、文档段落），识别速度更快、token 消耗更低</li>
+              </ul>
+            </div>
+            <div className={styles.featureBox}>
+              <strong>📋 剪贴板监控：</strong>
+              <ul className={styles.list}>
+                <li>开启后，软件会自动检测剪贴板中的新内容并提交给 AI 分析</li>
+                <li>适合快速复制题目、聊天记录或错误信息，让 AI 即时帮你解读</li>
+                <li>可在设置中随时开关此功能</li>
+              </ul>
+            </div>
           </SubSection>
 
           <SubSection title="步骤 3：模型选择与两点截图">
@@ -250,6 +267,17 @@ export function GuidePage() {
                 <li>每次修改后做一次小样本验证，保留效果最佳版本</li>
               </ul>
             </div>
+            <div className={styles.featureBox}>
+              <strong>🎭 AI 场景模式（Profile）：</strong>
+              <ul className={styles.list}>
+                <li><strong>答辩模式（Defense）：</strong>技术答辩 / 学术问答场景，侧重精准回答、逻辑推演与论据引用</li>
+                <li><strong>销售模式（Sales）：</strong>销售通话场景，提供异议处理、话术优化与成交引导建议</li>
+                <li><strong>会议模式（Meeting）：</strong>日常会议讨论，侧重要点提炼、观点梳理与回应建议</li>
+                <li><strong>演讲模式（Presentation）：</strong>演讲 / 路演场景，侧重表达优化、节奏控制与互动建议</li>
+                <li><strong>谈判模式（Negotiation）：</strong>商务谈判场景，侧重博弈分析、利弊权衡与策略建议</li>
+              </ul>
+            </div>
+            <Note>每种场景模式会自动调整 AI 的系统提示词和回答风格。切换场景后，自定义指令仍会叠加生效，两者互补。</Note>
           </SubSection>
 
           <SubSection title="步骤 5：实时转录与连续监听（进阶版 / 高级版专享）">
@@ -277,6 +305,38 @@ export function GuidePage() {
               </ul>
             </div>
             <Note>连续监听模式下，系统会通过 VAD（语音活动检测）自动将音频流切分为独立片段，每段显示时间戳与时长，方便快速定位关键信息。</Note>
+            <div className={styles.featureBox}>
+              <strong>⚙️ 连续监听配置建议：</strong>
+              <ul className={styles.list}>
+                <li><strong>音频源选择：</strong>可选系统音频、麦克风或双通道同时捕获，根据会议场景灵活切换</li>
+                <li><strong>灵敏度调节：</strong>控制 VAD 静音超时时间——安静环境可适当调低（分段更精细），嘈杂环境建议调高（减少误触发）</li>
+                <li><strong>能量阈值：</strong>可分别为系统音和麦克风设置检测灵敏度，过滤背景噪音</li>
+              </ul>
+            </div>
+          </SubSection>
+
+          <SubSection title="步骤 6：会话历史管理">
+            <p className={styles.text}>Lucencia 会自动保存每次会话的完整对话记录（包括用户输入和 AI 回复），方便你随时回顾之前的对话内容。</p>
+            <ul className={styles.list}>
+              <li><strong>查看历史：</strong>点击侧边导航的「历史」图标，即可浏览所有历史会话</li>
+              <li><strong>会话详情：</strong>每个会话显示时间戳与内容摘要，支持快速定位</li>
+              <li><strong>清除当前会话：</strong>按 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>'</Kbd> 清空当前会话的上下文与历史</li>
+            </ul>
+            <Note>清除会话仅影响当前对话，不会删除已保存的历史记录。</Note>
+          </SubSection>
+
+          <SubSection title="步骤 7：文档解析与上下文注入">
+            <p className={styles.text}>支持上传简历和 JD（职位描述），系统会自动解析文档内容，提取关键信息作为 AI 对话的背景上下文。</p>
+            <div className={styles.featureBox}>
+              <strong>使用流程：</strong>
+              <ul className={styles.list}>
+                <li><strong>上传文档：</strong>点击顶部的「文档解析」入口，上传简历或 JD 文件</li>
+                <li><strong>自动解析：</strong>系统自动提取文档中的关键信息（技能、经历、岗位要求等）</li>
+                <li><strong>上下文注入：</strong>在设置中开启「文档上下文注入」后，解析结果会自动融入 AI 对话</li>
+                <li><strong>效果：</strong>AI 了解你的背景后，回答更贴合你的实际情况和岗位需求</li>
+              </ul>
+            </div>
+            <Note>建议在面试前上传最新的简历和目标岗位 JD，让 AI 充分了解你的背景，提供更有针对性的辅助。</Note>
           </SubSection>
         </Section>
 
@@ -376,8 +436,14 @@ export function GuidePage() {
                 <div className={styles.shortcutDesc}>在快速/性能模式间切换（进阶版+）</div>
                 <div className={styles.shortcutKey}>Ctrl+I</div>
               </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>紧急擦除</div>
+                <div className={styles.shortcutDesc}>一键清除所有本地数据（不可逆）</div>
+                <div className={styles.shortcutKey}>Ctrl+Shift+E</div>
+              </div>
             </div>
             <Note>建议先记住 <strong>Ctrl+M、Ctrl+Enter、Ctrl+L、Ctrl+K、Ctrl+C</strong> 这 5 个高频键位，能覆盖大多数会议场景。</Note>
+            <Note>💡 所有快捷键均可在设置页面的「快捷键配置」中自定义绑定，按你的使用习惯调整。</Note>
           </SubSection>
         </Section>
 
@@ -385,8 +451,21 @@ export function GuidePage() {
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         }>
           <SubSection title="账号与计费">
-            <p className={styles.text}>设置中第一栏可以查看用户余额。一次对话大约消耗 1,000 tokens，建议在重要会议前预留足够额度。</p>
-            <p className={styles.text}>您可以在设置页面查看当前账户的 token 余额、使用历史和订阅状态。系统会在余额不足时提前提醒您充值。</p>
+            <p className={styles.text}>Lucencia 采用<strong>周配额 + 月配额</strong>双重限制机制，确保资源合理分配。你可以在设置页面第一栏查看实时配额状态。</p>
+            <ul className={styles.list}>
+              <li><strong>周配额：</strong>每周分配一定量的 Token 额度，自然周重置</li>
+              <li><strong>月配额：</strong>每月总额度上限，防止短时间内过度消耗</li>
+              <li><strong>状态指示：</strong>正常（绿色）→ 低余量（≤20% 时提醒）→ 已耗尽（暂停服务）</li>
+            </ul>
+            <div className={styles.featureBox}>
+              <strong>订阅等级：</strong>
+              <ul className={styles.list}>
+                <li><strong>普通版：</strong>基础功能，支持单次录音转写、截图分析、文本对话</li>
+                <li><strong>进阶版：</strong>解锁连续监听模式、预设模式切换（快速/性能）、更多模型选项</li>
+                <li><strong>高级版：</strong>包含进阶版全部功能，更高 Token 配额上限</li>
+              </ul>
+            </div>
+            <Note>一次对话大约消耗 1,000 tokens。建议在重要会议前检查配额状态，预留约 30,000 tokens 以覆盖完整会议。</Note>
           </SubSection>
 
           <SubSection title="默认用户提示词">
@@ -411,10 +490,24 @@ export function GuidePage() {
               <li>多轮对话默认开启，保持上下文连贯性</li>
               <li>智能追问可预判会议中的后续问题，按需开启</li>
             </ul>
+            <div className={styles.featureBox}>
+              <strong>🔮 追问增强（智能追问）详解：</strong>
+              <ul className={styles.list}>
+                <li><strong>工作原理：</strong>开启后，AI 会在回答末尾自动预判面试官/对方可能的追问方向，并提供相关概念分析</li>
+                <li><strong>适用场景：</strong>技术面试、论文答辩等需要深入讨论的场景，帮你提前准备下一轮回答</li>
+                <li><strong>Token 消耗：</strong>开启后每次回答会额外增加约 30–50% 的 Token 消耗</li>
+              </ul>
+            </div>
+            <Note>追问增强在日常会议中可以关闭以节省配额，在重要面试或答辩中建议开启，提升应对深度追问的准备度。</Note>
           </SubSection>
 
           <SubSection title="更换 License Key">
             <p className={styles.text}>在设置页面可以更换您的 License Key。输入新的 License Key 后，系统会自动验证并激活。</p>
+          </SubSection>
+
+          <SubSection title="紧急擦除">
+            <p className={styles.text}>在紧急情况下，你可以使用快捷键一键清除所有本地数据，包括配置、对话历史和缓存文件。</p>
+            <Warn>⚠️ 按下 <Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Shift</Kbd> + <Kbd>E</Kbd> 将立即清除所有本地数据，<strong>此操作不可逆</strong>。请仅在确实需要时使用。</Warn>
           </SubSection>
         </Section>
 
