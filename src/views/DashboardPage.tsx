@@ -57,7 +57,7 @@ export function DashboardPage() {
       height: 280,
       type: 'canvas',
       data: `https://lucencia.daedalustech.cn/register?invite=${inviteCode}`,
-      image: '/lucencia-logo-black.png',
+      image: '/lucencia-logo-hd.png',
       dotsOptions: {
         color: '#4a90d9',
         type: 'rounded',
