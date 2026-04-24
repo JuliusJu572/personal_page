@@ -128,7 +128,7 @@ export function PrivacyPage() {
             <li><strong>撤回同意权：</strong>您可以随时撤回对本隐私政策的同意（撤回后将无法继续使用本服务）</li>
             <li><strong>投诉权：</strong>如您认为我们侵犯了您的个人信息权益，您有权向有关监管部门投诉举报</li>
           </ul>
-          <p className={styles.text}>行使上述权利，请发送邮件至 <a href="mailto:support@daedalus.cn">support@daedalus.cn</a>，我们将在 15 个工作日内核实并处理您的请求。</p>
+          <p className={styles.text}>行使上述权利，请发送邮件至 <a href="mailto:support@daedalustech.cn">support@daedalustech.cn</a>，我们将在 15 个工作日内核实并处理您的请求。</p>
         </section>
 
         {/* 7. Cookie 与追踪 */}
@@ -217,7 +217,7 @@ export function PrivacyPage() {
           <p className={styles.contactTitle}>联系我们</p>
           <p className={styles.contactText}>
             如您对本隐私政策有任何疑问、意见或投诉，或希望行使个人信息权利，请通过以下方式联系我们：<br />
-            <a className={styles.contactEmail} href="mailto:support@daedalus.cn">support@daedalus.cn</a>
+            <a className={styles.contactEmail} href="mailto:support@daedalustech.cn">support@daedalustech.cn</a>
           </p>
         </div>
 

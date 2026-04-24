@@ -223,7 +223,7 @@ export function TermsPage() {
           <p className={styles.contactTitle}>联系我们</p>
           <p className={styles.contactText}>
             如您对本协议有任何疑问或建议，请通过以下方式联系我们：<br />
-            <a className={styles.contactEmail} href="mailto:support@daedalus.cn">support@daedalus.cn</a>
+            <a className={styles.contactEmail} href="mailto:support@daedalustech.cn">support@daedalustech.cn</a>
           </p>
         </div>
 
