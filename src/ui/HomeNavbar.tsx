@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/authContext'
 import styles from './homeNavbar.module.css'
 
-export function HomeNavbar() {
+export function HomeNavbar({ minimal = false }: { minimal?: boolean } = {}) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { user, logout } = useAuth()
@@ -48,29 +48,33 @@ export function HomeNavbar() {
             <Link to="/login" className={styles.loginBtnSolid}>登录</Link>
           )}
 
-          <button
-            type="button"
-            className={styles.mobileToggle}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="菜单"
-          >
-            {menuOpen ? '✕' : '☰'}
-          </button>
+          {!minimal && (
+            <button
+              type="button"
+              className={styles.mobileToggle}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="菜单"
+            >
+              {menuOpen ? '✕' : '☰'}
+            </button>
+          )}
         </div>
       </nav>
 
-      <div className={[styles.mobileMenu, menuOpen ? styles.mobileMenuOpen : undefined].filter(Boolean).join(' ')}>
-        <Link to="/pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>定价</Link>
-        <Link to="/guide" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>使用说明</Link>
-        {user ? (
-          <>
-            <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>{user.username || '工作台'}</Link>
-            <button type="button" className={styles.logoutBtn} onClick={() => { handleLogout(); setMenuOpen(false) }}>退出</button>
-          </>
-        ) : (
-          <Link to="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>登录</Link>
-        )}
-      </div>
+      {!minimal && (
+        <div className={[styles.mobileMenu, menuOpen ? styles.mobileMenuOpen : undefined].filter(Boolean).join(' ')}>
+          <Link to="/pricing" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>定价</Link>
+          <Link to="/guide" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>使用说明</Link>
+          {user ? (
+            <>
+              <Link to="/dashboard" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>{user.username || '工作台'}</Link>
+              <button type="button" className={styles.logoutBtn} onClick={() => { handleLogout(); setMenuOpen(false) }}>退出</button>
+            </>
+          ) : (
+            <Link to="/login" className={styles.mobileMenuLink} onClick={() => setMenuOpen(false)}>登录</Link>
+          )}
+        </div>
+      )}
     </>
   )
 }

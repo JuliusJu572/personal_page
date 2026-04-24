@@ -108,7 +108,7 @@ export function ForgotPasswordPage() {
   return (
     <div className={styles.page}>
       <Background />
-      <HomeNavbar />
+      <HomeNavbar minimal />
 
       <main className={styles.main}>
         <div className={styles.card}>
