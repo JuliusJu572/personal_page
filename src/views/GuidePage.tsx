@@ -245,6 +245,33 @@ export function GuidePage() {
               </ul>
             </div>
           </SubSection>
+
+          <SubSection title="步骤 5：实时转录与连续监听（进阶版 / 高级版专享）">
+            <p className={styles.text}>进阶版与高级版用户专享<strong>连续监听模式</strong>，支持同时捕获系统音频与麦克风双通道，实时转录并分段显示，随时选中片段交由 AI 分析——适合长时间会议与多轮对话场景。</p>
+            <GuideFigure src="/guide-images/live-transcript.png" alt="实时转录与连续监听界面" caption="连续监听模式：双通道实时转录，双击片段即可获取 AI 回答" />
+            <div className={styles.featureBox}>
+              <strong>操作方式：</strong>
+              <ul className={styles.list}>
+                <li><strong>启动连续监听：</strong>在设置中开启「连续监听」，或在录音结束后自动进入（仅进阶版及以上可用）</li>
+                <li><strong>双通道捕获：</strong>系统音频（对方说话）与麦克风（你的发言）分两列独立显示，互不干扰</li>
+                <li><strong>单击片段：</strong>选中 / 取消选中某一段转录文本</li>
+                <li><strong>Shift + 单击：</strong>多选模式，可同时选中多个片段</li>
+                <li><strong>双击片段：</strong>直接将该段文字发送给 AI，立即获取分析回答</li>
+                <li><strong>「发送」按钮：</strong>将当前选中的片段发送给 AI</li>
+                <li><strong>「全部发送」按钮：</strong>一键将所有已捕获的转录内容发送给 AI</li>
+                <li><strong>清除转录：</strong>按 <Kbd>Ctrl</Kbd> + <Kbd>Shift</Kbd> + <Kbd>L</Kbd> 清空当前转录记录</li>
+                <li><strong>切换预设模式：</strong>按 <Kbd>Ctrl</Kbd> + <Kbd>I</Kbd> 在快速 / 性能模式间切换（仅进阶版及以上）</li>
+              </ul>
+            </div>
+            <div className={styles.featureBox}>
+              <strong>与普通版的区别：</strong>
+              <ul className={styles.list}>
+                <li><strong>普通版 / 免费版：</strong>仅支持单次录音转写——按 <Kbd>Ctrl</Kbd> + <Kbd>L</Kbd> 开始录制，再按一次停止并自动提交 AI。无法连续监听，无法分段选择</li>
+                <li><strong>进阶版 / 高级版：</strong>支持连续监听模式，双通道同步采集，实时分段显示，可逐段选择或双击直接获取回答；同时解锁更多模型选项与更高 Token 上限</li>
+              </ul>
+            </div>
+            <Note>连续监听模式下，系统会通过 VAD（语音活动检测）自动将音频流切分为独立片段，每段显示时间戳与时长，方便快速定位关键信息。</Note>
+          </SubSection>
         </Section>
 
         <Section id="shortcuts" title="快捷键总览" icon={
@@ -332,6 +359,16 @@ export function GuidePage() {
                 <div className={styles.shortcutAction}>监听剪切板</div>
                 <div className={styles.shortcutDesc}>读取最新复制内容并加入输入流程</div>
                 <div className={styles.shortcutKey}>Ctrl+C</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>清除实时转录</div>
+                <div className={styles.shortcutDesc}>清空当前连续监听的转录记录</div>
+                <div className={styles.shortcutKey}>Ctrl+Shift+L</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>切换预设模式</div>
+                <div className={styles.shortcutDesc}>在快速/性能模式间切换（进阶版+）</div>
+                <div className={styles.shortcutKey}>Ctrl+I</div>
               </div>
             </div>
             <Note>建议先记住 <strong>Ctrl+M、Ctrl+Enter、Ctrl+L、Ctrl+K、Ctrl+C</strong> 这 5 个高频键位，能覆盖大多数会议场景。</Note>
