@@ -620,3 +620,80 @@
 .modalConfirmBtn:hover {
   opacity: 0.85;
 }
+
+/* ── QR Code Modal ── */
+.qrModalContent {
+  background: rgba(16, 20, 32, 0.98);
+  border: 1px solid rgba(0, 150, 255, 0.2);
+  border-radius: 20px;
+  padding: 2rem 2rem 1.5rem;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 30, 80, 0.6);
+}
+
+.qrTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(189, 231, 255, 0.95);
+  margin: 0 0 0.25rem;
+}
+
+.qrSubtitle {
+  font-size: 0.8rem;
+  color: rgba(150, 214, 255, 0.55);
+  margin: 0 0 1.25rem;
+}
+
+.qrCanvas {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.qrCanvas canvas,
+.qrCanvas svg {
+  border-radius: 12px;
+}
+
+.qrActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.qrSaveBtn {
+  padding: 8px 24px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(0, 61, 153, 0.5), rgba(0, 113, 227, 0.4));
+  border: 1px solid rgba(0, 150, 255, 0.25);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qrSaveBtn:hover {
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.6), rgba(51, 153, 255, 0.5));
+  border-color: rgba(0, 150, 255, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 82, 204, 0.3);
+}
+
+.qrCloseBtn {
+  padding: 8px 24px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qrCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}

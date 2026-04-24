@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import QRCodeStyling from 'qr-code-styling'
 import { Container } from '../ui/Container'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
@@ -46,6 +47,60 @@ export function DashboardPage() {
   const [redeemMessage, setRedeemMessage] = useState('')
   const [showRedeemSuccess, setShowRedeemSuccess] = useState(false)
   const [redeemSuccessMsg, setRedeemSuccessMsg] = useState('')
+  const [showQrModal, setShowQrModal] = useState(false)
+  const qrRef = useRef<HTMLDivElement>(null)
+  const qrInstanceRef = useRef<QRCodeStyling | null>(null)
+
+  const generateQr = useCallback((inviteCode: string) => {
+    const qr = new QRCodeStyling({
+      width: 280,
+      height: 280,
+      type: 'canvas',
+      data: `https://lucencia.daedalustech.cn/register?invite=${inviteCode}`,
+      image: '/lucencia-logo.png',
+      dotsOptions: {
+        color: '#4a90d9',
+        type: 'rounded',
+      },
+      cornersSquareOptions: {
+        color: '#0066cc',
+        type: 'extra-rounded',
+      },
+      cornersDotOptions: {
+        color: '#0088ff',
+        type: 'dot',
+      },
+      backgroundOptions: {
+        color: '#0a0e1a',
+      },
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        margin: 6,
+        imageSize: 0.35,
+      },
+      qrOptions: {
+        errorCorrectionLevel: 'Q',
+      },
+    })
+    qrInstanceRef.current = qr
+    return qr
+  }, [])
+
+  const openQrModal = useCallback((inviteCode: string) => {
+    navigator.clipboard.writeText(inviteCode).catch(() => {})
+    const qr = generateQr(inviteCode)
+    setShowQrModal(true)
+    setTimeout(() => {
+      if (qrRef.current) {
+        qrRef.current.innerHTML = ''
+        qr.append(qrRef.current)
+      }
+    }, 50)
+  }, [generateQr])
+
+  const saveQrImage = useCallback(() => {
+    qrInstanceRef.current?.download({ name: 'lucencia-invite', extension: 'png' })
+  }, [])
 
   useEffect(() => {
     if (authLoading) return
@@ -313,16 +368,9 @@ export function DashboardPage() {
                 </div>
                 <button
                   className={styles.copyBtn}
-                  onClick={() => {
-                    navigator.clipboard.writeText(user.inviteCode)
-                      .then(() => {
-                        const btn = document.querySelector(`.${styles.copyBtn}`) as HTMLButtonElement
-                        if (btn) { btn.textContent = '已复制!'; setTimeout(() => { btn.textContent = '复制' }, 2000) }
-                      })
-                      .catch(() => {})
-                  }}
+                  onClick={() => openQrModal(user.inviteCode)}
                 >
-                  复制
+                  复制 & 二维码
                 </button>
               </div>
             </Card>
@@ -344,6 +392,20 @@ export function DashboardPage() {
             >
               确认
             </button>
+          </div>
+        </div>
+      )}
+      {/* QR Code Modal */}
+      {showQrModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowQrModal(false)}>
+          <div className={styles.qrModalContent} onClick={e => e.stopPropagation()}>
+            <h3 className={styles.qrTitle}>扫码注册 · 自动填入邀请码</h3>
+            <p className={styles.qrSubtitle}>邀请码已复制到剪贴板</p>
+            <div className={styles.qrCanvas} ref={qrRef} />
+            <div className={styles.qrActions}>
+              <button className={styles.qrSaveBtn} onClick={saveQrImage}>保存图片</button>
+              <button className={styles.qrCloseBtn} onClick={() => setShowQrModal(false)}>关闭</button>
+            </div>
           </div>
         </div>
       )}

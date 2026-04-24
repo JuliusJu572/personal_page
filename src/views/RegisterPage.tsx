@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../lib/authContext'
 import { api } from '../lib/api'
 import { Background } from '../ui/Background'
@@ -23,7 +23,13 @@ export function RegisterPage() {
   const [countdown, setCountdown] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { register } = useAuth()
+
+  useEffect(() => {
+    const invite = searchParams.get('invite')
+    if (invite) setInviteCode(invite.toUpperCase().slice(0, 8))
+  }, [searchParams])
 
   useEffect(() => {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
