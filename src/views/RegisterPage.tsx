@@ -15,7 +15,12 @@ export function RegisterPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [inviteCode, setInviteCode] = useState('')
+  const [inviteCode, setInviteCode] = useState(() => {
+    return sessionStorage.getItem('register_invite_code') || ''
+  })
+  const [inviteFromUrl, setInviteFromUrl] = useState(() => {
+    return sessionStorage.getItem('register_invite_from_url') === '1'
+  })
   const [agreed, setAgreed] = useState(false)
   const [error, setError] = useState('')
   const [resendHint, setResendHint] = useState('')
@@ -26,10 +31,28 @@ export function RegisterPage() {
   const [searchParams] = useSearchParams()
   const { register } = useAuth()
 
+  // Read invite code from URL and persist to sessionStorage
   useEffect(() => {
     const invite = searchParams.get('invite')
-    if (invite) setInviteCode(invite.toUpperCase().slice(0, 8))
+    if (invite) {
+      const code = invite.toUpperCase().slice(0, 8)
+      setInviteCode(code)
+      setInviteFromUrl(true)
+      sessionStorage.setItem('register_invite_code', code)
+      sessionStorage.setItem('register_invite_from_url', '1')
+    }
   }, [searchParams])
+
+  // Sync manual edits to sessionStorage
+  const handleInviteCodeChange = (val: string) => {
+    const code = val.toUpperCase()
+    setInviteCode(code)
+    if (code) {
+      sessionStorage.setItem('register_invite_code', code)
+    } else {
+      sessionStorage.removeItem('register_invite_code')
+    }
+  }
 
   useEffect(() => {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
@@ -104,6 +127,8 @@ export function RegisterPage() {
     setLoading(true)
     try {
       await register(username, email, password, code, inviteCode || undefined)
+      sessionStorage.removeItem('register_invite_code')
+      sessionStorage.removeItem('register_invite_from_url')
       navigate('/dashboard')
     } catch (err: any) {
       setError(err.message || '注册失败，请稍后重试')
@@ -314,16 +339,20 @@ export function RegisterPage() {
 
               <div className={styles.field}>
                 <label htmlFor="inviteCode" className={styles.label}>
-                  邀请码 <span className={styles.optional}>（选填，双方获 7 天进阶版试用）</span>
+                  邀请码 <span className={styles.optional}>
+                    {inviteFromUrl ? '（已通过邀请链接填入）' : '（选填，双方获 7 天进阶版试用）'}
+                  </span>
                 </label>
                 <input
                   id="inviteCode"
                   type="text"
                   value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                  onChange={(e) => handleInviteCodeChange(e.target.value)}
                   placeholder="如有邀请码请输入"
                   maxLength={8}
                   autoComplete="off"
+                  readOnly={inviteFromUrl}
+                  className={`${styles.input} ${inviteFromUrl ? styles.inputReadonly : ''}`}
                   className={styles.input}
                 />
               </div>
