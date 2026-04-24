@@ -29,6 +29,9 @@ export function AppRoutes() {
       <Route path="/pricing" element={<PricingPage />} />
       <Route path="/payment/result" element={<PaymentResultPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
@@ -36,10 +39,6 @@ export function AppRoutes() {
         <Route path="features" element={<FeaturesPage />} />
         <Route path="knowledge-cards" element={<KnowledgeCardsPage />} />
         <Route path="knowledge-cards/editor" element={<KnowledgeCardEditorPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="pricing" element={<PricingPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
