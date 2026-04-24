@@ -238,6 +238,14 @@ export const api = {
     return request<{ success: boolean }>('/auth/logout', { method: 'POST' })
   },
 
+  /** Authorize a client quick-login code (browser → client auth). */
+  authorizeClient(code: string) {
+    return request<{ success: boolean; message: string }>('/auth/authorize-client', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    })
+  },
+
   getBalance() {
     return request<BalanceResponse>('/api/user/balance')
   },

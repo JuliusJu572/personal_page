@@ -16,6 +16,7 @@ import { ForgotPasswordPage } from '../views/ForgotPasswordPage'
 import { PricingPage } from '../views/PricingPage'
 import { DashboardPage } from '../views/DashboardPage'
 import { PaymentResultPage } from '../views/PaymentResultPage'
+import { QuickLoginPage } from '../views/QuickLoginPage'
 
 export function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ export function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/quick-login" element={<QuickLoginPage />} />
 
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/lucencia" replace />} />
