@@ -262,7 +262,7 @@ export function GuidePage() {
             <div className={styles.featureBox}>
               <strong>推荐模板维护方式：</strong>
               <ul className={styles.list}>
-                <li>先选择最接近的模板（如答辩/会议/讲解）</li>
+                <li>先选择最接近的模板（如问答/会议/讲解）</li>
                 <li>将你的固定表达写成短句，避免过长提示词</li>
                 <li>每次修改后做一次小样本验证，保留效果最佳版本</li>
               </ul>
@@ -270,7 +270,7 @@ export function GuidePage() {
             <div className={styles.featureBox}>
               <strong>🎭 AI 场景模式（Profile）：</strong>
               <ul className={styles.list}>
-                <li><strong>答辩模式（Defense）：</strong>技术答辩 / 学术问答场景，侧重精准回答、逻辑推演与论据引用</li>
+                <li><strong>问答模式（Defense）：</strong>技术问答 / 学术讨论场景，侧重精准回答、逻辑推演与论据引用</li>
                 <li><strong>销售模式（Sales）：</strong>销售通话场景，提供异议处理、话术优化与成交引导建议</li>
                 <li><strong>会议模式（Meeting）：</strong>日常会议讨论，侧重要点提炼、观点梳理与回应建议</li>
                 <li><strong>演讲模式（Presentation）：</strong>演讲 / 路演场景，侧重表达优化、节奏控制与互动建议</li>
@@ -326,17 +326,17 @@ export function GuidePage() {
           </SubSection>
 
           <SubSection title="步骤 7：文档解析与上下文注入">
-            <p className={styles.text}>支持上传简历和 JD（职位描述），系统会自动解析文档内容，提取关键信息作为 AI 对话的背景上下文。</p>
+            <p className={styles.text}>支持上传个人经历和会议材料，系统会自动解析文档内容，提取关键信息作为 AI 对话的背景上下文。</p>
             <div className={styles.featureBox}>
               <strong>使用流程：</strong>
               <ul className={styles.list}>
-                <li><strong>上传文档：</strong>点击顶部的「文档解析」入口，上传简历或 JD 文件</li>
+                <li><strong>上传文档：</strong>点击顶部的「文档解析」入口，上传个人经历或会议材料</li>
                 <li><strong>自动解析：</strong>系统自动提取文档中的关键信息（技能、经历、岗位要求等）</li>
                 <li><strong>上下文注入：</strong>在设置中开启「文档上下文注入」后，解析结果会自动融入 AI 对话</li>
                 <li><strong>效果：</strong>AI 了解你的背景后，回答更贴合你的实际情况和岗位需求</li>
               </ul>
             </div>
-            <Note>建议在面试前上传最新的简历和目标岗位 JD，让 AI 充分了解你的背景，提供更有针对性的辅助。</Note>
+            <Note>建议在重要会议前上传最新的个人经历和相关材料，让 AI 充分了解你的背景，提供更有针对性的辅助。</Note>
           </SubSection>
         </Section>
 
@@ -469,7 +469,7 @@ export function GuidePage() {
           </SubSection>
 
           <SubSection title="默认用户提示词">
-            <p className={styles.text}>此处用于设置“模板 + 自定义指令”的最终提示词效果，建议按场景维护多套版本，例如技术答辩、项目周会、客户沟通。</p>
+            <p className={styles.text}>此处用于设置“模板 + 自定义指令”的最终提示词效果，建议按场景维护多套版本，例如技术讨论、项目周会、客户沟通。</p>
             <p className={styles.text}>当输出风格不稳定时，优先缩短自定义指令并提高约束清晰度（角色、目标、输出格式），能明显提升回答一致性。</p>
           </SubSection>
 
@@ -493,12 +493,12 @@ export function GuidePage() {
             <div className={styles.featureBox}>
               <strong>🔮 追问增强（智能追问）详解：</strong>
               <ul className={styles.list}>
-                <li><strong>工作原理：</strong>开启后，AI 会在回答末尾自动预判面试官/对方可能的追问方向，并提供相关概念分析</li>
-                <li><strong>适用场景：</strong>技术面试、论文答辩等需要深入讨论的场景，帮你提前准备下一轮回答</li>
+                <li><strong>工作原理：</strong>开启后，AI 会在回答末尾自动预判对方可能的追问方向，并提供相关概念分析</li>
+                <li><strong>适用场景：</strong>技术讨论、学术交流等需要深入对话的场景，帮你提前准备下一轮回答</li>
                 <li><strong>Token 消耗：</strong>开启后每次回答会额外增加约 30–50% 的 Token 消耗</li>
               </ul>
             </div>
-            <Note>追问增强在日常会议中可以关闭以节省配额，在重要面试或答辩中建议开启，提升应对深度追问的准备度。</Note>
+            <Note>追问增强在日常会议中可以关闭以节省配额，在重要会议或技术讨论中建议开启，提升应对深度追问的准备度。</Note>
           </SubSection>
 
           <SubSection title="更换 License Key">
