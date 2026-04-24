@@ -11,6 +11,7 @@ export function HomeFooter() {
         <nav className={styles.footerLinks}>
           <a href="/terms" className={styles.footerLink}>用户服务协议</a>
           <a href="/privacy" className={styles.footerLink}>隐私政策</a>
+          <a href="mailto:support@daedalustech.cn" className={styles.footerLink}>support@daedalustech.cn</a>
         </nav>
         <div className={styles.footerRight}>
           <span className={styles.company}>上海岱达罗智信息科技有限公司</span>
