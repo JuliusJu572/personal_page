@@ -80,6 +80,18 @@
   letter-spacing: 0.01em;
 }
 
+.icp {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.icp:hover {
+  color: rgba(90, 200, 250, 0.8);
+}
+
 @media (max-width: 768px) {
   .footerInner {
     flex-direction: column;

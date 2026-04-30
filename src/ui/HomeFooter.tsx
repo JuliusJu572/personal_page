@@ -17,6 +17,7 @@ export function HomeFooter() {
           <span className={styles.company}>上海岱达罗智信息科技有限公司</span>
           <span className={styles.companyEn}>Shanghai Daedalus Intelligence Technology Co., Ltd.</span>
           <span className={styles.copyright}>© {new Date().getFullYear()} Shanghai Daedalus Intelligence Technology Co., Ltd.</span>
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" className={styles.icp}>沪ICP备2026017509号-1</a>
         </div>
       </div>
     </footer>
