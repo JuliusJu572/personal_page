@@ -224,7 +224,7 @@ export function GuidePage() {
           <SubSection title="步骤 2：主对话面板与穿透模式（Ctrl + M）">
             <p className={styles.text}>主面板包含清空会话、加载文档到上下文、截屏、OCR、系统音录制、麦克风录制、文本输入与发送/暂停。会议时建议将常用按钮保持在可见区域。</p>
             <GuideFigure src="/guide-images/guide-panel-shortcut.png" alt="主对话面板按钮说明" caption="主面板常用能力：文档、截图、OCR、录音、输入与发送" />
-            <Note>按 <Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 可进入穿透模式：软件从任务栏隐藏，但悬浮区按钮仍可使用，适合避免遮挡演示内容。</Note>
+            <Note>按 <Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 可进入穿透模式：软件从任务栏隐藏，但悬浮区按钮仍可点击使用，且不会触发切屏检测（底层窗口保持焦点）。</Note>
             <ul className={styles.list}>
               <li><Kbd>Ctrl</Kbd> + <Kbd>C</Kbd>：监听剪切板并快速读取复制内容，用于追问或补充上下文</li>
               <li><Kbd>Ctrl</Kbd>/<Kbd>Cmd</Kbd> + <Kbd>Enter</Kbd>：执行截图识别（发给视觉模型）</li>
@@ -373,8 +373,13 @@ export function GuidePage() {
               </div>
               <div className={styles.shortcutRow}>
                 <div className={styles.shortcutAction}>切换穿透模式</div>
-                <div className={styles.shortcutDesc}>启用或关闭窗口点击穿透</div>
+                <div className={styles.shortcutDesc}>启用或关闭窗口点击穿透（不触发切屏）</div>
                 <div className={styles.shortcutKey}>Ctrl+M</div>
+              </div>
+              <div className={styles.shortcutRow}>
+                <div className={styles.shortcutAction}>自定义窗口大小</div>
+                <div className={styles.shortcutDesc}>进入/退出调整模式，拖拽边框后保存尺寸</div>
+                <div className={styles.shortcutKey}>Ctrl+D</div>
               </div>
               <div className={styles.shortcutRow}>
                 <div className={styles.shortcutAction}>截图并追问下一步</div>
@@ -479,7 +484,8 @@ export function GuidePage() {
 
           <SubSection title="界面优化配置">
             <p className={styles.text}>根据您的使用习惯，调整界面显示效果和性能设置。包括窗口置顶、点击穿透、防录屏保护等高级功能。</p>
-            <Note><Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 穿透模式下，软件将不再显示在任务栏，但悬浮区按钮依然可点击使用。</Note>
+            <Note><Kbd>Ctrl</Kbd> + <Kbd>M</Kbd> 穿透模式下，软件将不再显示在任务栏，但悬浮区按钮依然可点击使用，且不会触发底层应用的切屏检测。</Note>
+            <Note><Kbd>Ctrl</Kbd> + <Kbd>D</Kbd> 自定义窗口大小：在设置中开启后，按快捷键进入调整模式，拖拽窗口边框到合适大小，再按一次保存。仅对对话页面生效。</Note>
           </SubSection>
 
           <SubSection title="模型设置">
