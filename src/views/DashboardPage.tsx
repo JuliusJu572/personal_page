@@ -360,7 +360,7 @@ export function DashboardPage() {
           <section className={styles.inviteSection}>
             <Card className={styles.inviteCard}>
               <h2 className={styles.sectionTitle}>邀请好友</h2>
-              <p className={styles.inviteDesc}>分享您的邀请码，双方均可获得赠送套餐奖励</p>
+              <p className={styles.inviteDesc}>分享您的邀请码。被邀请账号完成注册并在桌面客户端首次登录、上报设备指纹且通过风控后，双方才会获得赠送套餐奖励。</p>
               <div className={styles.inviteCodeGroup}>
                 <div>
                   <div className={styles.inviteCodeLabel}>我的邀请码</div>
@@ -372,6 +372,14 @@ export function DashboardPage() {
                 >
                   复制 & 二维码
                 </button>
+              </div>
+              <div className={styles.inviteRules}>
+                <div className={styles.inviteRuleTitle}>邀请奖励说明</div>
+                <ul>
+                  <li>奖励不会在注册时立即发放，需被邀请人登录桌面客户端并完成设备校验后自动结算。</li>
+                  <li>邀请人与被邀请人不能使用同一台设备或异常共享登录环境，否则双方邀请赠送权益会被撤回。</li>
+                  <li>系统会持续检查邀请链路；批量小号、同设备、同 IP 等薅羊毛行为会导致被邀请账号冻结，严重时邀请人也会被冻结。</li>
+                </ul>
               </div>
             </Card>
           </section>
