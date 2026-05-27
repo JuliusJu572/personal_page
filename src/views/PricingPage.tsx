@@ -62,6 +62,10 @@ export function PricingPage() {
     outTradeNo: string; planLabel: string; amount: string; payUrl: string; createdAt: string
   } | null>(null)
   const [cancellingOrder, setCancellingOrder] = useState(false)
+  const [confirmOrder, setConfirmOrder] = useState<{
+    outTradeNo: string; planId: string; planLabel: string; amount: string; payUrl: string;
+    billingType: string; createdAt: string
+  } | null>(null)
 
   // Check for pending orders
   useEffect(() => {
@@ -106,13 +110,32 @@ export function PricingPage() {
           payUrl: data.payUrl,
           createdAt: new Date().toISOString(),
         })
-        window.location.href = data.payUrl
+        // Show confirmation modal instead of redirecting immediately
+        setConfirmOrder({
+          outTradeNo: data.outTradeNo,
+          planId,
+          planLabel: planNameMap[planId] || planId,
+          amount: displayAmount,
+          payUrl: data.payUrl,
+          billingType,
+          createdAt: new Date().toISOString(),
+        })
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : '创建订单失败')
     } finally {
       setPurchasing(null)
     }
+  }
+
+  const handleConfirmPay = () => {
+    if (confirmOrder?.payUrl) {
+      window.location.href = confirmOrder.payUrl
+    }
+  }
+
+  const handleCancelConfirm = () => {
+    setConfirmOrder(null)
   }
 
   const planNameMap: Record<string, string> = {
@@ -410,6 +433,82 @@ export function PricingPage() {
             单次付费模式在客户端激活后开始计时，不可暂停，到期后自动结束。
           </p>
         </section>
+
+        {/* ── Order Confirmation Modal ── */}
+        {confirmOrder && user && (
+          <div className={styles.confirmOverlay} onClick={handleCancelConfirm}>
+            <Card variant="thick" className={styles.confirmModal} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+              <h2 className={styles.confirmTitle}>订单确认</h2>
+
+              <div className={styles.confirmBody}>
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>商品名称</span>
+                  <span className={styles.confirmValue}>
+                    Lucencia {confirmOrder.planLabel}
+                    （{confirmOrder.billingType === 'subscription' ? '月包' : '单次'}）
+                  </span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>订单编号</span>
+                  <span className={styles.confirmValueMono}>{confirmOrder.outTradeNo}</span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>下单时间</span>
+                  <span className={styles.confirmValue}>
+                    {new Date(confirmOrder.createdAt).toLocaleString('zh-CN', {
+                      year: 'numeric', month: '2-digit', day: '2-digit',
+                      hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    })}
+                  </span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>购买用户</span>
+                  <span className={styles.confirmValue}>{user.username}</span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>联系邮箱</span>
+                  <span className={styles.confirmValue}>{user.email || '-'}</span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>交易网址</span>
+                  <span className={styles.confirmValueMono} style={{ fontSize: 'var(--font-size-xs)', wordBreak: 'break-all' }}>
+                    {window.location.origin}/pricing
+                  </span>
+                </div>
+                <div className={styles.confirmDivider} />
+
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmLabel}>支付方式</span>
+                  <span className={styles.confirmValue}>支付宝</span>
+                </div>
+              </div>
+
+              <div className={styles.confirmTotal}>
+                <span className={styles.confirmTotalLabel}>实付金额</span>
+                <span className={styles.confirmTotalPrice}>¥{confirmOrder.amount}</span>
+              </div>
+
+              <div className={styles.confirmActions}>
+                <Button variant="primary" size="lg" className={styles.confirmPayBtn} onClick={handleConfirmPay}>
+                  确认并前往支付
+                </Button>
+                <Button variant="ghost" size="sm" className={styles.confirmCancelBtn} onClick={handleCancelConfirm}>
+                  取消
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
       </Container>
       <HomeFooter />
     </div>
