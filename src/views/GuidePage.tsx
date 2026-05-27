@@ -154,37 +154,12 @@ export function GuidePage() {
           </SubSection>
 
           <SubSection title="macOS 安装">
-            <Note>macOS 安装较为复杂，烦请按以下步骤操作。如有问题请联系管理员。</Note>
 
             <Step num={1} title="安装应用程序">
-              <p className={styles.text}>双击 <code>Lucencia.dmg</code> 安装包开始安装。将应用图标拖拽到"应用程序"文件夹。</p>
+              <p className={styles.text}>双击 <code>Lucencia.dmg</code> 安装包，将应用图标拖拽到"应用程序"文件夹即可完成安装。</p>
             </Step>
 
-            <Step num={2} title="移除隔离属性 (Quarantine)">
-              <p className={styles.text}>苹果 Gatekeeper 会拦截未签名应用，需手动移除隔离属性。以下两种方式任选其一：</p>
-              <p className={styles.text}><strong>方式一：拖拽法</strong></p>
-              <ol className={styles.orderedList}>
-                <li>打开终端（Terminal），快捷键 <Kbd>Command (⌘)</Kbd> + <Kbd>空格键</Kbd> 搜索"终端"</li>
-                <li>输入以下命令（<strong>末尾必须保留一个空格</strong>）：</li>
-              </ol>
-              <div className={styles.codeBlock}><code>sudo xattr -rd com.apple.quarantine&nbsp;</code></div>
-              <ol className={styles.orderedList} start={3}>
-                <li>将 <code>Lucencia.app</code> 从 Finder 拖拽到终端窗口中</li>
-                <li>按下 <Kbd>Enter</Kbd>，输入电脑登录密码（输入时不会显示字符，这是正常现象），回车执行</li>
-                <li>重新双击打开应用即可</li>
-              </ol>
-              <p className={styles.text}><strong>方式二：直接输入完整路径</strong></p>
-              <p className={styles.text}>如果应用安装在默认位置，也可以直接复制粘贴以下命令一步完成：</p>
-              <div className={styles.codeBlock}><code>sudo xattr -rd com.apple.quarantine /Applications/Lucencia.app</code></div>
-              <p className={styles.text}>按下 <Kbd>Enter</Kbd> 后输入电脑登录密码即可。</p>
-              <Note>sudo 命令需要输入你的 Mac 登录密码，输入过程中屏幕不会显示任何字符，直接输完回车即可。如果提示找不到应用，请确认路径是否正确。</Note>
-            </Step>
-
-            <Step num={3} title="安装 ffmpeg">
-              <p className={styles.text}>推荐使用 Homebrew 安装：<code>brew install ffmpeg</code></p>
-            </Step>
-
-            <Step num={4} title="配置系统权限">
+            <Step num={2} title="配置系统权限">
               <div className={styles.permGrid}>
                 <PermCard title="屏幕录制权限" lines={[
                   '"系统设置" → "隐私与安全性" → "屏幕录制"',
