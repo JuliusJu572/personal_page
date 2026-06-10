@@ -150,9 +150,12 @@ export function PricingPage() {
 
   // Featured models: highlighted + sorted to the top
   const featuredModels = new Set([
+    'Qwen3.7-Max',
+    'Qwen3.7-Plus',
     'Kimi-K2.5',
     'GLM-5.1',
-    'MiniMax-M2.7-Highspeed',
+    'MiniMax-M3',
+    'MiniMax-M2.7',
     'Claude-Sonnet-4.6',
     'Claude-Haiku-4.5',
     'Gemini-3.1-Pro',
@@ -164,7 +167,8 @@ export function PricingPage() {
   const modelPriority: Record<string, number> = {
     'Claude-Sonnet-4.6': 0,
     'Gemini-3.1-Pro': 1,
-    'MiniMax-M2.7-Highspeed': 2,
+    'Qwen3.7-Max': 2,
+    'MiniMax-M3': 3,
   }
   function sortModels(models: string[]) {
     return [...models].sort((a, b) => {
