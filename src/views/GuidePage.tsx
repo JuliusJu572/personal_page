@@ -113,8 +113,8 @@ export function GuidePage() {
             <ul className={styles.list}>
               <li><strong>多模型支持：</strong>
                 <ul className={styles.subList}>
-                  <li>文本模型：Qwen3-Max（推荐）、Qwen3.6-Plus、Qwen3.5-Flash、DeepSeek-v3.2、Kimi-k2.5、GLM-5、MiniMax 等</li>
-                  <li>视觉模型：Qwen3-VL-Plus（推荐）、Qwen3-VL-Flash，精准识别屏幕代码与图表</li>
+                  <li>文本模型：Qwen3.7-Max（推荐）、Qwen3.7-Plus、Qwen3.7-Flash、DeepSeek-v3.2 等</li>
+                  <li>视觉模型：Qwen3.7-Plus、Qwen3.7-Flash，精准识别屏幕代码与图表</li>
                   <li>语音识别：Qwen3-ASR-Flash，毫秒级实时语音转文字</li>
                 </ul>
               </li>
@@ -125,7 +125,7 @@ export function GuidePage() {
                 </ul>
               </li>
             </ul>
-            <Note>文本模型推荐使用 Qwen3-Max，兼顾速度与质量。如需更换，可在设置中选择 DeepSeek、Kimi、GLM 或 MiniMax 等模型。</Note>
+            <Note>文本模型推荐使用 Qwen3.7-Max，兼顾速度与质量。如需更换，可在设置中选择 Qwen3.7-Plus、Qwen3.7-Flash 或 DeepSeek。</Note>
           </SubSection>
 
           <SubSection title="多语种实时语音转写">
@@ -475,8 +475,8 @@ export function GuidePage() {
 
           <SubSection title="模型设置">
             <ul className={styles.list}>
-              <li>文本模型建议使用 <strong>Qwen3-Max</strong>，也可选择 Deepseek、Minimax 或 Kimi</li>
-              <li>视觉模型建议使用默认的 <strong>Qwen3-VL-Plus</strong>，精准识别屏幕内容</li>
+              <li>文本模型建议使用 <strong>Qwen3.7-Max</strong>，也可选择 Qwen3.7-Plus、Qwen3.7-Flash 或 DeepSeek</li>
+              <li>视觉模型建议使用默认的 <strong>Qwen3.7-Plus</strong>，精准识别屏幕内容</li>
               <li>最大回复 Tokens 越大回复越长，响应速度越慢</li>
               <li>多轮对话默认开启，保持上下文连贯性</li>
               <li>智能追问可预判会议中的后续问题，按需开启</li>

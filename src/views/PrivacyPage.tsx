@@ -162,7 +162,7 @@ export function PrivacyPage() {
             <li><strong>阿里云通义千问（Qwen）</strong> — 文本理解与生成</li>
             <li><strong>阿里云视觉模型（Qwen-VL）</strong> — 图像识别与内容分析</li>
             <li><strong>阿里云语音识别（Qwen-ASR）</strong> — 实时语音转文字</li>
-            <li><strong>其他可选模型</strong> — 根据用户配置，可能使用 OpenRouter、MiniMax、Moonshot 等第三方模型服务</li>
+            <li><strong>其他可选模型</strong> — 根据用户配置，可能使用 OpenRouter 等第三方模型服务</li>
           </ul>
           <p className={styles.text}>当您使用 AI 功能时，相关输入内容（如语音、截图、文字）将由客户端<strong>直接发送至</strong>上述第三方模型服务商处理，<strong>不经过我们的服务器</strong>。这些第三方服务受其各自隐私政策约束，我们建议您查阅其相关政策。</p>
           <p className={styles.text}>支付服务由第三方支付平台提供（如支付宝），支付过程中的信息由支付平台独立处理，我们仅接收支付结果通知。</p>
