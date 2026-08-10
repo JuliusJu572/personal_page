@@ -152,6 +152,7 @@ export function PricingPage() {
   const featuredModels = new Set([
     'Qwen3.7-Flash',
     'Qwen3.7-Max',
+    'Qwen3.8-Max',
     'Qwen3.7-Plus',
     'Claude-Sonnet-4.6',
     'Claude-Haiku-4.5',
@@ -164,8 +165,9 @@ export function PricingPage() {
   const modelPriority: Record<string, number> = {
     'Claude-Sonnet-4.6': 0,
     'Gemini-3.1-Pro': 1,
-    'Qwen3.7-Max': 2,
-    'Qwen3.7-Plus': 3,
+    'Qwen3.8-Max': 2,
+    'Qwen3.7-Max': 3,
+    'Qwen3.7-Plus': 4,
   }
   function sortModels(models: string[]) {
     return [...models].sort((a, b) => {
